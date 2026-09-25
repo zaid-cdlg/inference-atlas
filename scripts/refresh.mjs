@@ -16,12 +16,13 @@ function perM(raw) {
   return Number.isFinite(n) && n >= 0 ? Number((n * 1e6).toPrecision(12)) : null;
 }
 
-// One entry per hf_id: drop entries without one and `:free` slugs, then keep the
-// cheapest paid slug (prompt + completion). Descriptions are never stored.
+// One entry per hf_id: drop entries without one, `:free` slugs and `:batch` slugs (async
+// batch pricing, not comparable to live serving), then keep the cheapest paid slug
+// (prompt + completion). Descriptions are never stored.
 export function selectListings(data) {
   const out = new Map();
   for (const m of data) {
-    if (!m.hugging_face_id || m.id.endsWith(':free')) continue;
+    if (!m.hugging_face_id || /:(free|batch)$/.test(m.id)) continue;
     const prompt = perM(m.pricing?.prompt);
     const completion = perM(m.pricing?.completion);
     const paid = prompt !== null && completion !== null && prompt + completion > 0;

@@ -7,7 +7,7 @@ import { selectListings, normalize, fetchModel, buildCatalogue, validate } from 
 const fx = (p) => JSON.parse(readFileSync(new URL(`../test/fixtures/${p}`, import.meta.url)));
 const hf = (name) => ({ config: fx(`hf/${name}.config.json`), api: fx(`hf/${name}.api.json`) });
 
-test('listings: keep hf ids, drop :free, dedup to the cheapest paid slug, prices per 1M', () => {
+test('listings: keep hf ids, drop :free and :batch, dedup to the cheapest paid slug, prices per 1M', () => {
   const m = selectListings(fx('openrouter-models.json').data);
   assert.deepEqual([...m.keys()], ['meta-llama/Llama-3.3-70B-Instruct', 'Qwen/Qwen3.8-27B', 'zai-org/GLM-5.3']);
   assert.deepEqual(m.get('meta-llama/Llama-3.3-70B-Instruct'), {
@@ -17,13 +17,16 @@ test('listings: keep hf ids, drop :free, dedup to the cheapest paid slug, prices
   });
   // The :free slug is dropped, so the paid slug's cache-read price is kept
   assert.deepEqual(m.get('Qwen/Qwen3.8-27B').pricing, { prompt: 0.42, completion: 3, cache_read: 0.085 });
-  // 0.45 + 2.0 beats 1.4 + 4.4
-  assert.equal(m.get('zai-org/GLM-5.3').slug, 'z-ai/glm-5.3:batch');
+  // The :batch slug (0.45 + 2.0) is async batch pricing, so the interactive slug is kept
+  assert.equal(m.get('zai-org/GLM-5.3').slug, 'z-ai/glm-5.3');
+  assert.deepEqual(m.get('zai-org/GLM-5.3').pricing, { prompt: 1.4, completion: 4.4, cache_read: 0.26 });
   // Third-party descriptions are never stored
   assert.ok(!('description' in m.get('zai-org/GLM-5.3')));
   // A model listed only as :free is not in the catalogue at all
   const free = { id: 'x/y:free', hugging_face_id: 'x/Y', name: 'Y', context_length: 1, pricing: { prompt: '0', completion: '0' } };
   assert.equal(selectListings([free]).size, 0);
+  // Same for a model listed only as :batch
+  assert.equal(selectListings([{ ...free, id: 'x/y:batch', pricing: { prompt: '0.000001', completion: '0.000001' } }]).size, 0);
 });
 
 test('normalize GQA without head_dim: head_dim = hidden_size / heads', () => {
