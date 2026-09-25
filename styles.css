@@ -27,6 +27,8 @@
   --coral: #E8735A;
   --coral-ink: #B8472F;
   --code-bg: #1C1B19;
+  --weights: #CFCCC6;
+  --ink-hover: #3A3935;
   --sans: 'IBM Plex Sans', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   color-scheme: light;
@@ -43,7 +45,7 @@ body {
   font: 400 16px/1.5 var(--sans);
   caret-color: var(--coral-ink);
 }
-::selection { background: rgb(232 115 90 / 25%); }
+::selection { background: color-mix(in srgb, var(--coral) 25%, transparent); }
 :focus-visible { outline: 2px solid var(--coral-ink); outline-offset: 2px; }
 
 a { color: var(--coral-ink); text-decoration: underline; text-underline-offset: 3px; }
@@ -142,7 +144,7 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
   box-shadow: 0 2px 8px rgba(28, 27, 25, .08);
 }
 .command-card pre {
-  margin: 0; padding: 16px; border-radius: 8px; background: var(--code-bg); color: #FFFFFF;
+  margin: 0; padding: 16px; border-radius: 8px; background: var(--code-bg); color: var(--surface);
   font-size: 14px; line-height: 1.6; overflow-x: auto; white-space: pre;
 }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
@@ -152,7 +154,7 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
   transition: background-color 150ms, color 150ms;
 }
 .btn.secondary { background: var(--surface); color: var(--ink); }
-.btn:hover { background: #3a3935; color: var(--surface); }
+.btn:hover { background: var(--ink-hover); color: var(--surface); }
 
 /* KV sim */
 .kvbar {
@@ -161,16 +163,16 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
 }
 .kv-weights {
   flex: none; display: flex; align-items: center; padding: 0 8px; overflow: hidden; white-space: nowrap;
-  background: #CFCCC6; color: var(--ink); font-size: 14px;
+  background: var(--weights); color: var(--ink); font-size: 14px;
 }
 .kv-users { position: relative; flex: none; display: flex; gap: 1px; padding-left: 1px; }
 .kv-users .u { flex: 1 1 0; min-width: 0; background: var(--coral); }
 .kv-users .u.pages {
-  background-image: linear-gradient(to right, transparent calc(100% - 1px), rgb(255 255 255 / 55%) 0);
+  background-image: linear-gradient(to right, transparent calc(100% - 1px), color-mix(in srgb, var(--surface) 55%, transparent) 0);
 }
 .kv-users .u.dense, .kv-users.dense {
   background-color: var(--coral);
-  background-image: repeating-linear-gradient(90deg, transparent 0 3px, rgb(255 255 255 / 30%) 3px 4px);
+  background-image: repeating-linear-gradient(90deg, transparent 0 3px, color-mix(in srgb, var(--surface) 30%, transparent) 3px 4px);
 }
 .kv-cover {
   position: absolute; inset: 0; background: var(--surface);
