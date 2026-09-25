@@ -1,0 +1,10 @@
+{
+  "id": "mistralai/Ministral-3-8B-Instruct-2512",
+  "safetensors": {
+    "parameters": {
+      "BF16": 1502496768,
+      "F8_E4M3": 7415529472
+    },
+    "total": 8918026716
+  }
+}

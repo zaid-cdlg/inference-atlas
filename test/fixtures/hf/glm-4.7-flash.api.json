@@ -1,0 +1,10 @@
+{
+  "id": "zai-org/GLM-4.7-Flash",
+  "safetensors": {
+    "parameters": {
+      "BF16": 31221485568,
+      "F32": 3008
+    },
+    "total": 31221488576
+  }
+}

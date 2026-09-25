@@ -129,6 +129,18 @@ test('AWQ/GPTQ 4-bit is INT4; other quantization formats are quarantined', () =>
     /unsupported quantization: gptq/);
 });
 
+test('MLA head_dim = qk_nope_head_dim + qk_rope_head_dim, not hidden_size / heads', () => {
+  // GLM-4.7-Flash: 2048 / 20 heads = 102.4, but its heads are 192 + 64 = 256 wide
+  const g = normalize(hf('glm-4.7-flash').config, hf('glm-4.7-flash').api);
+  assert.equal(g.head_dim, 256);
+  assert.deepEqual(g.mla, { kv_lora_rank: 512, qk_rope_head_dim: 64 });
+  // DeepSeek V3: 128 + 64
+  assert.equal(normalize(hf('deepseek-v3').config, hf('deepseek-v3').api).head_dim, 192);
+  // An explicit head_dim of 0 (GLM-5.3-Flash) is ignored for MLA models too
+  const zero = { ...hf('glm-4.7-flash').config, head_dim: 0 };
+  assert.equal(normalize(zero, hf('glm-4.7-flash').api).head_dim, 256);
+});
+
 test('normalize rejects configs missing core shape keys', () => {
   assert.throws(() => normalize({ hidden_size: 4096 }, hf('qwen2.5-7b').api), /num_hidden_layers/);
 });

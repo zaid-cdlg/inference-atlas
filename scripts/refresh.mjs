@@ -143,7 +143,8 @@ export function normalize(config, api) {
     layers,
     heads,
     kv_heads: c.num_key_value_heads ?? heads,
-    head_dim: c.head_dim ?? c.hidden_size / heads,
+    // MLA query/key heads are nope + rope wide; head_dim there is often absent or 0.
+    head_dim: c.kv_lora_rank ? c.qk_nope_head_dim + c.qk_rope_head_dim : c.head_dim ?? c.hidden_size / heads,
     mla: c.kv_lora_rank ? { kv_lora_rank: c.kv_lora_rank, qk_rope_head_dim: c.qk_rope_head_dim } : null,
     moe: experts > 1,
     max_ctx: c.max_position_embeddings ?? null,
@@ -253,4 +254,4 @@ async function main() {
   writeFileSync(MODELS_FILE, `${JSON.stringify(out, null, 1)}\n`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

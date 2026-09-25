@@ -1,0 +1,11 @@
+{
+  "id": "deepseek-ai/DeepSeek-V3.2",
+  "safetensors": {
+    "parameters": {
+      "BF16": 3946184704,
+      "F8_E4M3": 681408069632,
+      "F32": 1075456
+    },
+    "total": 685355329792
+  }
+}

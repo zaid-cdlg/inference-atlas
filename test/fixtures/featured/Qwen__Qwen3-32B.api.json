@@ -1,0 +1,9 @@
+{
+  "id": "Qwen/Qwen3-32B",
+  "safetensors": {
+    "parameters": {
+      "BF16": 32762123264
+    },
+    "total": 32762123264
+  }
+}

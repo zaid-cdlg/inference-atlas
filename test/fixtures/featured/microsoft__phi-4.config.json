@@ -1,0 +1,15 @@
+{
+  "_read_from": "microsoft/phi-4",
+  "architectures": [
+    "Phi3ForCausalLM"
+  ],
+  "hidden_size": 5120,
+  "intermediate_size": 17920,
+  "max_position_embeddings": 16384,
+  "model_type": "phi3",
+  "num_attention_heads": 40,
+  "num_hidden_layers": 40,
+  "num_key_value_heads": 10,
+  "sliding_window": null,
+  "torch_dtype": "bfloat16"
+}

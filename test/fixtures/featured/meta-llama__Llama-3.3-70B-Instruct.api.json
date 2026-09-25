@@ -1,0 +1,9 @@
+{
+  "id": "meta-llama/Llama-3.3-70B-Instruct",
+  "safetensors": {
+    "parameters": {
+      "BF16": 70553706496
+    },
+    "total": 70553706496
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "google/gemma-4-26B-A4B-it",
+  "safetensors": {
+    "parameters": {
+      "BF16": 25805936206
+    },
+    "total": 25805936206
+  }
+}

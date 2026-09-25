@@ -1,0 +1,10 @@
+{
+  "id": "mistralai/Devstral-2-123B-Instruct-2512",
+  "safetensors": {
+    "parameters": {
+      "BF16": 3223400448,
+      "F8_E4M3": 121802588160
+    },
+    "total": 125025989840
+  }
+}

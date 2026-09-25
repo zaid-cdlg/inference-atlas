@@ -1,0 +1,9 @@
+{
+  "id": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+  "safetensors": {
+    "parameters": {
+      "BF16": 24011361280
+    },
+    "total": 24011361280
+  }
+}
