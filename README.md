@@ -1,5 +1,7 @@
 # inference-atlas
 
+<img src="assets/hero.webp" width="1600" height="900" alt="Pencil drawing of a graphics card shaped like a water dispenser. Its clear tank holds a grey block for the model's weights and small coral cubes stacked above it, one cube per user, with empty space left at the top.">
+
 **Should you self-host this LLM, or just pay the API?**
 
 inference-atlas is a free calculator you open in your browser. Nothing to install. Pick a model
