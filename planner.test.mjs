@@ -1,0 +1,88 @@
+// Page logic: auto GPU and precision, verdict copy, error states, command.
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { plan, usd } from './planner.js';
+
+// Hand-made data in the data/ shapes. Llama 3.1 8B config: 32 layers, 32 heads, 8 KV heads.
+const arch8b = {
+  params: 8e9, active_params: 8e9, layers: 32, heads: 32, kv_heads: 8, head_dim: 128, mla: null,
+  moe: false, max_ctx: 131072, attn: { full: 32, sliding: 0, window: null, linear: 0, approx: false },
+  quant: null, native_bytes: null,
+};
+const model = (over = {}) => ({
+  hf_id: 'x/Model-8B', name: 'X: Model 8B', pricing: { prompt: 0.6, completion: 2.4, cache_read: null }, arch: arch8b, ...over,
+});
+const gpu = (id, over = {}) => ({
+  id, name: `GPU ${id}`, vram_gb: 80, bandwidth_gbs: 3350, peak_tflops: { fp16: 989, fp8: 1979 }, fp8: true, usd_per_hr: 4, ...over,
+});
+const chat = { use: 'chat', kv: 'fp16', max_ctx: 8192, avg_ctx: 4096, r: 3, cache: 0, batch: null, util: 60, tpd: 1e7, gpu: null, prec: null };
+
+test('auto picks the GPU with the lowest self-host $/1M tokens, and FP8 where the GPU has it', () => {
+  const p = plan({ model: model(), gpus: [gpu('dear', { usd_per_hr: 9 }), gpu('cheap', { usd_per_hr: 2 })], state: chat });
+  assert.equal(p.gpu.id, 'cheap');
+  assert.equal(p.prec, 'fp8');
+  assert.equal(p.error, null);
+});
+
+test('a chosen GPU without FP8 runs FP16 by default; a native format always wins', () => {
+  const noFp8 = gpu('a100', { fp8: false, peak_tflops: { fp16: 312, fp8: null } });
+  assert.equal(plan({ model: model(), gpus: [noFp8], state: { ...chat, gpu: 'a100' } }).prec, 'fp16');
+  const mx = model({ arch: { ...arch8b, quant: 'mxfp4', native_bytes: 5e9 } });
+  assert.equal(plan({ model: mx, gpus: [gpu('h100')], state: chat }).prec, 'mxfp4');
+});
+
+test('verdict: calibrated break-even sentence, 2 significant figures', () => {
+  const p = plan({ model: model(), gpus: [gpu('h100')], state: { ...chat, gpu: 'h100' } });
+  assert.equal(p.be.kind, 'cross');
+  assert.match(p.verdict, /^Self-hosting likely wins above ~\d+(\.\d)?[KMB] tokens\/day$/);
+});
+
+test('no paid API: no break-even, the self-host price instead, and no chart', () => {
+  const p = plan({ model: model({ pricing: null }), gpus: [gpu('h100')], state: chat });
+  assert.equal(p.be, null);
+  assert.equal(p.verdict, `No paid API for this model yet, so there's no break-even. Self-hosting costs ${usd(p.selfPerM)} per 1M tokens.`);
+});
+
+test('multi-node: no command, and the exact copy', () => {
+  const huge = model({ arch: { ...arch8b, params: 700e9, active_params: 700e9 } });
+  const p = plan({ model: huge, gpus: [gpu('h100', { name: 'H100' })], state: { ...chat, gpu: 'h100', prec: 'fp16' } });
+  assert.equal(p.command, null);
+  assert.equal(p.error, "This model doesn't fit on H100, even 8 of them. It needs more than 8 GPUs (multi-node), which is out of scope. Try FP8, a bigger GPU, or a smaller model.");
+});
+
+test('head split: the model fits on N GPUs but its heads cannot split N ways', () => {
+  // 24 heads, 6 KV heads, 100e9 params FP16: fits first at TP 4, which 6 KV heads cannot split
+  const odd = model({ arch: { ...arch8b, params: 100e9, active_params: 100e9, heads: 24, kv_heads: 6, layers: 40 } });
+  const p = plan({ model: odd, gpus: [gpu('h100')], state: { ...chat, gpu: 'h100', prec: 'fp16' } });
+  assert.equal(p.error, "This model needs 4 GPUs to fit, but its attention heads can't be split 4 ways. Try FP8 or a bigger GPU.");
+});
+
+test('SLO miss: batch 1 with a red line, costs still shown', () => {
+  const slow = gpu('slow', { bandwidth_gbs: 100 });
+  const p = plan({ model: model(), gpus: [slow], state: { ...chat, gpu: 'slow', prec: 'fp16' } });
+  assert.equal(p.batch, 1);
+  assert.equal(p.slo, 'Misses the 50 ms target even at 1 user. Try a faster GPU or FP8.');
+  assert.ok(p.selfPerM > 0);
+});
+
+test('INT4 swaps in the quantized repo; FP8 checkpoints get no --quantization flag', () => {
+  const int4 = { repo: 'q/Model-8B-AWQ', url: 'https://huggingface.co/q/Model-8B-AWQ', method: 'awq', publisher: 'community' };
+  const p = plan({ model: model(), gpus: [gpu('h100')], state: { ...chat, gpu: 'h100', prec: 'int4' }, int4 });
+  assert.match(p.command, /^vllm serve q\/Model-8B-AWQ /);
+  const f8 = model({ arch: { ...arch8b, quant: 'fp8', native_bytes: 8e9 } });
+  assert.doesNotMatch(plan({ model: f8, gpus: [gpu('h100')], state: chat }).command, /--quantization/);
+});
+
+test('max context is capped at the model limit', () => {
+  const short = model({ arch: { ...arch8b, max_ctx: 4096 } });
+  const p = plan({ model: short, gpus: [gpu('h100')], state: { ...chat, max_ctx: 32768, avg_ctx: 16384 } });
+  assert.match(p.command, /--max-model-len 4096/);
+  assert.equal(p.avgCtx, 4096);
+});
+
+test('usd: 2 significant figures', () => {
+  assert.equal(usd(0.3149), '$0.31');
+  assert.equal(usd(12.49), '$12');
+  assert.equal(usd(1234), '$1,200');
+  assert.equal(usd(0.001), '<$0.01');
+});

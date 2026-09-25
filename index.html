@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="color-scheme" content="light">
+  <title>inference-atlas: self-host an LLM or pay the API?</title>
+  <meta name="description" content="Free calculator: pick an open-weight model and a GPU, see how many users fit, what it costs per million tokens, when self-hosting beats the API, and the vllm serve command to run it.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#answer">Skip to the answer</a>
+<div class="wrap">
+  <header class="site">
+    <div>
+      <a class="wordmark" href="./">inference-atlas</a>
+      <p class="tagline">Should you self-host this LLM, or just pay the API?</p>
+    </div>
+    <a class="gh" href="https://github.com/zaid-cdlg/inference-atlas">GitHub</a>
+    <img class="hero" src="assets/hero.webp" width="1600" height="900" loading="eager" alt="Pencil drawing of a graphics card shaped like a water dispenser. Its clear tank holds a grey block for the model's weights and small coral cubes stacked above it, one cube per user, with empty space left at the top.">
+  </header>
+
+  <main>
+    <section class="controls" aria-label="Your setup">
+      <div class="field">
+        <label for="model">Model <span class="muted">(example)</span></label>
+        <input id="model" list="model-list" autocomplete="off" spellcheck="false" placeholder="Loading models…" disabled>
+        <datalist id="model-list"></datalist>
+        <p class="hint" id="model-hint"></p>
+      </div>
+      <div class="field">
+        <span class="label" id="use-label">Use case</span>
+        <div class="segmented" role="group" aria-labelledby="use-label">
+          <button type="button" data-use="chat" aria-pressed="true">Chat</button>
+          <button type="button" data-use="agents" aria-pressed="false">Agents</button>
+          <button type="button" data-use="batch" aria-pressed="false">Batch</button>
+        </div>
+        <p class="hint" id="use-hint"></p>
+      </div>
+      <div class="field">
+        <label for="gpu">GPU</label>
+        <select id="gpu"></select>
+        <p class="hint" id="gpu-hint"></p>
+      </div>
+      <div class="field">
+        <label for="prec">Precision</label>
+        <select id="prec"></select>
+        <p class="hint" id="prec-hint"></p>
+      </div>
+    </section>
+
+    <div id="notices"></div>
+
+    <section id="answer" aria-labelledby="answer-h">
+      <h2 id="answer-h" class="eyebrow">Your answer</h2>
+      <p id="verdict" class="verdict" aria-live="polite"><span class="skeleton"></span></p>
+      <p id="stats" class="stats"></p>
+      <p id="slo" class="slo" hidden></p>
+      <p class="estimate">First-order estimate, usually optimistic. Check with <code>vllm bench serve</code>. <a href="#how" id="how-link">How we estimate</a></p>
+      <details class="explain" id="explain-box" hidden>
+        <summary>What these numbers mean</summary>
+        <dl id="explain"></dl>
+      </details>
+      <figure class="chart" id="chart-fig" hidden>
+        <figcaption>Cost per day as your traffic grows. Dashed line: the API. Solid steps: self-hosting, one step for each extra copy of the model you need.</figcaption>
+        <div class="chart-box" id="chart"></div>
+        <p class="readout" id="chart-readout" aria-live="polite">Tap or hover the chart to read the costs at any volume.</p>
+        <table class="sr-only" id="chart-table"></table>
+      </figure>
+      <p id="chart-note" class="hint" hidden></p>
+    </section>
+
+    <hr>
+    <section aria-labelledby="run-h" id="run">
+      <h2 id="run-h">Run it</h2>
+      <div class="command-card" id="command-card">
+        <pre id="command" tabindex="0"><code><span class="skeleton"></span></code></pre>
+        <div class="actions">
+          <button type="button" class="btn" id="copy-cmd">Copy command</button>
+          <button type="button" class="btn secondary" id="copy-link">Copy link</button>
+        </div>
+        <p class="hint" id="copy-status" role="status"></p>
+        <p class="hint" id="cmd-note"></p>
+      </div>
+      <p id="cmd-error" class="notice error" hidden></p>
+    </section>
+
+    <hr>
+    <section aria-labelledby="kv-h" id="kv">
+      <h2 id="kv-h">Why these users fit</h2>
+      <p class="hint" id="kv-caption"></p>
+      <div class="kvbar" id="kvbar" role="img">
+        <div class="kv-weights" id="kv-weights"></div>
+        <div class="kv-users" id="kv-users"></div>
+      </div>
+      <p class="kv-legend" id="kv-legend"></p>
+      <label class="slider" for="avg">Average conversation length: <output id="avg-out" for="avg"></output></label>
+      <input type="range" id="avg" min="256" step="256">
+    </section>
+
+    <hr>
+    <details class="tune" id="tune">
+      <summary><h2>Tune assumptions</h2></summary>
+      <div class="tune-grid">
+        <div class="field">
+          <label for="kvdtype">KV cache precision</label>
+          <select id="kvdtype" data-param="kv">
+            <option value="fp16">FP16 (default)</option>
+            <option value="fp8">FP8 (half the memory per user)</option>
+          </select>
+          <p class="hint">How the conversation memory is stored. FP8 fits about twice the users.</p>
+        </div>
+        <div class="field">
+          <label for="maxctx">Longest conversation (tokens)</label>
+          <input id="maxctx" type="number" inputmode="numeric" data-param="max_ctx" min="512" max="1048576" step="512">
+          <p class="hint">The longest request the server accepts (<code>--max-model-len</code>). Capped at the model's limit.</p>
+        </div>
+        <div class="field">
+          <label for="ratio">Input tokens per output token</label>
+          <input id="ratio" type="number" inputmode="decimal" data-param="r" min="0.1" max="100" step="0.1">
+          <p class="hint">Chat is about 3, agents about 10: they read far more than they write.</p>
+        </div>
+        <div class="field">
+          <label for="cache">Cached prefix (%)</label>
+          <input id="cache" type="number" inputmode="decimal" data-param="cache" min="0" max="95" step="5">
+          <p class="hint">Share of each prompt that repeats (system prompt, tool list) and is served from the cache.</p>
+        </div>
+        <div class="field">
+          <label for="util">GPU busy time (%)</label>
+          <input id="util" type="number" inputmode="decimal" data-param="util" min="5" max="100" step="5">
+          <p class="hint">Real traffic comes in waves. You pay for idle hours too.</p>
+        </div>
+        <div class="field">
+          <label for="batch">Users served at once</label>
+          <input id="batch" type="number" inputmode="numeric" data-param="batch" min="1" max="4096" step="1" placeholder="auto">
+          <p class="hint">Leave empty to use the most users that still meet the speed target (<code>--max-num-seqs</code>).</p>
+        </div>
+        <div class="field">
+          <label for="tpd">Your tokens per day</label>
+          <input id="tpd" type="number" inputmode="numeric" data-param="tpd" min="1000" max="1000000000000" step="1000000">
+          <p class="hint">Marked on the chart so you can see which side of the break-even you are on.</p>
+        </div>
+      </div>
+
+      <h3 class="slider">Quality</h3>
+      <p id="tier">Quality tier: Unrated. No quality tier yet.</p>
+      <p class="hint">What each precision costs in accuracy, quoted from the sources. Measured on the Llama 3.1 family; other models may lose more or less.</p>
+      <table id="quality">
+        <thead><tr><th scope="col">Precision</th><th scope="col">What you lose</th><th scope="col">Sources</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </details>
+
+    <details class="how" id="how">
+      <summary><h2>How we estimate</h2></summary>
+      <ul>
+        <li><strong>Memory.</strong> Weights take parameters × bytes per parameter (2 for FP16, 1 for FP8, 0.5 for INT4). vLLM gets 90% of each GPU's memory; the rest covers working space.</li>
+        <li><strong>GPUs.</strong> We use the fewest GPUs (1, 2, 4 or 8) that hold the weights plus one conversation of the longest length, and that the model's attention heads can be split across.</li>
+        <li><strong>Users.</strong> Each conversation keeps a KV cache: 2 × KV heads × head size × layers × bytes per token. Sliding-window layers keep only their window, and linear-attention layers keep a small fixed state. Users = free memory ÷ one average conversation.</li>
+        <li><strong>Speed.</strong> Each new token reads the active weights and every user's cache from memory, or does 2 × active parameters × users of maths, whichever is slower (the roofline). We assume kernels reach 50% of peak maths and 85% of bandwidth when split across GPUs.</li>
+        <li><strong>Throughput.</strong> A group of users first reads all their prompts (cached parts are free), then writes the answers together.</li>
+        <li><strong>Cost.</strong> GPU rent per hour ÷ tokens served per hour at your busy time. The API price is OpenRouter's cheapest paid listing for the same model, mixed by your input:output ratio.</li>
+        <li><strong>Limits.</strong> Mixture-of-experts speed is approximate. Real servers lose time to scheduling and uneven traffic, so treat every number as a best case and measure with <code>vllm bench serve</code>.</li>
+      </ul>
+    </details>
+  </main>
+
+  <footer>
+    <p>Models and API prices as of <span id="asof">…</span> (OpenRouter and Hugging Face). GPU specs and hourly prices checked <span id="gpudate">…</span> (<a href="data/gpus.sources.md">sources</a>). MIT license. By Zaid Ibrahim.</p>
+  </footer>
+</div>
+</body>
+</html>

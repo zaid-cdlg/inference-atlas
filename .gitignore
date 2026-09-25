@@ -12,3 +12,6 @@ docs/designs/
 
 # Claude Code local state (worktrees, settings)
 .claude/
+
+# gstack local reports
+.gstack/
