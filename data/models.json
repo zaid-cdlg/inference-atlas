@@ -24,45 +24,14 @@
  ],
  "models": [
   {
-   "hf_id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
-   "slug": "xiaomi/mimo-v2.6-pro",
-   "name": "Xiaomi: MiMo-V2.6-Pro",
-   "context_length": 1048576,
-   "pricing": {
-    "prompt": 0.435,
-    "completion": 0.87,
-    "cache_read": 0.0036
-   },
-   "arch": {
-    "params": 1024216603392,
-    "active_params": 30669871872,
-    "layers": 70,
-    "heads": 128,
-    "kv_heads": 8,
-    "head_dim": 192,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 1048576,
-    "attn": {
-     "full": 70,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": true
-    },
-    "quant": "fp8",
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "inclusionAI/Ling-3.0-flash-VL",
    "slug": "inclusionai/ling-3.0-flash-vl",
    "name": "inclusionAI: Ling 3.0 Flash VL",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.06,
-    "completion": 0.18,
-    "cache_read": 0.012
+    "prompt": 0.021,
+    "completion": 0.0616,
+    "cache_read": 0.0042
    },
    "arch": {
     "params": 124848460496,
@@ -94,9 +63,9 @@
    "name": "DeepSeek: DeepSeek V4.1 Flash",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.15,
-    "completion": 0.6,
-    "cache_read": 0.003
+    "prompt": 0.075,
+    "completion": 0.3,
+    "cache_read": 0.0015
    },
    "arch": {
     "params": 763205315794,
@@ -247,37 +216,6 @@
     },
     "quant": "fp8",
     "native_bytes": 328250014584
-   }
-  },
-  {
-   "hf_id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
-   "slug": "deepseek/deepseek-v4-flash-vision-exp",
-   "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
-   "context_length": 1048576,
-   "pricing": {
-    "prompt": 0.22,
-    "completion": 0.66,
-    "cache_read": 0.007
-   },
-   "arch": {
-    "params": 304646824126,
-    "active_params": 15239848126,
-    "layers": 43,
-    "heads": 64,
-    "kv_heads": 1,
-    "head_dim": 512,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 1048576,
-    "attn": {
-     "full": 43,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": true
-    },
-    "quant": "fp8",
-    "native_bytes": null
    }
   },
   {
@@ -470,37 +408,6 @@
    }
   },
   {
-   "hf_id": "deepseek-ai/DeepSeek-V4-Pro-0813",
-   "slug": "deepseek/deepseek-v4-pro-0813",
-   "name": "DeepSeek: DeepSeek V4 Pro 0813",
-   "context_length": 1048576,
-   "pricing": {
-    "prompt": 0.462,
-    "completion": 1.386,
-    "cache_read": 0.0154
-   },
-   "arch": {
-    "params": 1650497936906,
-    "active_params": 102309027338,
-    "layers": 61,
-    "heads": 128,
-    "kv_heads": 1,
-    "head_dim": 512,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 1048576,
-    "attn": {
-     "full": 61,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": true
-    },
-    "quant": "fp8",
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "meta-models/Muse-Glimmer-30B",
    "slug": "meta/muse-glimmer-30b",
    "name": "Meta: Muse Glimmer 30B",
@@ -528,37 +435,6 @@
      "approx": false
     },
     "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
-   "hf_id": "deepseek-ai/DeepSeek-V4-Flash-0731",
-   "slug": "deepseek/deepseek-v4-flash-0731",
-   "name": "DeepSeek: DeepSeek V4 Flash 0731",
-   "context_length": 1310720,
-   "pricing": {
-    "prompt": 0.03,
-    "completion": 0.32,
-    "cache_read": 0.016
-   },
-   "arch": {
-    "params": 304180418494,
-    "active_params": 27356354494,
-    "layers": 43,
-    "heads": 64,
-    "kv_heads": 1,
-    "head_dim": 512,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 1048576,
-    "attn": {
-     "full": 43,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": true
-    },
-    "quant": "fp8",
     "native_bytes": null
    }
   },
@@ -695,9 +571,9 @@
    "name": "Tencent: Hy3",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.132,
-    "completion": 0.528,
-    "cache_read": 0.033
+    "prompt": 0.0825,
+    "completion": 0.33,
+    "cache_read": 0.020625
    },
    "arch": {
     "params": 298786155776,
@@ -910,68 +786,6 @@
    }
   },
   {
-   "hf_id": "deepseek-ai/DeepSeek-V4-Pro",
-   "slug": "deepseek/deepseek-v4-pro",
-   "name": "DeepSeek: DeepSeek V4 Pro 0423",
-   "context_length": 1048576,
-   "pricing": {
-    "prompt": 0.783,
-    "completion": 1.566,
-    "cache_read": 0.06525
-   },
-   "arch": {
-    "params": 1598839674782,
-    "active_params": 50650765214,
-    "layers": 61,
-    "heads": 128,
-    "kv_heads": 1,
-    "head_dim": 512,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 1048576,
-    "attn": {
-     "full": 61,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": true
-    },
-    "quant": "fp8",
-    "native_bytes": null
-   }
-  },
-  {
-   "hf_id": "deepseek-ai/DeepSeek-V4-Flash",
-   "slug": "deepseek/deepseek-v4-flash",
-   "name": "DeepSeek: DeepSeek V4 Flash 0423",
-   "context_length": 1048576,
-   "pricing": {
-    "prompt": 0.049,
-    "completion": 0.098,
-    "cache_read": 0.0098
-   },
-   "arch": {
-    "params": 290944616402,
-    "active_params": 14120552402,
-    "layers": 43,
-    "heads": 64,
-    "kv_heads": 1,
-    "head_dim": 512,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 1048576,
-    "attn": {
-     "full": 43,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": true
-    },
-    "quant": "fp8",
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "tencent/Hy3-preview",
    "slug": "tencent/hy3-preview",
    "name": "Tencent: Hy3 preview",
@@ -1104,9 +918,9 @@
    "name": "Google: Gemma 4 26B A4B ",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.09,
-    "completion": 0.3,
-    "cache_read": 0.05
+    "prompt": 0.0675,
+    "completion": 0.225,
+    "cache_read": 0.0375
    },
    "arch": {
     "params": 25805936206,
