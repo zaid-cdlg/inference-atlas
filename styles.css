@@ -67,6 +67,7 @@ p { margin: 0 0 12px; }
 
 /* Header: wordmark, GitHub link, the one hero illustration */
 .site { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 8px 16px; padding-top: 24px; }
+.brand { margin: 0; font-size: inherit; line-height: inherit; }
 .wordmark { font-size: 20px; font-weight: 600; color: var(--ink); text-decoration: none; }
 .wordmark:visited { color: var(--ink); }
 .tagline { margin: 4px 0 0; color: var(--muted); }
