@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import {
   kvBytesPerToken, kvPerGpuPerToken, headsSplitOk, chooseTP, decodeItl,
   splitTokens, prefillTime, tokensPerSec, blendedApiPrice,
+  USE_CASES, maxUsers, operatingBatch, selfHostPerM, selfHostPerDay, breakEven, vllmCommand, fmtCount,
 } from './math.js';
 
 const close = (actual, expected, rel = 1e-9) =>
@@ -170,4 +171,76 @@ test('blended API price falls back to the prompt price when there is no cache pr
   assert.equal(p.cachePriced, false);
   // chat, no cache: (3 x 0.6 + 2.4) / 4 = 1.05
   close(blendedApiPrice({ prompt: 0.6, completion: 2.4, cache_read: 0.15 }, 3, 0).perM, 1.05);
+});
+
+test('use-case defaults table', () => {
+  assert.deepEqual(USE_CASES.chat, { maxCtx: 8192, avgCtx: 4096, r: 3, itlPin: 0.05, cache: 0 });
+  assert.deepEqual(USE_CASES.agents, { maxCtx: 32768, avgCtx: 16384, r: 10, itlPin: 0.15, cache: 0.7 });
+  assert.deepEqual(USE_CASES.batch, { maxCtx: 8192, avgCtx: 2048, r: 5, itlPin: null, cache: 0 });
+});
+
+test('maxUsers = floor((VRAM x 0.9 - weights / TP) / (per-GPU KV x avg ctx))', () => {
+  // 8B FP16: (72e9 - 16e9) / (131,072 x 4096) = 56e9 / 536,870,912 = 104.3
+  assert.equal(maxUsers(llama8b, h100, 'fp16', 'fp16', 1, 4096), 104);
+  // 70B FP8: (72e9 - 70e9) / (163,840 x 4096) = 2.98
+  assert.equal(maxUsers(llama70b, h100, 'fp8', 'fp8', 1, 4096), 2);
+  // 70B FP16 on one GPU does not fit at all
+  assert.equal(maxUsers(llama70b, h100, 'fp16', 'fp16', 1, 4096), 0);
+});
+
+test('operating batch: largest batch under the ITL pin, capped by maxUsers', () => {
+  const run = (pin, override) => operatingBatch(llama8b, h100, 'fp16', 'fp16', 1, 4096, 104, pin, override);
+  // 50 ms pin: ITL at B = 104 is (16e9 + 104 x 536,870,912) / 3.35e12 = 21.4 ms, so all users fit
+  assert.deepEqual(run(0.05), { batch: 104, sloMiss: false });
+  // 10 ms pin: B = 32 gives 33.18e9 / 3.35e12 = 9.90 ms, B = 33 gives 10.07 ms
+  assert.deepEqual(run(0.01), { batch: 32, sloMiss: false });
+  // no pin (batch use case): B = maxUsers
+  assert.deepEqual(run(null), { batch: 104, sloMiss: false });
+  // 4 ms pin: even B = 1 takes 16.54e9 / 3.35e12 = 4.94 ms
+  assert.deepEqual(run(0.004), { batch: 1, sloMiss: true });
+  // user override wins, but never above maxUsers or below 1
+  assert.deepEqual(run(0.01, 16), { batch: 16, sloMiss: false });
+  assert.deepEqual(run(0.01, 500), { batch: 104, sloMiss: false });
+});
+
+test('self-host $/1M tokens = (TP x $/hr / 3600) / (tokens/s x utilization) x 1e6', () => {
+  // TP 2 at $3/hr, 1000 tok/s, 60%: (6 / 3600) / 600 x 1e6 = $2.78
+  close(selfHostPerM(2, 3, 1000, 0.6), 6e6 / (3600 * 600));
+});
+
+test('self-host $/day is a step function of replicas', () => {
+  // capacity 4.32e7 tokens/day per replica; TP 1 at $2/hr = $48/day per replica
+  assert.equal(selfHostPerDay(4.32e7, 4.32e7, 1, 2), 48);
+  assert.equal(selfHostPerDay(4.32e7 + 1, 4.32e7, 1, 2), 96);
+});
+
+test('break-even: first crossing, or which side wins across 1e5..1e10 tokens/day', () => {
+  // TP 1 at $2/hr, 1000 tok/s at 50%: capacity 4.32e7/day, $48/day per replica.
+  const be = (apiPerM, tps = 1000, util = 0.5) => breakEven({ tps, util, tp: 1, usdHr: 2, apiPerM });
+  // API $2/M: $48 buys 2.4e7 tokens, inside one replica's capacity
+  assert.deepEqual(be(2), { kind: 'cross', tpd: 2.4e7 });
+  // API $1/M: break-even 4.8e7 is above one replica's capacity, so the API always wins
+  assert.deepEqual(be(1), { kind: 'api' });
+  // API $1000/M: break-even 4.8e4 is below the chart range
+  assert.deepEqual(be(1000), { kind: 'self' });
+  // Huge capacity, API $0.001/M: break-even 4.8e10 is above the chart range
+  assert.deepEqual(be(0.001, 1e6, 1), { kind: 'api' });
+});
+
+test('vllm serve command carries TP, context, batch and FP8 flags', () => {
+  const base = { hfId: 'meta-llama/Llama-3.3-70B-Instruct', tp: 2, maxCtx: 8192, batch: 38 };
+  assert.equal(vllmCommand({ ...base, prec: 'fp16', kvDtype: 'fp16' }),
+    'vllm serve meta-llama/Llama-3.3-70B-Instruct --tensor-parallel-size 2 --max-model-len 8192 '
+    + '--gpu-memory-utilization 0.9 --max-num-seqs 38');
+  assert.equal(vllmCommand({ ...base, prec: 'fp8', kvDtype: 'fp8' }),
+    'vllm serve meta-llama/Llama-3.3-70B-Instruct --tensor-parallel-size 2 --max-model-len 8192 '
+    + '--gpu-memory-utilization 0.9 --max-num-seqs 38 --quantization fp8 --kv-cache-dtype fp8');
+});
+
+test('fmtCount rounds to 2 significant figures with a K/M/B/T suffix', () => {
+  assert.equal(fmtCount(42.3e6), '42M');
+  assert.equal(fmtCount(1.46e9), '1.5B');
+  assert.equal(fmtCount(123456), '120K');
+  assert.equal(fmtCount(999), '1K');
+  assert.equal(fmtCount(950), '950');
 });

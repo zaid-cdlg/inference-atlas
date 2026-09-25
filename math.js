@@ -17,6 +17,17 @@ export const TP_COMM_EFFICIENCY = 0.85;
 // Share of peak FLOPS that real kernels reach (model FLOPs utilization).
 export const MFU = 0.5;
 export const TP_OPTIONS = [1, 2, 4, 8];
+// Break-even chart range, tokens per day (log x).
+export const CHART_MIN_TPD = 1e5;
+export const CHART_MAX_TPD = 1e10;
+
+// Use-case defaults, shared by the v0.1 selector and the v1.0 wizard. itlPin is the
+// decode latency target in seconds (null = none); cache is the cached prefix share.
+export const USE_CASES = {
+  chat: { maxCtx: 8192, avgCtx: 4096, r: 3, itlPin: 0.05, cache: 0 },
+  agents: { maxCtx: 32768, avgCtx: 16384, r: 10, itlPin: 0.15, cache: 0.7 },
+  batch: { maxCtx: 8192, avgCtx: 2048, r: 5, itlPin: null, cache: 0 },
+};
 
 const BYTES = { fp16: 2, fp8: 1, int4: 0.5 };
 
@@ -98,4 +109,68 @@ export function blendedApiPrice(pricing, r, cachedFrac) {
   const cacheRead = cachePriced ? pricing.cache_read : pricing.prompt;
   const prompt = cachedFrac * cacheRead + (1 - cachedFrac) * pricing.prompt;
   return { perM: (r * prompt + pricing.completion) / (r + 1), cachePriced };
+}
+
+// Users whose average context fits in the KV space left on each GPU. 0 = does not fit.
+export function maxUsers(model, gpu, prec, kvDtype, tp, avgCtx) {
+  const free = usableBytes(gpu) - weightBytes(model, prec) / tp;
+  return Math.max(0, Math.floor(free / (kvPerGpuPerToken(model, kvDtype, tp) * avgCtx)));
+}
+
+// Batch the server runs at: the user override, else the largest batch whose ITL meets
+// the pin, never above maxUsers or below 1. If batch 1 misses the pin, run at 1 and flag it.
+export function operatingBatch(model, gpu, prec, kvDtype, tp, avgCtx, users, itlPin, override) {
+  const cap = Math.max(1, users);
+  if (override) return { batch: Math.min(Math.max(1, Math.floor(override)), cap), sloMiss: false };
+  if (itlPin == null) return { batch: cap, sloMiss: false };
+  const itl = (b) => decodeItl(model, gpu, prec, kvDtype, tp, b, avgCtx);
+  if (itl(1) > itlPin) return { batch: 1, sloMiss: true };
+  // ITL grows with batch, so binary-search the largest batch under the pin.
+  let lo = 1;
+  let hi = cap;
+  while (lo < hi) {
+    const mid = Math.ceil((lo + hi) / 2);
+    if (itl(mid) <= itlPin) lo = mid; else hi = mid - 1;
+  }
+  return { batch: lo, sloMiss: false };
+}
+
+// USD per 1M served tokens for one replica of TP GPUs at the given utilization.
+export const selfHostPerM = (tp, usdHr, tps, util) => ((tp * usdHr) / 3600 / (tps * util)) * 1e6;
+
+// USD per day to serve tpd tokens/day: whole replicas, each TP GPUs for 24 h.
+export const selfHostPerDay = (tpd, capacityPerDay, tp, usdHr) =>
+  Math.ceil(tpd / capacityPerDay) * tp * usdHr * 24;
+
+// First tokens/day where self-hosting costs no more than the API. Within one replica the
+// self-host cost is flat and the API cost is linear, so they cross at the volume one
+// replica-day of the API costs. Past one replica's capacity every later step is the same
+// ratio, so there is no crossing at all. Returns { kind: 'cross', tpd } | { kind: 'api' | 'self' }.
+export function breakEven({ tps, util, tp, usdHr, apiPerM }) {
+  const capacity = tps * 86400 * util;
+  const tpd = (tp * usdHr * 24 * 1e6) / apiPerM;
+  if (tpd > capacity || tpd > CHART_MAX_TPD) return { kind: 'api' };
+  if (tpd <= CHART_MIN_TPD) return { kind: 'self' };
+  return { kind: 'cross', tpd };
+}
+
+// The command to run. For INT4 the caller passes the AWQ/GPTQ repo as hfId; vLLM reads
+// the quantization method from that repo's config, so no flag is needed.
+export function vllmCommand({ hfId, tp, maxCtx, batch, prec, kvDtype }) {
+  const parts = [
+    `vllm serve ${hfId}`, `--tensor-parallel-size ${tp}`, `--max-model-len ${maxCtx}`,
+    `--gpu-memory-utilization ${GPU_MEM_UTIL}`, `--max-num-seqs ${batch}`,
+  ];
+  if (prec === 'fp8') parts.push('--quantization fp8');
+  if (kvDtype === 'fp8') parts.push('--kv-cache-dtype fp8');
+  return parts.join(' ');
+}
+
+// 2 significant figures with a K/M/B/T suffix: 42.3e6 -> "42M". Never claim more precision.
+export function fmtCount(n) {
+  const r = Number(n.toPrecision(2));
+  for (const [v, s] of [[1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K']]) {
+    if (r >= v) return `${Number((r / v).toPrecision(2))}${s}`;
+  }
+  return String(r);
 }
