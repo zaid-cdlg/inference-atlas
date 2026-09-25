@@ -1,0 +1,345 @@
+{
+  "_meta": {
+    "checked_date": "2026-09-25",
+    "flops_basis": "DENSE Tensor Core figures (no structured sparsity). Where a vendor page shows only the sparse figure, dense = sparse / 2, per the vendor's own footnote.",
+    "price_basis": "On-demand USD per GPU per hour, single-GPU instance where offered. Median of the quotes listed in gpus.sources.md.",
+    "note": "Each GPU's `sources` map gives a source_url and checked_date for every value."
+  },
+  "gpus": [
+    {
+      "id": "t4",
+      "name": "NVIDIA T4 16GB",
+      "vram_gb": 16,
+      "bandwidth_gbs": 320,
+      "peak_tflops": {
+        "fp16": 65,
+        "fp8": null
+      },
+      "fp8": false,
+      "usd_per_hr": 0.42,
+      "verify": true,
+      "verify_reason": "GCP quote (0.42, the median) came via an aggregator; Google's price page would not load. Other two quotes are primary.",
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/tesla-t4/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/tesla-t4/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/tesla-t4/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/tesla-t4/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#t4",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "l4",
+      "name": "NVIDIA L4 24GB",
+      "vram_gb": 24,
+      "bandwidth_gbs": 300,
+      "peak_tflops": {
+        "fp16": 121,
+        "fp8": 242.5
+      },
+      "fp8": true,
+      "usd_per_hr": 0.65,
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l4/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l4/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l4/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l4/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l4/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#l4",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "a10g",
+      "name": "NVIDIA A10G 24GB (AWS)",
+      "vram_gb": 24,
+      "bandwidth_gbs": 600,
+      "peak_tflops": {
+        "fp16": 70,
+        "fp8": null
+      },
+      "fp8": false,
+      "usd_per_hr": 1.0,
+      "verify": true,
+      "verify_reason": "NVIDIA publishes no A10G datasheet (AWS-only variant). VRAM from AWS. Bandwidth 600 GB/s is the A10 datasheet value; A10 and A10G share memory specs. FP16 tensor 70 TFLOPS (not the A10's 125) per Baseten's A10 vs A10G comparison: best public figure, not a vendor sheet.",
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://aws.amazon.com/ec2/instance-types/g5/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/products/a10-gpu/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.baseten.co/blog/nvidia-a10-vs-a10g-for-ml-model-inference/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/products/a10-gpu/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#a10g",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "l40s",
+      "name": "NVIDIA L40S 48GB",
+      "vram_gb": 48,
+      "bandwidth_gbs": 864,
+      "peak_tflops": {
+        "fp16": 362.05,
+        "fp8": 733
+      },
+      "fp8": true,
+      "usd_per_hr": 1.57,
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l40s/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l40s/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l40s/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l40s/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l40s/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#l40s",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "a100_80",
+      "name": "NVIDIA A100 80GB SXM",
+      "vram_gb": 80,
+      "bandwidth_gbs": 2039,
+      "peak_tflops": {
+        "fp16": 312,
+        "fp8": null
+      },
+      "fp8": false,
+      "usd_per_hr": 2.5,
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/a100/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/a100/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/a100/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/a100/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#a100-80gb",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "h100",
+      "name": "NVIDIA H100 SXM 80GB",
+      "vram_gb": 80,
+      "bandwidth_gbs": 3350,
+      "peak_tflops": {
+        "fp16": 989.5,
+        "fp8": 1979
+      },
+      "fp8": true,
+      "usd_per_hr": 4.35,
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h100/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h100/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h100/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h100/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h100/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#h100",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "h200",
+      "name": "NVIDIA H200 SXM 141GB",
+      "vram_gb": 141,
+      "bandwidth_gbs": 4800,
+      "peak_tflops": {
+        "fp16": 989.5,
+        "fp8": 1979
+      },
+      "fp8": true,
+      "usd_per_hr": 4.59,
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h200/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h200/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h200/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h200/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h200/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#h200",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "b200",
+      "name": "NVIDIA B200 180GB",
+      "vram_gb": 180,
+      "bandwidth_gbs": 8000,
+      "peak_tflops": {
+        "fp16": 2250,
+        "fp8": 4500
+      },
+      "fp8": true,
+      "usd_per_hr": 6.99,
+      "note": "NVIDIA lists B200 only as 8-GPU systems. Per-GPU values are system totals / 8 (DGX B200: 1,440 GB, 64 TB/s; HGX B200: FP16 36 PF sparse, FP8 72 PF sparse, dense = half). RunPod also lists B200 at 180 GB.",
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/dgx-b200/",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/dgx-b200/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/hgx/",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/hgx/",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/hgx/",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#b200",
+          "checked_date": "2026-09-25"
+        }
+      }
+    },
+    {
+      "id": "mi300x",
+      "name": "AMD Instinct MI300X 192GB",
+      "vram_gb": 192,
+      "bandwidth_gbs": 5300,
+      "peak_tflops": {
+        "fp16": 1307.4,
+        "fp8": 2614.9
+      },
+      "fp8": true,
+      "usd_per_hr": 2.59,
+      "sources": {
+        "vram_gb": {
+          "source_url": "https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf",
+          "checked_date": "2026-09-25"
+        },
+        "bandwidth_gbs": {
+          "source_url": "https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp16": {
+          "source_url": "https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf",
+          "checked_date": "2026-09-25"
+        },
+        "peak_tflops.fp8": {
+          "source_url": "https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf",
+          "checked_date": "2026-09-25"
+        },
+        "fp8": {
+          "source_url": "https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf",
+          "checked_date": "2026-09-25"
+        },
+        "usd_per_hr": {
+          "source_url": "gpus.sources.md#mi300x",
+          "checked_date": "2026-09-25"
+        }
+      }
+    }
+  ]
+}

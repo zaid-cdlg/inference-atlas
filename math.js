@@ -10,7 +10,7 @@
 //     attn: { full, sliding, window, linear, approx } (optional; absent = all full),
 //     quant: null | 'fp8' | 'mxfp4' | 'int4' (native checkpoint format),
 //     native_bytes: checkpoint weight bytes when quant is set (mixed dtypes summed) }
-// GPU shape (data/gpus.json): { vram_gb, bandwidth_gbs, tflops: { fp16, fp8 }, fp8, usd_hr }
+// GPU shape (data/gpus.json): { vram_gb, bandwidth_gbs, peak_tflops: { fp16, fp8 }, fp8, usd_per_hr }
 
 // vLLM's --gpu-memory-utilization 0.9: the other 10% of VRAM covers activations,
 // CUDA graphs and fragmentation. A fixed constant, not modelled per model.
@@ -120,7 +120,7 @@ export function chooseTP(model, gpu, prec, kvDtype, maxCtx) {
 
 // INT4 and MXFP4 kernels dequantize and compute in fp16, and so do FP8 weights on a GPU
 // without FP8 tensor cores.
-const peakFlops = (gpu, prec) => gpu.tflops[prec === 'fp8' && gpu.fp8 ? 'fp8' : 'fp16'] * 1e12;
+const peakFlops = (gpu, prec) => gpu.peak_tflops[prec === 'fp8' && gpu.fp8 ? 'fp8' : 'fp16'] * 1e12;
 
 // Seconds per decode step for a batch of B sequences, each holding avgCtx tokens.
 // Roofline: the slower of streaming bytes and doing the matmul FLOPs. MoE streams

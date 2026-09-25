@@ -1,0 +1,22 @@
+[
+  "meta-llama/Meta-Llama-3.1-8B-Instruct",
+  "Qwen/Qwen3-8B",
+  "Qwen/Qwen3.5-9B",
+  "google/gemma-3-4b-it",
+  "mistralai/Ministral-3-8B-Instruct-2512",
+  "google/gemma-4-31B-it",
+  "Qwen/Qwen3.6-27B",
+  "Qwen/Qwen3-32B",
+  "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+  "google/gemma-3-27b-it",
+  "microsoft/phi-4",
+  "meta-llama/Llama-3.3-70B-Instruct",
+  "mistralai/Devstral-2-123B-Instruct-2512",
+  "openai/gpt-oss-20b",
+  "openai/gpt-oss-120b",
+  "Qwen/Qwen3.6-35B-A3B",
+  "google/gemma-4-26B-A4B-it",
+  "zai-org/GLM-4.5-Air",
+  "Qwen/Qwen3-235B-A22B-Instruct-2507",
+  "deepseek-ai/DeepSeek-V3.2"
+]

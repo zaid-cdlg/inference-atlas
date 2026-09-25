@@ -45,9 +45,9 @@ const gptOss20b = {
   quant: 'mxfp4', native_bytes: 1804459584 * 2 + 19110297600 * 0.53125,
 };
 // A100 80GB spec sheet: 80 GB, 2.039 TB/s, 312 TFLOPS dense FP16, no FP8.
-const a100 = { vram_gb: 80, bandwidth_gbs: 2039, tflops: { fp16: 312, fp8: null }, fp8: false };
+const a100 = { vram_gb: 80, bandwidth_gbs: 2039, peak_tflops: { fp16: 312, fp8: null }, fp8: false };
 // H100 SXM spec sheet: 80 GB, 3.35 TB/s, 989 TFLOPS dense BF16, 1979 dense FP8.
-const h100 = { vram_gb: 80, bandwidth_gbs: 3350, tflops: { fp16: 989, fp8: 1979 }, fp8: true };
+const h100 = { vram_gb: 80, bandwidth_gbs: 3350, peak_tflops: { fp16: 989, fp8: 1979 }, fp8: true };
 
 test('KV bytes per token: GQA = 2 x kv_heads x head_dim x layers x bytes', () => {
   // 2 x 8 x 128 x 80 x 2 B = 327,680 B = 320 KiB
