@@ -1,0 +1,9 @@
+{
+  "id": "unsloth/gemma-3-27b-it",
+  "safetensors": {
+    "parameters": {
+      "BF16": 27432406640
+    },
+    "total": 27432406640
+  }
+}

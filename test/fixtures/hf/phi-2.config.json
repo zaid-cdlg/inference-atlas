@@ -1,0 +1,12 @@
+{
+  "architectures": [
+    "PhiForCausalLM"
+  ],
+  "hidden_size": 2560,
+  "intermediate_size": 10240,
+  "max_position_embeddings": 2048,
+  "model_type": "phi",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "torch_dtype": "float16"
+}
