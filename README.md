@@ -19,7 +19,12 @@ and a use case, and it shows you:
 
 The model list refreshes every week, so new open-weight models show up on their own.
 
-<!-- GIF: KV-cache animation goes here -->
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/kv-sim-poster.png">
+  <img src="assets/kv-sim.gif" width="800" height="275" alt="The page's memory bar for one GPU: a grey block for the model's weights, then coral blocks filling in, one per user, until 68 users fit. The conversation-length slider is dragged from 4k to 16k tokens and the bar re-fills with fewer, longer blocks until 17 users fit.">
+</picture>
+
+*Llama 3.3 70B on one NVIDIA B200 (auto-picked, FP8), chat use case with the longest conversation raised to 16k tokens: 68 users fit at 4k tokens each, 17 at 16k. [Open this setup](https://zaid-cdlg.github.io/inference-atlas/?model=meta-llama%2FLlama-3.3-70B-Instruct&use=chat&max_ctx=16384).*
 
 <!-- BUTTON: "Open the calculator" link goes here -->
 
