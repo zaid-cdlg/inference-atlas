@@ -42,7 +42,11 @@ let played = false;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const sync = urlSyncer(window);
 
-const displayName = (m) => m.name.replace(/^[^:]+:\s*/, '') || m.hf_id;
+// "Meta: Llama 3.3 70B Instruct" -> "Llama 3.3 70B", "Qwen: Qwen3 235B A22B Instruct 2507" ->
+// "Qwen3 235B A22B": short enough for the picker on a phone.
+const displayName = (m) => m.name.replace(/^[^:]+:\s*/, '').replace(/\s+Instruct\b/i, '').replace(/\s+\d{4}\s*$/, '').trim() || m.hf_id;
+// "NVIDIA H100 SXM 80GB" -> "H100 SXM", "AMD Instinct MI300X 192GB" -> "MI300X (AMD)"
+const gpuLabel = (g) => shortGpu(g).replace(/\s*\d+GB\s*/, ' ').trim() + (g.vendor === 'amd' ? ' (AMD)' : '');
 const int4For = (id) => data.quality.quantized_repos[id]?.int4 ?? null;
 
 async function load() {
@@ -139,10 +143,8 @@ function initControls() {
   }
 
   const gpu = $('gpu');
-  gpu.append(new Option('Cheapest that fits (auto)', ''));
-  for (const g of data.gpus) {
-    gpu.append(new Option(`${shortGpu(g)} · $${g.usd_per_hr.toFixed(2)}/hr${g.verify ? ' (estimate)' : ''}`, g.id));
-  }
+  gpu.append(new Option('Auto (cheapest)', ''));
+  for (const g of data.gpus) gpu.append(new Option(gpuLabel(g), g.id));
   gpu.addEventListener('change', () => {
     const id = gpu.value || null;
     update({ gpu: id, prec: state.prec && !ctx.precOk(state.model, id, state.prec) ? null : state.prec });
@@ -193,8 +195,8 @@ function render() {
   for (const b of document.querySelectorAll('[data-use]')) b.setAttribute('aria-pressed', String(b.dataset.use === state.use));
   $('use-hint').textContent = USE_HINT[state.use];
   $('gpu').value = state.gpu ?? '';
-  const gpuNotes = [];
-  if (!state.gpu) gpuNotes.push(`Picked ${shortGpu(p.gpu)}: lowest cost per token that fits.`);
+  const gpuNotes = [`${p.gpu.vram_gb} GB · $${p.gpu.usd_per_hr.toFixed(2)}/hr${p.gpu.verify ? ' (estimate)' : ''}.`];
+  if (!state.gpu) gpuNotes.unshift(`${gpuLabel(p.gpu)}: lowest cost per token that fits.`);
   if (p.amdHint) {
     const name = p.amdHint.gpu.name.replace(/^AMD Instinct /, '').replace(/ \d+GB$/, '');
     gpuNotes.push(`An AMD ${name} may cost less here (about ${usd(p.amdHint.selfPerM)} per 1M tokens). Pick it under GPU. It needs vLLM's ROCm build.`);
@@ -250,7 +252,7 @@ function render() {
 function renderPrecision(p, model) {
   const sel = $('prec');
   const q = int4For(state.model);
-  sel.replaceChildren(new Option(`Best available (${PREC_LABEL[p.prec]})`, ''));
+  sel.replaceChildren(new Option(`Auto (${PREC_LABEL[p.prec]})`, ''));
   const reasons = [];
   for (const k of ['fp16', 'fp8', 'int4', 'mxfp4']) {
     const reason = p.precOptions[k];

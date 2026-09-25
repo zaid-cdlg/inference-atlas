@@ -15,3 +15,8 @@ docs/designs/
 
 # gstack local reports
 .gstack/
+
+# Dev tooling
+node_modules/
+test-results/
+playwright-report/

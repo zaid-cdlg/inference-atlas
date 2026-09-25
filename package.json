@@ -1,0 +1,13 @@
+{
+  "name": "inference-atlas",
+  "private": true,
+  "type": "module",
+  "description": "Dev tooling only. The page itself has no build step and no runtime dependencies.",
+  "scripts": {
+    "test": "node --test",
+    "smoke": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

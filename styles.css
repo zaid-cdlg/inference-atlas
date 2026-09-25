@@ -49,7 +49,7 @@ body {
 a { color: var(--coral-ink); text-decoration: underline; text-underline-offset: 3px; }
 a:visited { color: var(--muted); }
 code, pre, output, .num { font-family: var(--mono); }
-.num, output, td, .stats, .hint, .kv-legend { font-variant-numeric: tabular-nums; }
+.num, output, td, .verdict, .stats, .hint, .kv-legend { font-variant-numeric: tabular-nums; }
 
 h1, h2 { margin: 48px 0 12px; font-size: 20px; line-height: 1.3; font-weight: 600; }
 p { margin: 0 0 12px; }
@@ -72,6 +72,7 @@ p { margin: 0 0 12px; }
 .tagline { margin: 4px 0 0; color: var(--muted); }
 .gh { font-size: 14px; padding: 12px 0; }
 .hero { grid-column: 1 / -1; width: 100%; height: auto; max-height: 280px; object-fit: contain; }
+.hero-phone { display: none; }
 
 /* Controls: 4 in a row, 2 columns from 640 to 1023, 2x2 on phones */
 .controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
@@ -88,7 +89,7 @@ input:disabled { color: var(--muted); }
 
 .segmented { display: flex; border: 1px solid var(--hairline); border-radius: 8px; background: var(--surface); overflow: hidden; }
 .segmented button {
-  flex: 1; min-height: 42px; border: 0; background: transparent; cursor: pointer;
+  flex: 1; min-height: 44px; border: 0; background: transparent; cursor: pointer;
   transition: background-color 150ms, color 150ms;
 }
 .segmented button + button { border-left: 1px solid var(--hairline); }
@@ -186,6 +187,7 @@ input[type='range'] { width: 100%; min-height: 44px; accent-color: var(--coral-i
 table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 12px; }
 th, td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--hairline); }
 th { font-weight: 600; }
+.how { margin-top: 16px; }
 .how li { margin-bottom: 8px; }
 
 footer { margin: 64px 0 32px; padding-top: 16px; border-top: 1px solid var(--hairline); font-size: 14px; color: var(--muted); }
@@ -200,7 +202,8 @@ footer { margin: 64px 0 32px; padding-top: 16px; border-top: 1px solid var(--hai
   .chart-box { height: 200px; }
   .controls { gap: 12px; }
   .tune-grid { grid-template-columns: 1fr; }
-  .hero { max-height: 200px; }
+  .hero-top { display: none; }
+  .hero-phone { display: block; max-height: 200px; margin-top: 32px; }
   .explain dl { grid-template-columns: 1fr; gap: 0 0; }
   .explain dd { margin-bottom: 8px; }
 }
