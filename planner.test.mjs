@@ -3,7 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { plan, usd, ctxLabel } from './planner.js';
-import { parseState } from './state.js';
+import { parseState, DEFAULT_MODEL } from './state.js';
+import { fmtCount } from './math.js';
 
 // Hand-made data in the data/ shapes. Llama 3.1 8B config: 32 layers, 32 heads, 8 KV heads.
 const arch8b = {
@@ -140,4 +141,16 @@ test('MI300X picked by hand works and gets no hint', () => {
   assert.equal(p.error, null);
   assert.equal(p.amdHint, null);
   assert.match(p.command, /^vllm serve openai\/gpt-oss-120b /);
+});
+
+test('default example: gpt-oss-120b on 1x B200 in MXFP4, with a break-even to show', () => {
+  assert.equal(DEFAULT_MODEL, 'openai/gpt-oss-120b');
+  const p = planFor('');
+  assert.equal(p.gpu.id, 'b200');
+  assert.equal(p.tp, 1);
+  assert.equal(p.prec, 'mxfp4');
+  // Prices change weekly, so check the shape and the rounding rather than the number
+  assert.equal(p.be.kind, 'cross');
+  assert.equal(p.verdict, `Self-hosting likely wins above ~${fmtCount(p.be.tpd)} tokens/day`);
+  assert.match(p.verdict, /~\d{1,3}(\.\d)?[KMB] tokens/);
 });

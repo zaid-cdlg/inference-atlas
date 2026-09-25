@@ -3,7 +3,7 @@
 // Nothing from the URL is ever echoed back into the page.
 import { USE_CASES } from './math.js';
 
-export const DEFAULT_MODEL = 'meta-llama/Llama-3.3-70B-Instruct';
+export const DEFAULT_MODEL = 'openai/gpt-oss-120b';
 export const FALLBACK_GPU = 'h100';
 
 const PRECS = ['fp16', 'fp8', 'int4', 'mxfp4'];
