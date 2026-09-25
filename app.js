@@ -283,7 +283,8 @@ function renderPrecision(p, model) {
   const reasons = [];
   for (const k of ['fp16', 'fp8', 'int4', 'mxfp4']) {
     const reason = p.precOptions[k];
-    if (k === 'mxfp4' && reason) continue;
+    // MXFP4 is listed only for models published in it (even when this GPU can't run it).
+    if (k === 'mxfp4' && reason && model.arch.quant !== 'mxfp4') continue;
     let label = PREC_LABEL[k];
     if (k === 'int4' && q) label += q.publisher === 'community' ? ' (community quant)' : ` (${q.method.toUpperCase()})`;
     const o = new Option(label, k);
