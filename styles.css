@@ -110,7 +110,7 @@ input:disabled { color: var(--muted); }
 .verdict.long { font-size: 24px; line-height: 1.3; }
 .stats { font-size: 16px; margin-bottom: 4px; }
 .estimate { font-size: 14px; color: var(--muted); }
-.skeleton { display: block; height: 0.9em; width: 70%; border-radius: 8px; background: var(--hairline); }
+.skeleton { display: block; height: 0.9em; width: 70%; background: var(--hairline); }
 
 details > summary { cursor: pointer; display: flex; align-items: center; gap: 8px; min-height: 44px; }
 details > summary::before { content: '▸'; font-size: 14px; transition: transform 150ms; }
@@ -163,7 +163,7 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
 /* KV sim */
 .kvbar {
   position: relative; display: flex; height: 56px; margin: 16px 0 8px;
-  border: 1px solid var(--hairline); border-radius: 8px; background: var(--surface); overflow: hidden;
+  border: 1px solid var(--hairline); background: var(--surface); overflow: hidden;
 }
 .kv-weights {
   flex: none; display: flex; align-items: center; padding: 0 8px; overflow: hidden; white-space: nowrap;
