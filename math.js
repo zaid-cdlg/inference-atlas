@@ -77,3 +77,25 @@ export function decodeItl(model, gpu, prec, kvDtype, tp, batch, avgCtx) {
   const compute = (2 * model.active_params * batch) / (tp * peakFlops(gpu, prec) * MFU);
   return Math.max(memory, compute);
 }
+
+// Split one request's context into prompt and output tokens by the in:out ratio r.
+export const splitTokens = (avgCtx, r) => ({ inTok: (avgCtx * r) / (r + 1), outTok: avgCtx / (r + 1) });
+
+// Seconds to prefill one request. Compute-bound; tokens in the cached prefix are
+// served from vLLM's prefix cache and cost no FLOPs.
+export const prefillTime = (model, gpu, prec, tp, inTok, cachedFrac) =>
+  (2 * model.active_params * inTok * (1 - cachedFrac)) / (tp * peakFlops(gpu, prec) * MFU);
+
+// Served tokens/s for one replica. The B prefills of a wave share the same GPUs,
+// so a wave of B requests takes B x prefill plus the decode steps.
+export const tokensPerSec = (batch, inTok, outTok, prefill, itl) =>
+  (batch * (inTok + outTok)) / (batch * prefill + outTok * itl);
+
+// Blended API price in USD per 1M tokens (pricing is per 1M, converted by refresh.mjs).
+// The cached prompt share uses the cache-read price when the listing has one.
+export function blendedApiPrice(pricing, r, cachedFrac) {
+  const cachePriced = pricing.cache_read != null;
+  const cacheRead = cachePriced ? pricing.cache_read : pricing.prompt;
+  const prompt = cachedFrac * cacheRead + (1 - cachedFrac) * pricing.prompt;
+  return { perM: (r * prompt + pricing.completion) / (r + 1), cachePriced };
+}

@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   kvBytesPerToken, kvPerGpuPerToken, headsSplitOk, chooseTP, decodeItl,
+  splitTokens, prefillTime, tokensPerSec, blendedApiPrice,
 } from './math.js';
 
 const close = (actual, expected, rel = 1e-9) =>
@@ -129,4 +130,44 @@ test('head split failure is monotone in TP, so there is never a larger valid TP 
       }
     }
   }
+});
+
+test('splitTokens: in = ctx x r/(r+1), out = ctx x 1/(r+1)', () => {
+  // r = 3: 4096 x 3/4 = 3072 in, 1024 out
+  assert.deepEqual(splitTokens(4096, 3), { inTok: 3072, outTok: 1024 });
+});
+
+test('prefill is compute-bound and skips the cached prefix', () => {
+  // 2 x 8e9 x 12,000 x (1 - 0.7) / (989e12 x 0.5) = 5.76e13 / 4.945e14 s
+  close(prefillTime(llama8b, h100, 'fp16', 1, 12000, 0.7), (2 * 8e9 * 12000 * 0.3) / (989e12 * 0.5));
+  // no cache, FP8 peak, TP 2
+  close(prefillTime(llama8b, h100, 'fp8', 2, 12000, 0), (2 * 8e9 * 12000) / (2 * 1979e12 * 0.5));
+});
+
+test('agents case: B prefills share one replica, so tokens/s = B(in+out) / (B x prefill + out x ITL)', () => {
+  // Llama 3.1 8B FP16, H100, TP 1, B = 8, avg ctx 16,384, r = 10, 70% cached prefix
+  const { inTok, outTok } = splitTokens(16384, 10);
+  const pre = prefillTime(llama8b, h100, 'fp16', 1, inTok, 0.7);
+  const itl = decodeItl(llama8b, h100, 'fp16', 'fp16', 1, 8, 16384);
+  const tps = tokensPerSec(8, inTok, outTok, pre, itl);
+  close(tps, (8 * 16384) / (8 * pre + outTok * itl));
+  // Charging each request only its own prefill would overstate throughput
+  assert.ok(tps < (8 * 16384) / (pre + outTok * itl));
+});
+
+test('blended API price uses the cache-read price for the cached prompt share', () => {
+  // $/1M: prompt 0.6, completion 2.4, cache read 0.15. Agents r = 10, 70% cached:
+  // 10/11 x (0.7 x 0.15 + 0.3 x 0.6) + 1/11 x 2.4 = (2.85 + 2.4) / 11
+  const p = blendedApiPrice({ prompt: 0.6, completion: 2.4, cache_read: 0.15 }, 10, 0.7);
+  close(p.perM, 5.25 / 11);
+  assert.equal(p.cachePriced, true);
+});
+
+test('blended API price falls back to the prompt price when there is no cache price', () => {
+  // 10/11 x 0.6 + 1/11 x 2.4 = 8.4 / 11
+  const p = blendedApiPrice({ prompt: 0.6, completion: 2.4 }, 10, 0.7);
+  close(p.perM, 8.4 / 11);
+  assert.equal(p.cachePriced, false);
+  // chat, no cache: (3 x 0.6 + 2.4) / 4 = 1.05
+  close(blendedApiPrice({ prompt: 0.6, completion: 2.4, cache_read: 0.15 }, 3, 0).perM, 1.05);
 });
