@@ -138,7 +138,7 @@ details > summary h2 { display: inline; }
 .chart-box .you { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
 .chart-box .probe { stroke: var(--ink); stroke-width: 1; }
 .chart-box text.label { fill: var(--ink); font-weight: 600; }
-.readout { font-size: 14px; min-height: 21px; margin: 8px 0 0; }
+.readout { font-size: 14px; min-height: 24px; margin: 8px 0 0; }
 
 hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
 
@@ -162,7 +162,7 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
 
 /* KV sim */
 .kvbar {
-  position: relative; display: flex; height: 56px; margin: 16px 0 8px;
+  position: relative; display: flex; height: 48px; margin: 16px 0 8px;
   border: 1px solid var(--hairline); background: var(--surface); overflow: hidden;
 }
 .kv-weights {
