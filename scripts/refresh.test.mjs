@@ -34,6 +34,8 @@ test('normalize GQA without head_dim: head_dim = hidden_size / heads', () => {
   assert.deepEqual(normalize(config, api), {
     params: 7615616512, active_params: 7615616512, layers: 28, heads: 28, kv_heads: 4,
     head_dim: 128, mla: null, moe: false, max_ctx: 32768,
+    // sliding_window is set but use_sliding_window is false: every layer is full attention
+    attn: { full: 28, sliding: 0, window: null, linear: 0, approx: false },
   });
 });
 
@@ -71,6 +73,33 @@ test('normalize MLA + MoE (DeepSeek V3): latent KV, dense first layers, MTP laye
   assert.deepEqual(n.mla, { kv_lora_rank: 512, qk_rope_head_dim: 64 });
   assert.equal(n.params, 684531386000);
   assert.equal(n.active_params, 684531386000 - 256 * e * 59 + 8 * e * 59);
+});
+
+test('attention layout: sliding_window_pattern (Gemma 3), 1 full layer in every 6', () => {
+  assert.deepEqual(normalize(hf('gemma-3-27b').config, hf('gemma-3-27b').api).attn,
+    { full: 10, sliding: 52, window: 1024, linear: 0, approx: false });
+});
+
+test('attention layout: layer_types with linear attention (Qwen3.5), linear layers keep no KV', () => {
+  assert.deepEqual(normalize(hf('qwen3.5-27b').config, hf('qwen3.5-27b').api).attn,
+    { full: 16, sliding: 0, window: null, linear: 48, approx: false });
+});
+
+test('attention layout: full_attention_interval without layer_types (Qwen3-Next)', () => {
+  // 48 layers, full attention every 4th: 12 full, 36 linear
+  assert.deepEqual(normalize(hf('qwen3-coder-next').config, hf('qwen3-coder-next').api).attn,
+    { full: 12, sliding: 0, window: null, linear: 36, approx: false });
+});
+
+test('attention layout: unknown layouts count every layer as full and are marked approximate', () => {
+  // Mistral 7B v0.1 has a sliding_window but no per-layer layout
+  assert.deepEqual(normalize(hf('mistral-7b-v0.1').config, hf('mistral-7b-v0.1').api).attn,
+    { full: 32, sliding: 0, window: null, linear: 0, approx: true });
+  // An unfamiliar layer type counts as full attention; mamba and conv layers keep no KV
+  const { config, api } = hf('qwen2.5-7b');
+  const types = [...Array(26).fill('deepseek_sparse_attention'), 'mamba', 'conv'];
+  assert.deepEqual(normalize({ ...config, layer_types: types }, api).attn,
+    { full: 26, sliding: 0, window: null, linear: 2, approx: true });
 });
 
 test('normalize rejects configs missing core shape keys', () => {

@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import {
   kvBytesPerToken, kvPerGpuPerToken, headsSplitOk, chooseTP, decodeItl,
   splitTokens, prefillTime, tokensPerSec, blendedApiPrice,
-  USE_CASES, maxUsers, operatingBatch, selfHostPerM, selfHostPerDay, breakEven, vllmCommand, fmtCount,
+  kvPerGpuPerSeq, USE_CASES, maxUsers, operatingBatch, selfHostPerM, selfHostPerDay, breakEven, vllmCommand, fmtCount,
 } from './math.js';
 
 const close = (actual, expected, rel = 1e-9) =>
@@ -25,6 +25,18 @@ const llama8b = {
 const deepseekV3 = {
   params: 671e9, active_params: 37e9, layers: 61, heads: 128, kv_heads: 128, head_dim: 128,
   mla: { kv_lora_rank: 512, qk_rope_head_dim: 64 },
+};
+// Gemma 3 27B config.json: 62 layers, 16 KV heads, head_dim 128, sliding window 1024 on
+// 5 of every 6 layers, so 10 full-attention layers and 52 sliding ones.
+const gemma27b = {
+  params: 27e9, active_params: 27e9, layers: 62, heads: 32, kv_heads: 16, head_dim: 128, mla: null,
+  attn: { full: 10, sliding: 52, window: 1024, linear: 0, approx: false },
+};
+// Qwen3.5 27B config.json: 64 layers, 4 KV heads, head_dim 256, full attention on every 4th
+// layer (16), linear attention on the other 48.
+const qwen35 = {
+  params: 27e9, active_params: 27e9, layers: 64, heads: 24, kv_heads: 4, head_dim: 256, mla: null,
+  attn: { full: 16, sliding: 0, window: null, linear: 48, approx: false },
 };
 // H100 SXM spec sheet: 80 GB, 3.35 TB/s, 989 TFLOPS dense BF16, 1979 dense FP8.
 const h100 = { vram_gb: 80, bandwidth_gbs: 3350, tflops: { fp16: 989, fp8: 1979 }, fp8: true };
@@ -243,4 +255,27 @@ test('fmtCount rounds to 2 significant figures with a K/M/B/T suffix', () => {
   assert.equal(fmtCount(123456), '120K');
   assert.equal(fmtCount(999), '1K');
   assert.equal(fmtCount(950), '950');
+});
+
+test('layer-aware KV per sequence: full x ctx, sliding x min(ctx, window), linear x 0', () => {
+  // Gemma 3 27B FP16, per layer per token 2 x 16 x 128 x 2 B = 8192 B.
+  // 4096 ctx: (10 x 4096 + 52 x 1024) x 8192 = 771,751,936 B
+  assert.equal(kvPerGpuPerSeq(gemma27b, 'fp16', 1, 4096), 771751936);
+  // Context inside the window: every layer holds all 512 tokens
+  assert.equal(kvPerGpuPerSeq(gemma27b, 'fp16', 1, 512), 62 * 512 * 8192);
+  // TP 2 splits the 16 KV heads
+  assert.equal(kvPerGpuPerSeq(gemma27b, 'fp16', 2, 4096), 771751936 / 2);
+  // Qwen3.5 27B, per layer per token 2 x 4 x 256 x 2 B = 4096 B; only 16 layers keep KV
+  assert.equal(kvPerGpuPerSeq(qwen35, 'fp16', 1, 10000), 16 * 10000 * 4096);
+  // No layout recorded: every layer is full attention
+  assert.equal(kvPerGpuPerSeq(llama70b, 'fp16', 1, 4096), 327680 * 4096);
+});
+
+test('max users, TP fit and decode ITL use the layer-aware KV', () => {
+  // (72e9 - 54e9) / 771,751,936 = 23.3
+  assert.equal(maxUsers(gemma27b, h100, 'fp16', 'fp16', 1, 4096), 23);
+  // 128k context: (10 x 131,072 + 52 x 1024) x 8192 = 11.17e9 B, 54e9 + 11.17e9 <= 72e9 fits on 1 GPU
+  assert.deepEqual(chooseTP(gemma27b, h100, 'fp16', 'fp16', 131072), { tp: 1 });
+  // batch 4 at 4096: (54e9 + 4 x 771,751,936) / 3.35e12
+  close(decodeItl(gemma27b, h100, 'fp16', 'fp16', 1, 4, 4096), (54e9 + 4 * 771751936) / 3.35e12);
 });

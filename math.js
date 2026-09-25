@@ -6,7 +6,8 @@
 //
 // Model shape (normalized by scripts/refresh.mjs from Hugging Face config.json):
 //   { params, active_params, layers, heads, kv_heads, head_dim,
-//     mla: null | { kv_lora_rank, qk_rope_head_dim } }
+//     mla: null | { kv_lora_rank, qk_rope_head_dim },
+//     attn: { full, sliding, window, linear, approx } (optional; absent = all full) }
 // GPU shape (data/gpus.json): { vram_gb, bandwidth_gbs, tflops: { fp16, fp8 }, fp8, usd_hr }
 
 // vLLM's --gpu-memory-utilization 0.9: the other 10% of VRAM covers activations,
@@ -60,11 +61,21 @@ export function headsSplitOk(model, tp) {
 
 const usableBytes = (gpu) => gpu.vram_gb * 1e9 * GPU_MEM_UTIL;
 
+// KV bytes one sequence of ctx tokens holds on each GPU. Full-attention layers keep every
+// token, sliding-window layers keep at most the window, and linear-attention layers keep a
+// small constant state, which is ignored.
+export function kvPerGpuPerSeq(model, kvDtype, tp, ctx) {
+  const perToken = kvPerGpuPerToken(model, kvDtype, tp);
+  const a = model.attn;
+  if (!a) return perToken * ctx;
+  return (perToken / model.layers) * (a.full * ctx + a.sliding * Math.min(ctx, a.window));
+}
+
 // Smallest power-of-two TP where weights plus one max-length sequence of KV fit
 // per GPU and the head count splits. Returns { tp } or { error, ... }.
 export function chooseTP(model, gpu, prec, kvDtype, maxCtx) {
   const fits = (tp) =>
-    weightBytes(model, prec) / tp + kvPerGpuPerToken(model, kvDtype, tp) * maxCtx <= usableBytes(gpu);
+    weightBytes(model, prec) / tp + kvPerGpuPerSeq(model, kvDtype, tp, maxCtx) <= usableBytes(gpu);
   const fitTp = TP_OPTIONS.find(fits);
   if (fitTp === undefined) return { error: 'multi_node' };
   // A head split that fails at fitTp also fails at every larger power of two (tested),
@@ -83,7 +94,7 @@ const peakFlops = (gpu, prec) => gpu.tflops[prec === 'fp8' ? 'fp8' : 'fp16'] * 1
 export function decodeItl(model, gpu, prec, kvDtype, tp, batch, avgCtx) {
   const bw = gpu.bandwidth_gbs * 1e9 * (tp > 1 ? TP_COMM_EFFICIENCY : 1);
   const streamed = (model.active_params * BYTES[prec]) / tp
-    + batch * kvPerGpuPerToken(model, kvDtype, tp) * avgCtx;
+    + batch * kvPerGpuPerSeq(model, kvDtype, tp, avgCtx);
   const memory = streamed / bw;
   const compute = (2 * model.active_params * batch) / (tp * peakFlops(gpu, prec) * MFU);
   return Math.max(memory, compute);
@@ -114,7 +125,7 @@ export function blendedApiPrice(pricing, r, cachedFrac) {
 // Users whose average context fits in the KV space left on each GPU. 0 = does not fit.
 export function maxUsers(model, gpu, prec, kvDtype, tp, avgCtx) {
   const free = usableBytes(gpu) - weightBytes(model, prec) / tp;
-  return Math.max(0, Math.floor(free / (kvPerGpuPerToken(model, kvDtype, tp) * avgCtx)));
+  return Math.max(0, Math.floor(free / kvPerGpuPerSeq(model, kvDtype, tp, avgCtx)));
 }
 
 // Batch the server runs at: the user override, else the largest batch whose ITL meets

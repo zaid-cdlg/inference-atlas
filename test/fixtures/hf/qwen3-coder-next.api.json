@@ -1,0 +1,9 @@
+{
+  "id": "Qwen/Qwen3-Coder-Next",
+  "safetensors": {
+    "parameters": {
+      "BF16": 79674391296
+    },
+    "total": 79674391296
+  }
+}

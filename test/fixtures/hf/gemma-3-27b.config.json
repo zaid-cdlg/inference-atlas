@@ -12,6 +12,8 @@
     "num_attention_heads": 32,
     "num_hidden_layers": 62,
     "num_key_value_heads": 16,
+    "sliding_window": 1024,
+    "sliding_window_pattern": 6,
     "torch_dtype": "bfloat16"
   },
   "torch_dtype": "bfloat16"

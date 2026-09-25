@@ -48,6 +48,45 @@ export function archError(a) {
   return bad ?? (a.active_params > a.params ? 'active_params' : undefined);
 }
 
+// Layer types that keep no per-token KV cache (a small constant state instead).
+const NO_KV_LAYERS = ['linear_attention', 'mamba', 'conv'];
+
+// How many layers keep full KV, a sliding window of KV, or none. A layout we cannot read
+// counts every layer as full attention (never fewer users than reality) and is approximate.
+export function attnLayout(c, layers) {
+  if (Array.isArray(c.layer_types)) {
+    let full = 0;
+    let sliding = 0;
+    let linear = 0;
+    let approx = false;
+    for (const t of c.layer_types) {
+      if (t === 'sliding_attention') sliding++;
+      else if (NO_KV_LAYERS.includes(t)) linear++;
+      else {
+        full++;
+        if (t !== 'full_attention' && t !== 'attention') approx = true;
+      }
+    }
+    if (sliding && !(c.sliding_window > 0)) {
+      full += sliding;
+      sliding = 0;
+      approx = true;
+    }
+    return { full, sliding, window: sliding ? c.sliding_window : null, linear, approx };
+  }
+  if (c.full_attention_interval > 0) {
+    const full = Math.floor(layers / c.full_attention_interval);
+    return { full, sliding: 0, window: null, linear: layers - full, approx: false };
+  }
+  if (c.sliding_window_pattern > 0 && c.sliding_window > 0) {
+    const full = Math.floor(layers / c.sliding_window_pattern);
+    return { full, sliding: layers - full, window: c.sliding_window, linear: 0, approx: false };
+  }
+  const unknown = (c.sliding_window > 0 && c.use_sliding_window !== false)
+    || c.attention_chunk_size > 0 || c.hybrid_override_pattern != null;
+  return { full: layers, sliding: 0, window: null, linear: 0, approx: unknown };
+}
+
 const first = (c, keys) => keys.map((k) => c[k]).find((v) => v != null);
 
 // Architecture numbers the math needs, from config.json plus the HF API param count.
@@ -83,6 +122,7 @@ export function normalize(config, api) {
     mla: c.kv_lora_rank ? { kv_lora_rank: c.kv_lora_rank, qk_rope_head_dim: c.qk_rope_head_dim } : null,
     moe: experts > 1,
     max_ctx: c.max_position_embeddings ?? null,
+    attn: attnLayout(c, layers),
   };
   // Hybrid or unusual layouts (linear attention, partial MoE) produce nonsense here.
   // Throwing quarantines just this model instead of failing the whole run.
