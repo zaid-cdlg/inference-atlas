@@ -134,7 +134,16 @@ function initControls() {
   };
   input.addEventListener('change', pick);
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') pick(); });
-  input.addEventListener('focus', () => input.select());
+  // A datalist only suggests options that match what is in the box, so empty it on focus
+  // (the current model stays visible as the placeholder) to offer the whole list.
+  input.addEventListener('focus', () => {
+    input.placeholder = displayName(data.byId.get(state.model));
+    input.value = '';
+    $('model-hint').textContent = '';
+  });
+  input.addEventListener('blur', () => {
+    if (!input.value.trim()) input.value = displayName(data.byId.get(state.model));
+  });
 
   for (const b of document.querySelectorAll('[data-use]')) {
     b.addEventListener('click', () => update({
@@ -191,7 +200,8 @@ function render() {
   sync(state);
 
   // Controls
-  $('model').value = displayName(model);
+  if (document.activeElement === $('model')) $('model').placeholder = displayName(model);
+  else $('model').value = displayName(model);
   for (const b of document.querySelectorAll('[data-use]')) b.setAttribute('aria-pressed', String(b.dataset.use === state.use));
   $('use-hint').textContent = USE_HINT[state.use];
   $('gpu').value = state.gpu ?? '';
