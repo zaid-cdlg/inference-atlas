@@ -6,7 +6,7 @@ import { USE_CASES } from './math.js';
 export const DEFAULT_MODEL = 'meta-llama/Llama-3.3-70B-Instruct';
 export const FALLBACK_GPU = 'h100';
 
-const PRECS = ['fp16', 'fp8', 'int4'];
+const PRECS = ['fp16', 'fp8', 'int4', 'mxfp4'];
 const KV_DTYPES = ['fp16', 'fp8'];
 
 // [min, max, integer]. cache and util are percentages.
@@ -40,7 +40,8 @@ function num(raw, [min, max, int]) {
   return int ? Math.round(c) : c;
 }
 
-// ctx = { models: [hf_id], gpus: { id: { fp8 } }, int4: [hf_id with an AWQ/GPTQ repo] }.
+// ctx = { models: [hf_id], gpus: { id: { fp8 } }, precOk(model, gpu, prec) -> bool }, where
+// precOk comes from math.js precisionOptions (gpu is null while the page picks it).
 // Returns { state, notices }, where notices are keys the page turns into copy.
 export function parseState(params, ctx) {
   const notices = new Set();
@@ -70,10 +71,9 @@ export function parseState(params, ctx) {
   if (kv) s.kv = kv;
   const prec = pick('prec', PRECS);
   if (prec) {
-    const ok = prec === 'fp8' ? !gpu || ctx.gpus[gpu].fp8
-      : prec === 'int4' ? ctx.int4.includes(s.model) : true;
-    if (!ok) notices.add('prec_unavailable');
-    s.prec = ok ? prec : 'fp16';
+    // Not available for this model and GPU: fall back to auto, which picks a valid one.
+    if (ctx.precOk(s.model, gpu, prec)) s.prec = prec;
+    else notices.add('prec_unavailable');
   }
 
   for (const k of Object.keys(RANGES)) {

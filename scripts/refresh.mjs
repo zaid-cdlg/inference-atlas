@@ -87,6 +87,30 @@ export function attnLayout(c, layers) {
   return { full: layers, sliding: 0, window: null, linear: 0, approx: unknown };
 }
 
+// Native checkpoint format from quantization_config. Anything we cannot size is rejected,
+// which quarantines the model.
+function nativeFormat(config) {
+  const q = config.quantization_config ?? config.text_config?.quantization_config;
+  if (!q) return null;
+  if (q.quant_method === 'fp8' || q.quant_method === 'mxfp4') return q.quant_method;
+  if ((q.quant_method === 'awq' || q.quant_method === 'gptq') && q.bits === 4) return 'int4';
+  throw new Error(`unsupported quantization: ${q.quant_method}`);
+}
+
+// Bytes per param for each safetensors dtype in the HF API breakdown. For MXFP4 checkpoints
+// the U8 entries are the 4-bit expert weights plus their shared scales (4.25 bits).
+const DTYPE_PARAM_BYTES = { BF16: 2, F16: 2, F32: 4, F8_E4M3: 1, F8_E5M2: 1, I8: 1 };
+
+function nativeBytes(parameters, quant) {
+  let sum = 0;
+  for (const [dtype, n] of Object.entries(parameters ?? {})) {
+    const b = dtype === 'U8' && quant === 'mxfp4' ? 0.53125 : DTYPE_PARAM_BYTES[dtype];
+    if (b === undefined) return null;
+    sum += n * b;
+  }
+  return sum || null;
+}
+
 const first = (c, keys) => keys.map((k) => c[k]).find((v) => v != null);
 
 // Architecture numbers the math needs, from config.json plus the HF API param count.
@@ -100,6 +124,7 @@ export function normalize(config, api) {
   if (!(params > 0)) throw new Error('no parameter count');
   const layers = c.num_hidden_layers;
   const heads = c.num_attention_heads;
+  const quant = nativeFormat(config);
 
   let active = params;
   const experts = first(c, ['n_routed_experts', 'num_local_experts', 'num_experts']);
@@ -123,6 +148,8 @@ export function normalize(config, api) {
     moe: experts > 1,
     max_ctx: c.max_position_embeddings ?? null,
     attn: attnLayout(c, layers),
+    quant,
+    native_bytes: quant ? nativeBytes(api.safetensors.parameters, quant) : null,
   };
   // Hybrid or unusual layouts (linear attention, partial MoE) produce nonsense here.
   // Throwing quarantines just this model instead of failing the whole run.

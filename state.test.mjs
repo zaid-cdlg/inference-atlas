@@ -6,7 +6,9 @@ import { parseState, serializeState, urlSyncer, DEFAULT_MODEL } from './state.js
 const ctx = {
   models: [DEFAULT_MODEL, 'Qwen/Qwen2.5-7B-Instruct'],
   gpus: { h100: { fp8: true }, a100_80: { fp8: false } },
-  int4: [DEFAULT_MODEL],
+  // The page builds this from math.js precisionOptions; here a stand-in with the same shape.
+  precOk: (model, gpu, prec) => (prec === 'fp8' ? gpu === 'h100'
+    : prec === 'int4' ? model === DEFAULT_MODEL : prec === 'fp16'),
 };
 const parse = (qs) => parseState(new URLSearchParams(qs), ctx);
 
@@ -72,12 +74,12 @@ test('unknown GPU falls back to H100 with a notice', () => {
   assert.deepEqual(notices, ['gpu_unknown']);
 });
 
-test('precision not available: FP8 on a non-FP8 GPU, or INT4 without a repo, falls back to FP16', () => {
-  assert.deepEqual(parse('gpu=a100_80&prec=fp8'), {
-    ...parse('gpu=a100_80&prec=fp16'), notices: ['prec_unavailable'],
-  });
-  assert.equal(parse('model=Qwen%2FQwen2.5-7B-Instruct&prec=int4').state.prec, 'fp16');
+test('precision not available for this model and GPU falls back to auto with a notice', () => {
+  assert.deepEqual(parse('gpu=a100_80&prec=fp8'), { ...parse('gpu=a100_80'), notices: ['prec_unavailable'] });
+  assert.equal(parse('model=Qwen%2FQwen2.5-7B-Instruct&prec=int4').state.prec, null);
   assert.equal(parse('prec=int4').state.prec, 'int4');
+  // mxfp4 is a known value, so it is checked for availability, not rejected as invalid
+  assert.deepEqual(parse('prec=mxfp4').notices, ['prec_unavailable']);
 });
 
 test('hostile params are inert: never echoed, never prototype keys', () => {

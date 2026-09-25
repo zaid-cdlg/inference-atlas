@@ -17,5 +17,14 @@
   "num_key_value_heads": 128,
   "num_nextn_predict_layers": 1,
   "qk_rope_head_dim": 64,
+  "quantization_config": {
+    "activation_scheme": "dynamic",
+    "fmt": "e4m3",
+    "quant_method": "fp8",
+    "weight_block_size": [
+      128,
+      128
+    ]
+  },
   "torch_dtype": "bfloat16"
 }

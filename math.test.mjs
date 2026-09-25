@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import {
   kvBytesPerToken, kvPerGpuPerToken, headsSplitOk, chooseTP, decodeItl,
   splitTokens, prefillTime, tokensPerSec, blendedApiPrice,
-  kvPerGpuPerSeq, USE_CASES, maxUsers, operatingBatch, selfHostPerM, selfHostPerDay, breakEven, vllmCommand, fmtCount,
+  kvPerGpuPerSeq, bytesPer, weightBytes, precisionOptions, USE_CASES, maxUsers, operatingBatch, selfHostPerM, selfHostPerDay, breakEven, vllmCommand, fmtCount,
 } from './math.js';
 
 const close = (actual, expected, rel = 1e-9) =>
@@ -38,6 +38,14 @@ const qwen35 = {
   params: 27e9, active_params: 27e9, layers: 64, heads: 24, kv_heads: 4, head_dim: 256, mla: null,
   attn: { full: 16, sliding: 0, window: null, linear: 48, approx: false },
 };
+// gpt-oss-20b: HF reports 1,804,459,584 BF16 params (attention, router, embeddings) and
+// 19,110,297,600 MXFP4 expert params. MXFP4 = 4-bit values + one 8-bit scale per 32 = 4.25 bits.
+const gptOss20b = {
+  params: 20914757184, active_params: 4e9, layers: 24, heads: 64, kv_heads: 8, head_dim: 64, mla: null,
+  quant: 'mxfp4', native_bytes: 1804459584 * 2 + 19110297600 * 0.53125,
+};
+// A100 80GB spec sheet: 80 GB, 2.039 TB/s, 312 TFLOPS dense FP16, no FP8.
+const a100 = { vram_gb: 80, bandwidth_gbs: 2039, tflops: { fp16: 312, fp8: null }, fp8: false };
 // H100 SXM spec sheet: 80 GB, 3.35 TB/s, 989 TFLOPS dense BF16, 1979 dense FP8.
 const h100 = { vram_gb: 80, bandwidth_gbs: 3350, tflops: { fp16: 989, fp8: 1979 }, fp8: true };
 
@@ -278,4 +286,48 @@ test('max users, TP fit and decode ITL use the layer-aware KV', () => {
   assert.deepEqual(chooseTP(gemma27b, h100, 'fp16', 'fp16', 131072), { tp: 1 });
   // batch 4 at 4096: (54e9 + 4 x 771,751,936) / 3.35e12
   close(decodeItl(gemma27b, h100, 'fp16', 'fp16', 1, 4, 4096), (54e9 + 4 * 771751936) / 3.35e12);
+});
+
+test('MXFP4 is 4.25 bits per param including the shared scales', () => {
+  assert.equal(bytesPer('mxfp4'), 0.53125);
+});
+
+test('native weights: bytes come from the published checkpoint, not params x a flat size', () => {
+  // 3,608,919,168 + 10,152,345,600 = 13,761,264,768 B (the checkpoint is about 13.8 GB)
+  assert.equal(weightBytes(gptOss20b, 'mxfp4'), 13761264768);
+  // Without a native size, params x bytes per param
+  assert.equal(weightBytes(llama70b, 'fp8'), 70e9);
+});
+
+test('decode streams active params at the native bytes per param', () => {
+  // 4e9 x (13,761,264,768 / 20,914,757,184) B at batch 1, 1024 ctx; MXFP4 computes at FP16 peak
+  const perParam = 13761264768 / 20914757184;
+  const kv = 2 * 8 * 64 * 2 * (12 * 1024 + 12 * 128);
+  const m = { ...gptOss20b, attn: { full: 12, sliding: 12, window: 128, linear: 0, approx: false } };
+  close(decodeItl(m, h100, 'mxfp4', 'fp16', 1, 1, 1024), (4e9 * perParam + kv) / 3.35e12);
+});
+
+test('precision options: native format only; FP8 online needs an FP8 GPU; INT4 needs a repo', () => {
+  const none = { ...llama70b, quant: null };
+  assert.deepEqual(precisionOptions(none, h100, true),
+    { fp16: null, fp8: null, int4: null, mxfp4: 'Only for models published in MXFP4.' });
+  assert.deepEqual(precisionOptions(none, a100, false), {
+    fp16: null, fp8: 'This GPU has no FP8 support.',
+    int4: 'No INT4 version published for this model.', mxfp4: 'Only for models published in MXFP4.',
+  });
+  const mx = 'Weights are published in MXFP4, so the model runs in MXFP4.';
+  assert.deepEqual(precisionOptions(gptOss20b, a100, true), { fp16: mx, fp8: mx, int4: mx, mxfp4: null });
+  // FP8 checkpoints load on GPUs without FP8 (weight-only kernels), so FP8 stays available
+  const f8 = 'Weights are published in FP8, so the model runs in FP8.';
+  assert.deepEqual(precisionOptions({ ...deepseekV3, quant: 'fp8' }, a100, true), { fp16: f8, fp8: null, int4: f8, mxfp4: f8 });
+});
+
+test('FP8 weights on a GPU without FP8 compute at the FP16 peak', () => {
+  // 8B FP8 on A100 at B = 500, 128 ctx: compute 2 x 8e9 x 500 / (312e12 x 0.5) = 51.3 ms wins
+  close(decodeItl(llama8b, a100, 'fp8', 'fp16', 1, 500, 128), (2 * 8e9 * 500) / (312e12 * 0.5));
+});
+
+test('vllm command: no --quantization flag when the checkpoint is already FP8', () => {
+  assert.equal(vllmCommand({ hfId: 'deepseek-ai/DeepSeek-V3', tp: 8, maxCtx: 8192, batch: 4, prec: 'fp8', kvDtype: 'fp16', native: 'fp8' }),
+    'vllm serve deepseek-ai/DeepSeek-V3 --tensor-parallel-size 8 --max-model-len 8192 --gpu-memory-utilization 0.9 --max-num-seqs 4');
 });

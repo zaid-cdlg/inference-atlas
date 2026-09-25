@@ -36,6 +36,7 @@ test('normalize GQA without head_dim: head_dim = hidden_size / heads', () => {
     head_dim: 128, mla: null, moe: false, max_ctx: 32768,
     // sliding_window is set but use_sliding_window is false: every layer is full attention
     attn: { full: 28, sliding: 0, window: null, linear: 0, approx: false },
+    quant: null, native_bytes: null,
   });
 });
 
@@ -100,6 +101,32 @@ test('attention layout: unknown layouts count every layer as full and are marked
   const types = [...Array(26).fill('deepseek_sparse_attention'), 'mamba', 'conv'];
   assert.deepEqual(normalize({ ...config, layer_types: types }, api).attn,
     { full: 26, sliding: 0, window: null, linear: 2, approx: true });
+});
+
+test('native FP8 (DeepSeek V3): bytes per dtype from the HF breakdown', () => {
+  const n = normalize(hf('deepseek-v3').config, hf('deepseek-v3').api);
+  assert.equal(n.quant, 'fp8');
+  // BF16 x 2 + F8_E4M3 x 1 + F32 x 4
+  assert.equal(n.native_bytes, 3918786560 * 2 + 680571043840 + 41555600 * 4);
+});
+
+test('native MXFP4 (gpt-oss-20b): U8 blocks count as 4.25-bit params, attention stays BF16', () => {
+  const n = normalize(hf('gpt-oss-20b').config, hf('gpt-oss-20b').api);
+  assert.equal(n.quant, 'mxfp4');
+  assert.equal(n.native_bytes, 1804459584 * 2 + 19110297600 * 0.53125);
+  // Experts use experts_per_token: 3 x 2880 x 2880 per expert, 32 experts, 4 per token, 24 layers
+  const e = 3 * 2880 * 2880;
+  assert.equal(n.active_params, 20914757184 - 32 * e * 24 + 4 * e * 24);
+  assert.deepEqual(n.attn, { full: 12, sliding: 12, window: 128, linear: 0, approx: false });
+});
+
+test('AWQ/GPTQ 4-bit is INT4; other quantization formats are quarantined', () => {
+  const { config, api } = hf('qwen2.5-7b');
+  assert.equal(normalize({ ...config, quantization_config: { quant_method: 'awq', bits: 4 } }, api).quant, 'int4');
+  assert.throws(() => normalize({ ...config, quantization_config: { quant_method: 'compressed-tensors' } }, api),
+    /unsupported quantization: compressed-tensors/);
+  assert.throws(() => normalize({ ...config, quantization_config: { quant_method: 'gptq', bits: 3 } }, api),
+    /unsupported quantization: gptq/);
 });
 
 test('normalize rejects configs missing core shape keys', () => {

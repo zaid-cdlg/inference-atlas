@@ -7,7 +7,9 @@
 // Model shape (normalized by scripts/refresh.mjs from Hugging Face config.json):
 //   { params, active_params, layers, heads, kv_heads, head_dim,
 //     mla: null | { kv_lora_rank, qk_rope_head_dim },
-//     attn: { full, sliding, window, linear, approx } (optional; absent = all full) }
+//     attn: { full, sliding, window, linear, approx } (optional; absent = all full),
+//     quant: null | 'fp8' | 'mxfp4' | 'int4' (native checkpoint format),
+//     native_bytes: checkpoint weight bytes when quant is set (mixed dtypes summed) }
 // GPU shape (data/gpus.json): { vram_gb, bandwidth_gbs, tflops: { fp16, fp8 }, fp8, usd_hr }
 
 // vLLM's --gpu-memory-utilization 0.9: the other 10% of VRAM covers activations,
@@ -30,11 +32,42 @@ export const USE_CASES = {
   batch: { maxCtx: 8192, avgCtx: 2048, r: 5, itlPin: null, cache: 0 },
 };
 
-const BYTES = { fp16: 2, fp8: 1, int4: 0.5 };
+// MXFP4: 4-bit values plus one shared 8-bit scale per 32 values = 4.25 bits.
+const BYTES = { fp16: 2, fp8: 1, int4: 0.5, mxfp4: 0.53125 };
+const LABELS = { fp16: 'FP16', fp8: 'FP8', int4: 'INT4', mxfp4: 'MXFP4' };
 
 export const bytesPer = (dtype) => BYTES[dtype];
 
-export const weightBytes = (model, prec) => model.params * BYTES[prec];
+// A pre-quantized checkpoint keeps some tensors (attention, embeddings) in BF16, so its
+// real size comes from the checkpoint rather than params x the format's size.
+const native = (model, prec) => prec === model.quant && model.native_bytes > 0;
+
+export const weightBytes = (model, prec) =>
+  (native(model, prec) ? model.native_bytes : model.params * BYTES[prec]);
+
+const bytesPerParam = (model, prec) =>
+  (native(model, prec) ? model.native_bytes / model.params : BYTES[prec]);
+
+// Which weight precisions this model can run in on this GPU: null = available, else the
+// reason it is disabled. A pre-quantized model only runs in its published format.
+export function precisionOptions(model, gpu, hasInt4Repo) {
+  const out = {};
+  for (const p of Object.keys(BYTES)) {
+    if (model.quant) {
+      out[p] = p === model.quant ? null
+        : `Weights are published in ${LABELS[model.quant]}, so the model runs in ${LABELS[model.quant]}.`;
+    } else if (p === 'fp8') {
+      out[p] = gpu.fp8 ? null : 'This GPU has no FP8 support.';
+    } else if (p === 'int4') {
+      out[p] = hasInt4Repo ? null : 'No INT4 version published for this model.';
+    } else if (p === 'mxfp4') {
+      out[p] = 'Only for models published in MXFP4.';
+    } else {
+      out[p] = null;
+    }
+  }
+  return out;
+}
 
 // Per token, all layers. GQA/MHA stores K and V per KV head. MLA stores one
 // compressed latent plus the rope key per layer (approximate).
@@ -85,15 +118,16 @@ export function chooseTP(model, gpu, prec, kvDtype, maxCtx) {
   return { error: 'heads', fitTp, maxValidTp };
 }
 
-// INT4 AWQ/GPTQ kernels dequantize and compute in fp16.
-const peakFlops = (gpu, prec) => gpu.tflops[prec === 'fp8' ? 'fp8' : 'fp16'] * 1e12;
+// INT4 and MXFP4 kernels dequantize and compute in fp16, and so do FP8 weights on a GPU
+// without FP8 tensor cores.
+const peakFlops = (gpu, prec) => gpu.tflops[prec === 'fp8' && gpu.fp8 ? 'fp8' : 'fp16'] * 1e12;
 
 // Seconds per decode step for a batch of B sequences, each holding avgCtx tokens.
 // Roofline: the slower of streaming bytes and doing the matmul FLOPs. MoE streams
 // active expert weights only, which is approximate at large batch.
 export function decodeItl(model, gpu, prec, kvDtype, tp, batch, avgCtx) {
   const bw = gpu.bandwidth_gbs * 1e9 * (tp > 1 ? TP_COMM_EFFICIENCY : 1);
-  const streamed = (model.active_params * BYTES[prec]) / tp
+  const streamed = (model.active_params * bytesPerParam(model, prec)) / tp
     + batch * kvPerGpuPerSeq(model, kvDtype, tp, avgCtx);
   const memory = streamed / bw;
   const compute = (2 * model.active_params * batch) / (tp * peakFlops(gpu, prec) * MFU);
@@ -165,14 +199,14 @@ export function breakEven({ tps, util, tp, usdHr, apiPerM }) {
   return { kind: 'cross', tpd };
 }
 
-// The command to run. For INT4 the caller passes the AWQ/GPTQ repo as hfId; vLLM reads
-// the quantization method from that repo's config, so no flag is needed.
-export function vllmCommand({ hfId, tp, maxCtx, batch, prec, kvDtype }) {
+// The command to run. For INT4 the caller passes the AWQ/GPTQ repo as hfId. vLLM reads the
+// quantization method from a pre-quantized checkpoint's config, so only online FP8 needs a flag.
+export function vllmCommand({ hfId, tp, maxCtx, batch, prec, kvDtype, native: nativeQuant = null }) {
   const parts = [
     `vllm serve ${hfId}`, `--tensor-parallel-size ${tp}`, `--max-model-len ${maxCtx}`,
     `--gpu-memory-utilization ${GPU_MEM_UTIL}`, `--max-num-seqs ${batch}`,
   ];
-  if (prec === 'fp8') parts.push('--quantization fp8');
+  if (prec === 'fp8' && nativeQuant !== 'fp8') parts.push('--quantization fp8');
   if (kvDtype === 'fp8') parts.push('--kv-cache-dtype fp8');
   return parts.join(' ');
 }
