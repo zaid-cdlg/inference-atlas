@@ -281,7 +281,7 @@ function renderPrecision(p, model) {
 function renderExplain(p, model) {
   const rows = [
     ['GPUs', `${p.tp}× ${shortGpu(p.gpu)}`, `One copy of the model needs ${p.tp === 1 ? 'one GPU' : `${p.tp} GPUs working together`}: the weights plus one conversation of the longest length must fit in 90% of each GPU's memory.`],
-    ['Users at once', `${p.users}`, `How many average conversations (${fmtCount(p.avgCtx)} tokens) fit in memory at the same time. The server runs ${p.batch} at once${p.batch < p.users ? ' to stay under the speed target' : ''}.`],
+    ['Users at once', `${p.users}`, `How many average conversations (${ctxLabel(p.avgCtx)}) fit in memory at the same time. The server runs ${p.batch} at once${p.batch < p.users ? ' to stay under the speed target' : ''}.`],
     ['Speed', `${Math.round(p.itl * 1000)} ms per token`, `Time to write one token for each user while ${p.batch} share the GPU${p.tp > 1 ? 's' : ''}: about ${Math.max(1, Math.round(1 / p.itl))} tokens per second each. Reading is roughly 4 words per second.`],
     ['Throughput', `${fmtCount(p.tps)} tokens/s`, 'All tokens one copy of the model serves per second, prompts and answers together.'],
     ['Self-host price', `${usd(p.selfPerM)} per 1M tokens`, `GPU rent (${p.tp} × $${p.gpu.usd_per_hr.toFixed(2)}/hr) divided by the tokens served, with the GPUs busy ${state.util}% of the time.`],
@@ -418,7 +418,7 @@ function renderKv(p, model) {
       blocks.push(b);
     }
   }
-  if (!played) blocks.push(el('span', null, 'kv-cover'));
+  if (!played && !reduceMotion.matches) blocks.push(el('span', null, 'kv-cover'));
   users.replaceChildren(...blocks);
   $('kvbar').setAttribute('aria-label', `${p.users} users fit: weights ${gb(weights)}, conversations ${gb(kvTotal)}, free ${gb(usable - weights - kvTotal)} of ${gb(usable)}.`);
 
