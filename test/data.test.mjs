@@ -35,6 +35,7 @@ test('gpus.json: 9 GPUs, every value positive and cited with a date', () => {
       assert.equal(g.peak_tflops.fp8, null);
     }
     if (g.verify) assert.ok(g.verify_reason?.length > 10, `${g.id} verify_reason`);
+    assert.ok(['nvidia', 'amd'].includes(g.vendor), `${g.id} vendor`);
   }
 });
 

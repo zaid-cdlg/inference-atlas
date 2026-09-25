@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { plan, usd, ctxLabel } from './planner.js';
+import { parseState } from './state.js';
 
 // Hand-made data in the data/ shapes. Llama 3.1 8B config: 32 layers, 32 heads, 8 KV heads.
 const arch8b = {
@@ -14,7 +15,7 @@ const model = (over = {}) => ({
   hf_id: 'x/Model-8B', name: 'X: Model 8B', pricing: { prompt: 0.6, completion: 2.4, cache_read: null }, arch: arch8b, ...over,
 });
 const gpu = (id, over = {}) => ({
-  id, name: `GPU ${id}`, vram_gb: 80, bandwidth_gbs: 3350, peak_tflops: { fp16: 989, fp8: 1979 }, fp8: true, usd_per_hr: 4, ...over,
+  id, name: `GPU ${id}`, vendor: 'nvidia', vram_gb: 80, bandwidth_gbs: 3350, peak_tflops: { fp16: 989, fp8: 1979 }, fp8: true, usd_per_hr: 4, ...over,
 });
 const chat = { use: 'chat', kv: 'fp16', max_ctx: 8192, avg_ctx: 4096, r: 3, cache: 0, batch: null, util: 60, tpd: 1e7, gpu: null, prec: null };
 
@@ -105,4 +106,38 @@ test('KV sim markup: the slider is named by its label and the heading says users
   assert.match(html, /<h2 id="kv-h">[^<]*users fit<\/h2>/);
   // app.js keeps aria-valuetext in step with the visible value
   assert.match(readFileSync(new URL('./app.js', import.meta.url), 'utf8'), /setAttribute\('aria-valuetext', ctxLabel\(/);
+});
+
+// The real data: auto mode must never hand a beginner an AMD command.
+const read = (p) => JSON.parse(readFileSync(new URL(`./data/${p}`, import.meta.url)));
+const models = read('models.json');
+const { gpus } = read('gpus.json');
+const quality = read('quality.json');
+const byId = new Map(models.models.map((m) => [m.hf_id, m]));
+const planFor = (qs) => {
+  const ctx = { models: models.featured, gpus: Object.fromEntries(gpus.map((g) => [g.id, g])), precOk: () => true };
+  const { state } = parseState(new URLSearchParams(qs), ctx);
+  return plan({ model: byId.get(state.model), gpus, state, int4: quality.quantized_repos[state.model]?.int4 ?? null });
+};
+
+test('auto never picks an AMD GPU, for any featured model or use case', () => {
+  for (const id of models.featured) {
+    for (const use of ['chat', 'agents', 'batch']) {
+      assert.equal(planFor(`model=${encodeURIComponent(id)}&use=${use}`).gpu.vendor, 'nvidia', `${id} ${use}`);
+    }
+  }
+});
+
+test('amdHint: a cheaper MI300X is offered as a hint, not picked', () => {
+  const p = planFor('model=openai%2Fgpt-oss-120b');
+  assert.equal(p.amdHint.gpu.id, 'mi300x');
+  assert.ok(p.amdHint.selfPerM < p.selfPerM);
+});
+
+test('MI300X picked by hand works and gets no hint', () => {
+  const p = planFor('model=openai%2Fgpt-oss-120b&gpu=mi300x');
+  assert.equal(p.gpu.id, 'mi300x');
+  assert.equal(p.error, null);
+  assert.equal(p.amdHint, null);
+  assert.match(p.command, /^vllm serve openai\/gpt-oss-120b /);
 });

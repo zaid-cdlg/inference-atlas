@@ -9,6 +9,7 @@
     {
       "id": "t4",
       "name": "NVIDIA T4 16GB",
+      "vendor": "nvidia",
       "vram_gb": 16,
       "bandwidth_gbs": 320,
       "peak_tflops": {
@@ -45,6 +46,7 @@
     {
       "id": "l4",
       "name": "NVIDIA L4 24GB",
+      "vendor": "nvidia",
       "vram_gb": 24,
       "bandwidth_gbs": 300,
       "peak_tflops": {
@@ -83,6 +85,7 @@
     {
       "id": "a10g",
       "name": "NVIDIA A10G 24GB (AWS)",
+      "vendor": "nvidia",
       "vram_gb": 24,
       "bandwidth_gbs": 600,
       "peak_tflops": {
@@ -119,6 +122,7 @@
     {
       "id": "l40s",
       "name": "NVIDIA L40S 48GB",
+      "vendor": "nvidia",
       "vram_gb": 48,
       "bandwidth_gbs": 864,
       "peak_tflops": {
@@ -157,6 +161,7 @@
     {
       "id": "a100_80",
       "name": "NVIDIA A100 80GB SXM",
+      "vendor": "nvidia",
       "vram_gb": 80,
       "bandwidth_gbs": 2039,
       "peak_tflops": {
@@ -191,6 +196,7 @@
     {
       "id": "h100",
       "name": "NVIDIA H100 SXM 80GB",
+      "vendor": "nvidia",
       "vram_gb": 80,
       "bandwidth_gbs": 3350,
       "peak_tflops": {
@@ -229,6 +235,7 @@
     {
       "id": "h200",
       "name": "NVIDIA H200 SXM 141GB",
+      "vendor": "nvidia",
       "vram_gb": 141,
       "bandwidth_gbs": 4800,
       "peak_tflops": {
@@ -267,6 +274,7 @@
     {
       "id": "b200",
       "name": "NVIDIA B200 180GB",
+      "vendor": "nvidia",
       "vram_gb": 180,
       "bandwidth_gbs": 8000,
       "peak_tflops": {
@@ -306,6 +314,7 @@
     {
       "id": "mi300x",
       "name": "AMD Instinct MI300X 192GB",
+      "vendor": "amd",
       "vram_gb": 192,
       "bandwidth_gbs": 5300,
       "peak_tflops": {

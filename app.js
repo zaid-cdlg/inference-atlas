@@ -195,6 +195,10 @@ function render() {
   $('gpu').value = state.gpu ?? '';
   const gpuNotes = [];
   if (!state.gpu) gpuNotes.push(`Picked ${shortGpu(p.gpu)}: lowest cost per token that fits.`);
+  if (p.amdHint) {
+    const name = p.amdHint.gpu.name.replace(/^AMD Instinct /, '').replace(/ \d+GB$/, '');
+    gpuNotes.push(`An AMD ${name} may cost less here (about ${usd(p.amdHint.selfPerM)} per 1M tokens). Pick it under GPU. It needs vLLM's ROCm build.`);
+  }
   if (p.gpu.verify) gpuNotes.push(`Estimate: ${p.gpu.verify_reason}`);
   $('gpu-hint').textContent = gpuNotes.join(' ');
   renderPrecision(p, model);
@@ -233,6 +237,7 @@ function render() {
     const notes = [];
     const q = int4For(state.model);
     if (p.prec === 'int4' && q) notes.push(`Uses ${q.repo}${q.publisher === 'community' ? ' (community quant)' : ''}.`);
+    if (p.gpu.vendor === 'amd') notes.push("This runs on AMD. Install vLLM's ROCm build, not the default CUDA one.");
     if (model.arch.quant) notes.push(`The weights are published in ${PREC_LABEL[model.arch.quant]}, so vLLM loads them as they are.`);
     $('cmd-note').textContent = notes.join(' ');
   }
