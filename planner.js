@@ -13,6 +13,14 @@ export function usd(x) {
   return `$${Number(x.toPrecision(2)).toLocaleString('en-US')}`;
 }
 
+// Context length the way people say it (4096 -> "4k tokens"), for the slider and its
+// screen-reader value.
+export function ctxLabel(t) {
+  if (t < 1024) return `${t} tokens`;
+  const k = t / 1024;
+  return `${k >= 10 ? Math.round(k) : Number(k.toFixed(1))}k tokens`;
+}
+
 export const shortGpu = (g) => g.name.replace(/^(NVIDIA|AMD Instinct) /, '');
 
 // Precision the page uses when the reader has not picked one: the published format of a

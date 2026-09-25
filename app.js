@@ -1,7 +1,7 @@
 // Page wiring. Every external string is rendered with textContent or an attribute setter,
 // never innerHTML.
 import { parseState, serializeState, urlSyncer } from './state.js';
-import { plan, usd, shortGpu } from './planner.js';
+import { plan, usd, shortGpu, ctxLabel } from './planner.js';
 import {
   USE_CASES, precisionOptions, fmtCount, selfHostPerDay, CHART_MIN_TPD, CHART_MAX_TPD,
 } from './math.js';
@@ -380,7 +380,7 @@ function renderKv(p, model) {
   $('kv-h').textContent = `Why ${p.users} users fit`;
   const cap = [`One ${shortGpu(p.gpu)}'s usable memory: ${p.gpu.vram_gb} GB × 0.9 = ${gb(usable)}.`];
   if (p.tp > 1) cap.push(`The model is split across ${p.tp} GPUs, so each holds 1/${p.tp} of the weights and its share of every user's cache.`);
-  cap.push(`Each coral block is one user's conversation (${fmtCount(p.avgCtx)} tokens), stored in ${pages} pages of 16 tokens.`);
+  cap.push(`Each coral block is one user's conversation (${ctxLabel(p.avgCtx)}), stored in ${pages} pages of 16 tokens.`);
   const a = model.arch.attn;
   if (a && (a.sliding || a.linear)) cap.push(`This model keeps the whole conversation on only ${a.full} of its ${model.arch.layers} layers, so long chats cost less memory.`);
   $('kv-caption').textContent = cap.join(' ');
@@ -416,7 +416,8 @@ function renderKv(p, model) {
   const slider = $('avg');
   slider.max = p.maxCtx;
   if (document.activeElement !== slider) slider.value = p.avgCtx;
-  $('avg-out').textContent = `${fmtCount(p.avgCtx)} tokens`;
+  slider.setAttribute('aria-valuetext', ctxLabel(p.avgCtx));
+  $('avg-out').textContent = ctxLabel(p.avgCtx);
 }
 
 // The one authored animation: fill once on first view, never loop.

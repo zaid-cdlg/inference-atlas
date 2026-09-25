@@ -1,7 +1,8 @@
 // Page logic: auto GPU and precision, verdict copy, error states, command.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { plan, usd } from './planner.js';
+import { readFileSync } from 'node:fs';
+import { plan, usd, ctxLabel } from './planner.js';
 
 // Hand-made data in the data/ shapes. Llama 3.1 8B config: 32 layers, 32 heads, 8 KV heads.
 const arch8b = {
@@ -85,4 +86,23 @@ test('usd: 2 significant figures', () => {
   assert.equal(usd(12.49), '$12');
   assert.equal(usd(1234), '$1,200');
   assert.equal(usd(0.001), '<$0.01');
+});
+
+test('context length reads the way people say it: 4k tokens', () => {
+  assert.equal(ctxLabel(4096), '4k tokens');
+  assert.equal(ctxLabel(16384), '16k tokens');
+  assert.equal(ctxLabel(4352), '4.3k tokens');
+  assert.equal(ctxLabel(131072), '128k tokens');
+  assert.equal(ctxLabel(512), '512 tokens');
+});
+
+test('KV sim markup: the slider is named by its label and the heading says users fit', () => {
+  const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+  const label = html.match(/<label[^>]*for="avg"[^>]*>(.*?)<\/label>/s);
+  assert.ok(label, 'the slider has a <label for="avg">');
+  assert.match(label[1], /Average conversation length/);
+  assert.match(html, /<input type="range" id="avg"/);
+  assert.match(html, /<h2 id="kv-h">[^<]*users fit<\/h2>/);
+  // app.js keeps aria-valuetext in step with the visible value
+  assert.match(readFileSync(new URL('./app.js', import.meta.url), 'utf8'), /setAttribute\('aria-valuetext', ctxLabel\(/);
 });
