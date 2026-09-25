@@ -115,7 +115,7 @@ input:disabled { color: var(--muted); }
 .skeleton { display: block; height: 0.9em; width: 70%; background: var(--hairline); }
 
 details > summary { cursor: pointer; display: flex; align-items: center; gap: 8px; min-height: 44px; }
-details > summary::before { content: '▸'; font-size: 0.9em; line-height: 1; transition: transform 150ms; }
+details > summary::before { content: '▸'; font-size: 0.9em; line-height: 1; }
 details[open] > summary::before { transform: rotate(90deg); }
 details > summary::-webkit-details-marker { display: none; }
 details > summary { list-style: none; }
