@@ -128,7 +128,7 @@ export function normalize(config, api) {
 
   let active = params;
   const experts = first(c, ['n_routed_experts', 'num_local_experts', 'num_experts']);
-  const k = first(c, ['num_experts_per_tok', 'experts_per_token']);
+  const k = first(c, ['num_experts_per_tok', 'experts_per_token', 'top_k_experts']);
   const expertSize = first(c, ['moe_intermediate_size', 'intermediate_size']);
   if (experts > 1 && k > 0 && expertSize > 0) {
     // DeepSeek-style: the first k layers are dense, and next-token-prediction layers are MoE too.

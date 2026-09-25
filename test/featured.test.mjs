@@ -41,3 +41,12 @@ for (const [id, [full, sliding, linear, window, quant]] of Object.entries(FEATUR
     assert.equal(arch.quant, quant);
   });
 }
+
+test('Gemma 4 names its per-token expert count top_k_experts', () => {
+  // 26B-A4B: expert = 3 x 2816 x 704; 128 experts, 8 per token, 30 layers
+  const id = 'google/gemma-4-26B-A4B-it';
+  const arch = normalize(fixture(id, 'config'), fixture(id, 'api'));
+  const e = 3 * 2816 * 704;
+  assert.equal(arch.moe, true);
+  assert.equal(arch.active_params, arch.params - 128 * e * 30 + 8 * e * 30);
+});
