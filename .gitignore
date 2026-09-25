@@ -1,0 +1,11 @@
+# Private planning files
+MEMORY.md
+CLAUDE.md
+TODOS.md
+Resources/
+docs/designs/
+
+# Jupyter notebooks
+*.ipynb
+
+.DS_Store
