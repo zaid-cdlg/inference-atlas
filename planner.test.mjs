@@ -20,7 +20,7 @@ const gpu = (id, over = {}) => ({
 });
 const chat = { use: 'chat', kv: 'fp16', max_ctx: 8192, avg_ctx: 4096, r: 3, cache: 0, batch: null, util: 60, tpd: 1e7, gpu: null, prec: null };
 
-test('auto picks the GPU with the lowest self-host $/1M tokens, and FP8 where the GPU has it', () => {
+test('auto picks the GPU with the earliest break-even, and FP8 where the GPU has it', () => {
   const p = plan({ model: model(), gpus: [gpu('dear', { usd_per_hr: 9 }), gpu('cheap', { usd_per_hr: 2 })], state: chat });
   assert.equal(p.gpu.id, 'cheap');
   assert.equal(p.prec, 'fp8');
@@ -143,14 +143,57 @@ test('MI300X picked by hand works and gets no hint', () => {
   assert.match(p.command, /^vllm serve openai\/gpt-oss-120b /);
 });
 
-test('default example: gpt-oss-120b on 1x B200 in MXFP4, with a break-even to show', () => {
+test('default example: gpt-oss-120b in MXFP4 on one NVIDIA GPU, with a break-even to show', () => {
   assert.equal(DEFAULT_MODEL, 'openai/gpt-oss-120b');
   const p = planFor('');
-  assert.equal(p.gpu.id, 'b200');
+  assert.equal(p.gpu.vendor, 'nvidia');
   assert.equal(p.tp, 1);
   assert.equal(p.prec, 'mxfp4');
   // Prices change weekly, so check the shape and the rounding rather than the number
   assert.equal(p.be.kind, 'cross');
   assert.equal(p.verdict, `Self-hosting likely wins above ~${fmtCount(p.be.tpd)} tokens/day`);
   assert.match(p.verdict, /~\d{1,3}(\.\d)?[KMB] tokens/);
+});
+
+test('a natively INT4 checkpoint runs as itself (no separate quantized repo needed)', () => {
+  const awq = model({ hf_id: 'x/Model-8B-AWQ', arch: { ...arch8b, quant: 'int4', native_bytes: 5e9 } });
+  const p = plan({ model: awq, gpus: [gpu('h100')], state: chat });
+  assert.equal(p.prec, 'int4');
+  assert.match(p.command, /^vllm serve x\/Model-8B-AWQ /);
+});
+
+test('a manual batch that misses the latency target is flagged with its own copy', () => {
+  const p = plan({ model: model(), gpus: [gpu('slow', { bandwidth_gbs: 300 })], state: { ...chat, gpu: 'slow', prec: 'fp16', batch: 60 } });
+  assert.equal(p.batch, 60);
+  assert.match(p.slo, /^Misses the 50 ms target with 60 users at once\. Lower "Users served at once" or leave it empty\.$/);
+});
+
+test('auto reports the earliest crossing, not the cheapest GPU per token at full load', () => {
+  // Every NVIDIA GPU picked by hand: the auto verdict must be the lowest break-even of them all
+  const auto = planFor('model=openai%2Fgpt-oss-120b');
+  const crossings = gpus.filter((g) => g.vendor === 'nvidia')
+    .map((g) => planFor(`model=openai%2Fgpt-oss-120b&gpu=${g.id}`))
+    .filter((p) => !p.error && p.be?.kind === 'cross');
+  assert.equal(auto.be.tpd, Math.min(...crossings.map((p) => p.be.tpd)));
+});
+
+test('auto falls back to the cheapest per token when no GPU crosses (the API wins everywhere)', () => {
+  const p = planFor('model=meta-llama%2FLlama-3.3-70B-Instruct');
+  assert.equal(p.be.kind, 'api');
+  const perToken = gpus.filter((g) => g.vendor === 'nvidia')
+    .map((g) => planFor(`model=meta-llama%2FLlama-3.3-70B-Instruct&gpu=${g.id}`)).filter((x) => !x.error);
+  assert.equal(p.selfPerM, Math.min(...perToken.map((x) => x.selfPerM)));
+});
+
+test('a model whose only format cannot run on the chosen GPU gets a clear error and no command', () => {
+  const p = planFor('model=openai%2Fgpt-oss-20b&gpu=t4');
+  assert.equal(p.command, null);
+  assert.equal(p.error, 'vLLM has no MXFP4 kernel for Turing GPUs such as the T4. Pick an A10G, L4 or newer GPU.');
+  // and auto never lands there
+  assert.notEqual(planFor('model=openai%2Fgpt-oss-20b').gpu.generation, 'turing');
+});
+
+test('a manual batch of 1 that misses the target gets the "even at 1 user" advice', () => {
+  const p = plan({ model: model(), gpus: [gpu('slow', { bandwidth_gbs: 100 })], state: { ...chat, gpu: 'slow', prec: 'fp16', batch: 1 } });
+  assert.equal(p.slo, 'Misses the 50 ms target even at 1 user. Try a faster GPU or FP8.');
 });

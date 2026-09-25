@@ -65,7 +65,9 @@ export function parseState(params, ctx) {
     gpu = FALLBACK_GPU;
   }
   const use = pick('use', Object.keys(USE_CASES)) ?? 'chat';
-  const s = { ...defaults(use), model: model ?? DEFAULT_MODEL, gpu };
+  // The weekly refresh may drop a model upstream, including the default example.
+  const fallback = ctx.models.includes(DEFAULT_MODEL) ? DEFAULT_MODEL : ctx.models[0];
+  const s = { ...defaults(use), model: model ?? fallback, gpu };
 
   const kv = pick('kv', KV_DTYPES);
   if (kv) s.kv = kv;

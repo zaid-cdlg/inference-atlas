@@ -209,3 +209,41 @@ test('validation gate: schema, >= 90% of the previous count; a missing featured 
   const bad = [{ ...good, arch: { ...good.arch, kv_heads: 0 } }, { ...good, hf_id: 'a/c', pricing: { prompt: -1, completion: 1, cache_read: null } }];
   assert.deepEqual(validate(bad, 0, []).errors, ['a/b: bad arch.kv_heads', 'a/c: bad pricing']);
 });
+
+test('a pre-quantized checkpoint whose size cannot be read is quarantined, not mis-sized', () => {
+  const { config } = hf('qwen2.5-7b');
+  // AWQ packs 8 INT4 weights per I32 element, so the HF param count is not the real count
+  const packed = { safetensors: { total: 1e9, parameters: { I32: 9e8, F16: 1e8 } } };
+  assert.throws(() => normalize({ ...config, quantization_config: { quant_method: 'awq', bits: 4 } }, packed), /cannot size/);
+  // Index fallback (no dtype breakdown) for an FP8 checkpoint: same
+  assert.throws(() => normalize({ ...config, quantization_config: { quant_method: 'fp8' } }, { safetensors: { total: 7e9 } }), /cannot size/);
+});
+
+test('quantization_config nested under text_config is read', () => {
+  const { config, api } = hf('deepseek-v3');
+  const { quantization_config: q, ...rest } = config;
+  assert.equal(normalize({ architectures: ['X'], text_config: { ...rest, quantization_config: q } }, api).quant, 'fp8');
+});
+
+test('chunked attention and hybrid patterns are marked approximate', () => {
+  const { config, api } = hf('qwen2.5-7b');
+  assert.equal(normalize({ ...config, attention_chunk_size: 8192 }, api).attn.approx, true);
+  assert.equal(normalize({ ...config, hybrid_override_pattern: 'M*M*' }, api).attn.approx, true);
+});
+
+test('the gate rejects implausible prices (a unit change upstream)', () => {
+  const good = { hf_id: 'a/b', slug: 'a/b', name: 'B', context_length: 8192,
+    arch: normalize(hf('qwen2.5-7b').config, hf('qwen2.5-7b').api) };
+  assert.deepEqual(validate([{ ...good, pricing: { prompt: 0.1, completion: 0.3, cache_read: null } }], 0, []).errors, []);
+  assert.deepEqual(validate([{ ...good, pricing: { prompt: 100000, completion: 300000, cache_read: null } }], 0, []).errors, ['a/b: bad pricing']);
+});
+
+test('a previous entry that the current rules reject is quarantined, not kept', async () => {
+  const listings = selectListings(fx('openrouter-models.json').data);
+  const unsized = { ...normalize(hf('qwen2.5-7b').config, hf('qwen2.5-7b').api), quant: 'fp8', native_bytes: null };
+  const prev = [{ hf_id: 'zai-org/GLM-5.3', arch: unsized }];
+  const fail = async () => { throw new Error('HTTP 403'); };
+  const r = await buildCatalogue(listings, prev, fail);
+  assert.deepEqual(r.kept, []);
+  assert.ok(r.quarantined.some((q) => q.hf_id === 'zai-org/GLM-5.3'));
+});

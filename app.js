@@ -40,6 +40,8 @@ let ctx;
 let last;
 let played = false;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+// Above this many users the KV bar draws one textured block instead of one block per user.
+const KV_MAX_BLOCKS = 200;
 const sync = urlSyncer(window);
 
 // "Meta: Llama 3.3 70B Instruct" -> "Llama 3.3 70B", "Qwen: Qwen3 235B A22B Instruct 2507" ->
@@ -61,6 +63,7 @@ async function load() {
     );
     const byId = new Map(models.models.map((m) => [m.hf_id, m]));
     const featured = models.featured.filter((id) => byId.has(id));
+    if (!featured.length) throw new Error('no featured models in the catalogue');
     data = { models, byId, featured, gpus: gpus.gpus, gpuMeta: gpus._meta, quality };
   } catch {
     showLoadError();
@@ -121,18 +124,27 @@ function initControls() {
   const input = $('model');
   input.disabled = false;
   input.placeholder = 'Search models, e.g. qwen';
+  const match = (q) => data.featured.find((f) => f.toLowerCase() === q || displayName(data.byId.get(f)).toLowerCase() === q);
   const pick = () => {
     const q = input.value.trim().toLowerCase();
     if (!q) return;
-    const id = data.featured.find((f) => f.toLowerCase() === q || displayName(data.byId.get(f)).toLowerCase() === q);
+    const id = match(q);
     if (!id) {
       $('model-hint').textContent = `No model matches '${input.value.trim()}'. Try a family name like 'qwen'.`;
       return;
     }
     $('model-hint').textContent = '';
     update({ model: id, prec: ctx.precOk(id, state.gpu, state.prec ?? 'fp16') ? state.prec : null });
+    // Let go of the box, so the next click starts a fresh search over the whole list.
+    input.blur();
   };
   input.addEventListener('change', pick);
+  // Choosing from the suggestion list fires input (not change or Enter) in some browsers.
+  // Typing fires input too, so only a whole-value replacement counts as a choice.
+  input.addEventListener('input', (e) => {
+    const typed = e instanceof InputEvent && e.inputType !== 'insertReplacementText';
+    if (!typed && match(input.value.trim().toLowerCase())) pick();
+  });
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') pick(); });
   // A datalist only suggests options that match what is in the box, so empty it on focus
   // (the current model stays visible as the placeholder) to offer the whole list.
@@ -163,7 +175,12 @@ function initControls() {
   for (const f of document.querySelectorAll('[data-param]')) {
     f.addEventListener('change', () => update({ [f.dataset.param]: f.value.trim() }));
   }
-  $('avg').addEventListener('input', (e) => update({ avg_ctx: e.target.value }));
+  // A dragged slider fires input on every step; redraw at most once per frame.
+  let frame;
+  $('avg').addEventListener('input', (e) => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => update({ avg_ctx: e.target.value }));
+  });
 
   $('copy-cmd').addEventListener('click', () => copy($('command').textContent, $('copy-cmd'), $('command')));
   $('copy-link').addEventListener('click', () => {
@@ -206,7 +223,7 @@ function render() {
   $('use-hint').textContent = USE_HINT[state.use];
   $('gpu').value = state.gpu ?? '';
   const gpuNotes = [`${p.gpu.vram_gb} GB · $${p.gpu.usd_per_hr.toFixed(2)}/hr${p.gpu.verify ? ' (estimate)' : ''}.`];
-  if (!state.gpu) gpuNotes.unshift(`${gpuLabel(p.gpu)}: lowest cost per token that fits.`);
+  if (!state.gpu) gpuNotes.unshift(`${gpuLabel(p.gpu)}: ${p.be?.kind === 'cross' || p.be?.kind === 'self' ? 'breaks even soonest' : 'lowest cost per token'} of the GPUs that fit.`);
   if (p.amdHint) {
     const name = p.amdHint.gpu.name.replace(/^AMD Instinct /, '').replace(/ \d+GB$/, '');
     gpuNotes.push(`An AMD ${name} may cost less here (about ${usd(p.amdHint.selfPerM)} per 1M tokens). Pick it under GPU. It needs vLLM's ROCm build.`);
@@ -287,7 +304,7 @@ function renderExplain(p, model) {
     ['Self-host price', `${usd(p.selfPerM)} per 1M tokens`, `GPU rent (${p.tp} × $${p.gpu.usd_per_hr.toFixed(2)}/hr) divided by the tokens served, with the GPUs busy ${state.util}% of the time.`],
   ];
   if (p.api) {
-    rows.push(['API price', `${usd(p.api.perM)} per 1M tokens`, `OpenRouter's cheapest paid price for ${displayName(model)}, mixing ${state.r} input tokens per output token.${state.cache > 0 && !p.api.cachePriced ? ' This API lists no cached-input price, so cached tokens are charged at the full input price.' : ''}`]);
+    rows.push(['API price', `${usd(p.api.perM)} per 1M tokens`, `OpenRouter's cheapest paid price for ${displayName(model)}, mixing ${state.r} input tokens per output token. That provider may serve a quantized version, so its quality can differ from this setup.${state.cache > 0 && !p.api.cachePriced ? ' This API lists no cached-input price, so cached tokens are charged at the full input price.' : ''}`]);
   }
   if (model.arch.moe) rows.push(['Approximate', 'mixture of experts', 'Only some experts run per token. Speed assumes each step reads just those, which is optimistic at large batches.']);
   if (model.arch.attn?.approx) rows.push(['Approximate', 'attention layout', 'We could not read which layers keep the full conversation, so we assume all do. Real memory use may be lower.']);
@@ -409,9 +426,9 @@ function renderKv(p, model) {
   w.textContent = wPct > 18 ? `Weights ${gb(weights)}` : '';
   const users = $('kv-users');
   users.style.width = `${uPct}%`;
-  users.classList.toggle('dense', p.users > 200);
+  users.classList.toggle('dense', p.users > KV_MAX_BLOCKS);
   const blocks = [];
-  if (p.users <= 200) {
+  if (p.users <= KV_MAX_BLOCKS) {
     for (let i = 0; i < p.users; i++) {
       const b = el('span', null, `u ${pages > 64 ? 'dense' : 'pages'}`);
       if (pages <= 64) b.style.backgroundSize = `${100 / pages}% 100%`;

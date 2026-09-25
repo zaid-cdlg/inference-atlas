@@ -106,3 +106,9 @@ test('URL sync debounces to one replaceState call per 300 ms burst', (t) => {
   t.mock.timers.tick(1);
   assert.deepEqual(calls, [[null, '', '/atlas/?r=6']]);
 });
+
+test('if the default model drops out of the catalogue, the first catalogue model is used', () => {
+  const small = { ...ctx, models: ['Qwen/Qwen2.5-7B-Instruct'] };
+  assert.equal(parseState(new URLSearchParams(''), small).state.model, 'Qwen/Qwen2.5-7B-Instruct');
+  assert.deepEqual(parseState(new URLSearchParams(`model=${encodeURIComponent(DEFAULT_MODEL)}`), small).notices, ['model_removed']);
+});

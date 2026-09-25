@@ -21,7 +21,8 @@ const ready = async (page, qs = '') => {
 test('first paint: verdict, stats, chart with crossing, command, footer', async ({ page }) => {
   await ready(page);
   await expect(page.locator('#verdict')).toHaveText(/^Self-hosting likely wins above ~\d+(\.\d)?[KMB] tokens\/day$/);
-  await expect(stats(page)).toHaveText(/^1× B200 180GB · \d+ users at once · \$[\d.]+ vs \$[\d.]+ per 1M tokens$/);
+  await expect(stats(page)).toHaveText(/^1× (A100|B200|H100|H200|L40S|L4|A10G|T4)[\w ()]* · \d+ users at once · \$[\d.]+ vs \$[\d.]+ per 1M tokens$/);
+  await expect(page.locator('#gpu-hint')).toContainText('breaks even soonest');
   await expect(page.locator('#chart svg path.api')).toHaveCount(1);
   await expect(page.locator('#chart svg path.self')).toHaveCount(1);
   await expect(page.locator('#chart svg circle.cross')).toHaveCount(1);
@@ -298,4 +299,33 @@ test('KV sim: the legend keeps its space while filling, so the slider never jump
     await expect(page.locator('#kv-legend')).toHaveCSS('visibility', 'visible', { timeout: 5000 });
     expect(await sliderY(), `${width}px`).toBe(before);
   }
+});
+
+test('blocked clipboard: the command is selected and the reader is told to copy by hand', async ({ page }) => {
+  await ready(page);
+  await page.evaluate(() => { navigator.clipboard.writeText = () => Promise.reject(new Error('blocked')); });
+  await page.locator('#copy-cmd').click();
+  await expect(page.locator('#copy-status')).toHaveText('Select and copy manually.');
+  expect(await page.evaluate(() => getSelection().toString())).toBe(await page.locator('#command').textContent());
+});
+
+test('model picker: pick a model, then pick another straight away without leaving the box', async ({ page }) => {
+  await ready(page);
+  const input = page.locator('#model');
+  await input.click();
+  await input.fill('Llama 3.3 70B');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/model=meta-llama%2FLlama-3\.3-70B-Instruct/);
+  // Click the same box again: the full list must be on offer again
+  await input.click();
+  await expect(input).toHaveValue('');
+  await expect(input).toHaveAttribute('placeholder', 'Llama 3.3 70B');
+  await input.fill('Qwen3 8B');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/model=Qwen%2FQwen3-8B/);
+  // Picking from the suggestion list fires input, not Enter: it must switch too
+  await input.click();
+  await input.fill('Phi 4');
+  await input.dispatchEvent('input');
+  await expect(page).toHaveURL(/model=microsoft%2Fphi-4/);
 });

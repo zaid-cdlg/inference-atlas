@@ -54,8 +54,11 @@ export function precisionOptions(model, gpu, hasInt4Repo) {
   const out = {};
   for (const p of Object.keys(BYTES)) {
     if (model.quant) {
-      out[p] = p === model.quant ? null
-        : `Weights are published in ${LABELS[model.quant]}, so the model runs in ${LABELS[model.quant]}.`;
+      out[p] = p !== model.quant
+        ? `Weights are published in ${LABELS[model.quant]}, so the model runs in ${LABELS[model.quant]}.`
+        // vLLM's hardware table: Marlin runs FP8 and INT4 weights on Turing, but not MXFP4.
+        : p === 'mxfp4' && gpu.generation === 'turing' ? 'vLLM has no MXFP4 kernel for Turing GPUs such as the T4.'
+          : null;
     } else if (p === 'fp8') {
       out[p] = gpu.fp8 ? null : 'This GPU has no FP8 support.';
     } else if (p === 'int4') {
@@ -166,9 +169,12 @@ export function maxUsers(model, gpu, prec, kvDtype, tp, avgCtx) {
 // the pin, never above maxUsers or below 1. If batch 1 misses the pin, run at 1 and flag it.
 export function operatingBatch(model, gpu, prec, kvDtype, tp, avgCtx, users, itlPin, override) {
   const cap = Math.max(1, users);
-  if (override) return { batch: Math.min(Math.max(1, Math.floor(override)), cap), sloMiss: false };
-  if (itlPin == null) return { batch: cap, sloMiss: false };
   const itl = (b) => decodeItl(model, gpu, prec, kvDtype, tp, b, avgCtx);
+  if (override) {
+    const batch = Math.min(Math.max(1, Math.floor(override)), cap);
+    return { batch, sloMiss: itlPin != null && itl(batch) > itlPin };
+  }
+  if (itlPin == null) return { batch: cap, sloMiss: false };
   if (itl(1) > itlPin) return { batch: 1, sloMiss: true };
   // ITL grows with batch, so binary-search the largest batch under the pin.
   let lo = 1;

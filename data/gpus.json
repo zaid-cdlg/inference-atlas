@@ -3,13 +3,15 @@
     "checked_date": "2026-09-25",
     "flops_basis": "DENSE Tensor Core figures (no structured sparsity). Where a vendor page shows only the sparse figure, dense = sparse / 2, per the vendor's own footnote.",
     "price_basis": "On-demand USD per GPU per hour, single-GPU instance where offered. Median of the quotes listed in gpus.sources.md.",
-    "note": "Each GPU's `sources` map gives a source_url and checked_date for every value."
+    "note": "Each GPU's `sources` map gives a source_url and checked_date for every value.",
+    "generation_note": "GPU architecture generation, from the same vendor page as the memory size. The page uses it for vLLM kernel support (docs.vllm.ai/en/latest/features/quantization: Turing has no MXFP4 kernel)."
   },
   "gpus": [
     {
       "id": "t4",
       "name": "NVIDIA T4 16GB",
       "vendor": "nvidia",
+      "generation": "turing",
       "vram_gb": 16,
       "bandwidth_gbs": 320,
       "peak_tflops": {
@@ -40,6 +42,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#t4",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/tesla-t4/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -47,6 +53,7 @@
       "id": "l4",
       "name": "NVIDIA L4 24GB",
       "vendor": "nvidia",
+      "generation": "ada",
       "vram_gb": 24,
       "bandwidth_gbs": 300,
       "peak_tflops": {
@@ -79,6 +86,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#l4",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l4/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -86,6 +97,7 @@
       "id": "a10g",
       "name": "NVIDIA A10G 24GB (AWS)",
       "vendor": "nvidia",
+      "generation": "ampere",
       "vram_gb": 24,
       "bandwidth_gbs": 600,
       "peak_tflops": {
@@ -116,6 +128,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#a10g",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://aws.amazon.com/ec2/instance-types/g5/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -123,6 +139,7 @@
       "id": "l40s",
       "name": "NVIDIA L40S 48GB",
       "vendor": "nvidia",
+      "generation": "ada",
       "vram_gb": 48,
       "bandwidth_gbs": 864,
       "peak_tflops": {
@@ -155,6 +172,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#l40s",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/l40s/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -162,6 +183,7 @@
       "id": "a100_80",
       "name": "NVIDIA A100 80GB SXM",
       "vendor": "nvidia",
+      "generation": "ampere",
       "vram_gb": 80,
       "bandwidth_gbs": 2039,
       "peak_tflops": {
@@ -190,6 +212,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#a100-80gb",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/a100/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -197,6 +223,7 @@
       "id": "h100",
       "name": "NVIDIA H100 SXM 80GB",
       "vendor": "nvidia",
+      "generation": "hopper",
       "vram_gb": 80,
       "bandwidth_gbs": 3350,
       "peak_tflops": {
@@ -229,6 +256,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#h100",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h100/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -236,6 +267,7 @@
       "id": "h200",
       "name": "NVIDIA H200 SXM 141GB",
       "vendor": "nvidia",
+      "generation": "hopper",
       "vram_gb": 141,
       "bandwidth_gbs": 4800,
       "peak_tflops": {
@@ -268,6 +300,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#h200",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/h200/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -275,6 +311,7 @@
       "id": "b200",
       "name": "NVIDIA B200 180GB",
       "vendor": "nvidia",
+      "generation": "blackwell",
       "vram_gb": 180,
       "bandwidth_gbs": 8000,
       "peak_tflops": {
@@ -308,6 +345,10 @@
         "usd_per_hr": {
           "source_url": "gpus.sources.md#b200",
           "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.nvidia.com/en-us/data-center/dgx-b200/",
+          "checked_date": "2026-09-25"
         }
       }
     },
@@ -315,6 +356,7 @@
       "id": "mi300x",
       "name": "AMD Instinct MI300X 192GB",
       "vendor": "amd",
+      "generation": "cdna3",
       "vram_gb": 192,
       "bandwidth_gbs": 5300,
       "peak_tflops": {
@@ -346,6 +388,10 @@
         },
         "usd_per_hr": {
           "source_url": "gpus.sources.md#mi300x",
+          "checked_date": "2026-09-25"
+        },
+        "generation": {
+          "source_url": "https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf",
           "checked_date": "2026-09-25"
         }
       }

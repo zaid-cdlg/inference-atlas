@@ -11,8 +11,8 @@ const TYPES = {
 };
 
 createServer(async (req, res) => {
-  const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^(\.\.[/\\])+/, '');
   try {
+    const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^(\.\.[/\\])+/, '');
     const body = await readFile(join(root, path.endsWith('/') ? `${path}index.html` : path));
     res.writeHead(200, { 'content-type': TYPES[extname(path) || '.html'] ?? 'application/octet-stream', 'cache-control': 'no-store' });
     res.end(body);

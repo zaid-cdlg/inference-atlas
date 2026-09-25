@@ -35,6 +35,7 @@ function evaluate(model, gpu, state, int4) {
   const maxCtx = Math.min(state.max_ctx, arch.max_ctx ?? Infinity);
   const avgCtx = Math.min(state.avg_ctx, maxCtx);
   const base = { gpu, prec, precOptions, maxCtx, avgCtx, command: null, be: null, slo: null };
+  if (precOptions[prec]) return { ...base, error: `${precOptions[prec]} Pick an A10G, L4 or newer GPU.` };
 
   const fit = chooseTP(arch, gpu, prec, state.kv, maxCtx);
   if (fit.error === 'multi_node') {
@@ -66,9 +67,11 @@ function evaluate(model, gpu, state, int4) {
     error: null,
     tp, users, batch, itl, tps, prefill, selfPerM, api, be,
     capacity: tps * 86400 * util,
-    slo: sloMiss ? `Misses the ${Math.round(uc.itlPin * 1000)} ms target even at 1 user. Try a faster GPU or FP8.` : null,
+    slo: !sloMiss ? null : state.batch && batch > 1
+      ? `Misses the ${Math.round(uc.itlPin * 1000)} ms target with ${batch} users at once. Lower "Users served at once" or leave it empty.`
+      : `Misses the ${Math.round(uc.itlPin * 1000)} ms target even at 1 user. Try a faster GPU or FP8.`,
     command: vllmCommand({
-      hfId: prec === 'int4' ? int4.repo : model.hf_id, tp, maxCtx, batch, prec, kvDtype: state.kv, native: arch.quant,
+      hfId: prec === 'int4' && !arch.quant ? int4.repo : model.hf_id, tp, maxCtx, batch, prec, kvDtype: state.kv, native: arch.quant,
     }),
     kv: {
       usable,
@@ -89,17 +92,23 @@ function verdictFor(r) {
   return 'The API is likely cheaper at any volume up to 10B tokens/day';
 }
 
-// Lowest self-host $/1M tokens among these GPUs where the model fits and the chosen
-// precision is available, or null.
-function cheapest(model, gpus, state, int4) {
+// How early self-hosting on this GPU beats the API, in tokens/day: "wins from the first GPU"
+// ranks first, "API always wins" (or no API) last.
+const crossAt = (r) => (r.be?.kind === 'self' ? 0 : r.be?.kind === 'cross' ? r.be.tpd : Infinity);
+
+// Among these GPUs where the model fits (and the chosen precision is available): the one
+// that breaks even earliest, so a reader with modest traffic sees the GPU that pays off for
+// them. With no crossing anywhere, the cheapest per token at full load. Null if none fits.
+function best(model, gpus, state, int4) {
   const ok = gpus
     .filter((g) => !state.prec || precisionOptions(model.arch, g, Boolean(int4))[state.prec] === null)
     .map((g) => evaluate(model, g, state, int4))
     .filter((x) => !x.error);
-  return ok.length ? ok.reduce((a, b) => (b.selfPerM < a.selfPerM ? b : a)) : null;
+  const rank = (a, b) => crossAt(a) - crossAt(b) || a.selfPerM - b.selfPerM;
+  return ok.length ? ok.reduce((a, b) => (rank(b, a) < 0 ? b : a)) : null;
 }
 
-// state.gpu null = auto: the cheapest NVIDIA GPU that fits. Default vLLM installs and most
+// state.gpu null = auto: the best NVIDIA GPU that fits (see best()). Default vLLM installs and most
 // guides are CUDA, and we have no data that ROCm reaches the same share of peak, so an AMD
 // GPU is never the automatic answer. When one looks cheaper it comes back as amdHint.
 // Nothing fits: show the H100's error.
@@ -109,9 +118,9 @@ export function plan({ model, gpus, state, int4 = null }) {
   if (state.gpu) {
     r = evaluate(model, gpus.find((g) => g.id === state.gpu), state, int4);
   } else {
-    r = cheapest(model, gpus.filter((g) => g.vendor === 'nvidia'), state, int4)
+    r = best(model, gpus.filter((g) => g.vendor === 'nvidia'), state, int4)
       ?? evaluate(model, gpus.find((g) => g.id === FALLBACK_GPU) ?? gpus[0], state, int4);
-    const amd = cheapest(model, gpus.filter((g) => g.vendor === 'amd'), state, int4);
+    const amd = best(model, gpus.filter((g) => g.vendor === 'amd'), state, int4);
     if (amd && (r.error || amd.selfPerM < r.selfPerM)) amdHint = { gpu: amd.gpu, selfPerM: amd.selfPerM };
   }
   return { ...r, amdHint, verdict: verdictFor(r) };

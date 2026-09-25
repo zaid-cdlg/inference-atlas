@@ -154,6 +154,7 @@ export function normalize(config, api) {
   };
   // Hybrid or unusual layouts (linear attention, partial MoE) produce nonsense here.
   // Throwing quarantines just this model instead of failing the whole run.
+  if (quant && !arch.native_bytes) throw new Error(`unsupported quantization: cannot size the ${quant} checkpoint`);
   const bad = archError(arch);
   if (bad) throw new Error(`unsupported architecture: bad ${bad}`);
   return arch;
@@ -185,7 +186,8 @@ export async function buildCatalogue(listings, previous, fetchArch) {
       models.push({ ...listing, arch: await fetchArch(listing.hf_id) });
     } catch (err) {
       const prev = prevById.get(listing.hf_id);
-      if (prev) {
+      // Only keep an old entry that today's rules would still accept.
+      if (prev && !archError(prev.arch) && !(prev.arch.quant && !prev.arch.native_bytes)) {
         models.push({ ...listing, arch: prev.arch });
         kept.push(listing.hf_id);
       } else {
@@ -196,7 +198,9 @@ export async function buildCatalogue(listings, previous, fetchArch) {
   return { models, kept, quarantined };
 }
 
-const price = (v) => typeof v === 'number' && v >= 0;
+// USD per 1M tokens. Open-weight APIs cost cents to a few dollars; anything near $1000 means
+// the upstream units changed, and publishing it would flip every verdict.
+const price = (v) => typeof v === 'number' && v >= 0 && v < 1000;
 
 // Global signals only. A missing featured model is a warning, never a failure.
 export function validate(models, previousCount, featured) {
@@ -222,7 +226,7 @@ async function main() {
   const token = process.env.HF_TOKEN;
   const get = async (url) => {
     const auth = token && url.startsWith(HF) ? { Authorization: `Bearer ${token}` } : {};
-    const res = await fetch(url, { headers: auth });
+    const res = await fetch(url, { headers: auth, signal: AbortSignal.timeout(60_000) });
     if (!res.ok) throw Object.assign(new Error(`HTTP ${res.status}`), { status: res.status });
     return res.json();
   };

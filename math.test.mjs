@@ -220,7 +220,8 @@ test('operating batch: largest batch under the ITL pin, capped by maxUsers', () 
   assert.deepEqual(run(0.004), { batch: 1, sloMiss: true });
   // user override wins, but never above maxUsers or below 1
   assert.deepEqual(run(0.01, 16), { batch: 16, sloMiss: false });
-  assert.deepEqual(run(0.01, 500), { batch: 104, sloMiss: false });
+  // An override that blows the pin is still flagged: 104 users take 21.4 ms against 10 ms
+  assert.deepEqual(run(0.01, 500), { batch: 104, sloMiss: true });
 });
 
 test('self-host $/1M tokens = (TP x $/hr / 3600) / (tokens/s x utilization) x 1e6', () => {
@@ -330,4 +331,11 @@ test('FP8 weights on a GPU without FP8 compute at the FP16 peak', () => {
 test('vllm command: no --quantization flag when the checkpoint is already FP8', () => {
   assert.equal(vllmCommand({ hfId: 'deepseek-ai/DeepSeek-V3', tp: 8, maxCtx: 8192, batch: 4, prec: 'fp8', kvDtype: 'fp16', native: 'fp8' }),
     'vllm serve deepseek-ai/DeepSeek-V3 --tensor-parallel-size 8 --max-model-len 8192 --gpu-memory-utilization 0.9 --max-num-seqs 4');
+});
+
+test('MXFP4 weights are disabled on Turing (vLLM has no Turing MXFP4 kernel); FP8 weights stay (Marlin)', () => {
+  const t4 = { vram_gb: 16, bandwidth_gbs: 320, peak_tflops: { fp16: 65, fp8: null }, fp8: false, generation: 'turing' };
+  assert.equal(precisionOptions(gptOss20b, t4, false).mxfp4, 'vLLM has no MXFP4 kernel for Turing GPUs such as the T4.');
+  assert.equal(precisionOptions({ ...deepseekV3, quant: 'fp8' }, t4, false).fp8, null);
+  assert.equal(precisionOptions(gptOss20b, { ...t4, generation: 'ampere' }, false).mxfp4, null);
 });

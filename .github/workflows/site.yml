@@ -35,7 +35,10 @@ jobs:
       - run: npx playwright test
 
   refresh:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    # Only main publishes: a manual run on another branch never refreshes or deploys.
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     needs: test
     runs-on: ubuntu-latest
     permissions:
@@ -50,7 +53,9 @@ jobs:
       - name: Refresh the catalogue (fails closed on the validation gate)
         run: node scripts/refresh.mjs
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          # Read-only token (gated repos). The Space write token never reaches this job,
+          # which parses untrusted upstream JSON.
+          HF_TOKEN: ${{ secrets.HF_READ_TOKEN }}
       - name: Tests on the new data
         run: node --test
       - name: Commit models.json
@@ -61,14 +66,17 @@ jobs:
           git add data/models.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(data): weekly model refresh'
-            git push
+            # main may have moved during the run; replay the data commit on top of it
+            git pull --rebase origin main
+            node --test
+            git push origin HEAD:main
           fi
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   deploy:
     needs: [test, refresh]
     if: >-
-      always() && needs.test.result == 'success' &&
+      always() && github.ref == 'refs/heads/main' && needs.test.result == 'success' &&
       (needs.refresh.result == 'success' ||
        (needs.refresh.result == 'skipped' && github.event_name == 'push'))
     runs-on: ubuntu-latest
@@ -82,7 +90,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ needs.refresh.outputs.sha || github.sha }}
+          # The refresh commit, or on a push the tip of main (never an older queued sha).
+          ref: ${{ needs.refresh.outputs.sha || github.ref }}
           persist-credentials: false
       - name: Collect the public page files
         run: |

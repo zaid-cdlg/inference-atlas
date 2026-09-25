@@ -36,6 +36,8 @@ test('gpus.json: 9 GPUs, every value positive and cited with a date', () => {
     }
     if (g.verify) assert.ok(g.verify_reason?.length > 10, `${g.id} verify_reason`);
     assert.ok(['nvidia', 'amd'].includes(g.vendor), `${g.id} vendor`);
+    assert.ok(['turing', 'ampere', 'ada', 'hopper', 'blackwell', 'cdna3'].includes(g.generation), `${g.id} generation`);
+    cited(g.sources.generation, `${g.id}.generation`);
   }
 });
 
