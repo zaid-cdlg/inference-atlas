@@ -45,7 +45,8 @@ body {
   font: 400 16px/1.5 var(--sans);
   caret-color: var(--coral-ink);
 }
-::selection { background: color-mix(in srgb, var(--coral) 25%, transparent); }
+/* rgb() lines are fallbacks for browsers without color-mix() (Safari < 16.4). */
+::selection { background: rgb(232 115 90 / 25%); background: color-mix(in srgb, var(--coral) 25%, transparent); }
 :focus-visible { outline: 2px solid var(--coral-ink); outline-offset: 2px; }
 
 a { color: var(--coral-ink); text-decoration: underline; text-underline-offset: 3px; }
@@ -115,7 +116,8 @@ input:disabled { color: var(--muted); }
 .skeleton { display: block; height: 0.9em; width: 70%; background: var(--hairline); }
 
 details > summary { cursor: pointer; display: flex; align-items: center; gap: 8px; min-height: 44px; }
-details > summary::before { content: '▸'; font-size: 0.9em; line-height: 1; }
+/* The marker is decoration: the empty alt text keeps screen readers from naming the glyph. */
+details > summary::before { content: '▸'; content: '▸' / ''; font-size: 0.9em; line-height: 1; }
 details[open] > summary::before { transform: rotate(90deg); }
 details > summary::-webkit-details-marker { display: none; }
 details > summary { list-style: none; }
@@ -175,10 +177,12 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
 .kv-users { position: relative; flex: none; display: flex; gap: 1px; padding-left: 1px; }
 .kv-users .u { flex: 1 1 0; min-width: 0; background: var(--coral); }
 .kv-users .u.pages {
+  background-image: linear-gradient(to right, transparent calc(100% - 1px), rgb(255 255 255 / 55%) 0);
   background-image: linear-gradient(to right, transparent calc(100% - 1px), color-mix(in srgb, var(--surface) 55%, transparent) 0);
 }
 .kv-users .u.dense, .kv-users.dense {
   background-color: var(--coral);
+  background-image: repeating-linear-gradient(90deg, transparent 0 3px, rgb(255 255 255 / 30%) 3px 4px);
   background-image: repeating-linear-gradient(90deg, transparent 0 3px, color-mix(in srgb, var(--surface) 30%, transparent) 3px 4px);
 }
 .kv-cover {
