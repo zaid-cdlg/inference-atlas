@@ -179,6 +179,7 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0 0; }
 .played .kv-cover { transform: scaleX(0); }
 .kv-legend { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
 .kv-legend strong { color: var(--ink); }
+.kv-legend.pending { visibility: hidden; }
 .slider { display: block; font-size: 14px; font-weight: 600; margin-top: 16px; }
 input[type='range'] { width: 100%; min-height: 44px; accent-color: var(--coral-ink); }
 

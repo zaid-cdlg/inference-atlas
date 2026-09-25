@@ -422,13 +422,12 @@ function renderKv(p, model) {
   users.replaceChildren(...blocks);
   $('kvbar').setAttribute('aria-label', `${p.users} users fit: weights ${gb(weights)}, conversations ${gb(kvTotal)}, free ${gb(usable - weights - kvTotal)} of ${gb(usable)}.`);
 
+  // The legend is laid out from the start and only revealed when the fill ends, so the
+  // slider below it never jumps.
   const legend = $('kv-legend');
-  const fill = () => {
-    legend.replaceChildren(el('strong', `${p.users} users fit.`), ` Weights ${gb(weights)} · conversations ${gb(kvTotal)} · free ${gb(Math.max(0, usable - weights - kvTotal))}`);
-  };
-  if (played || reduceMotion.matches) fill();
-  else legend.textContent = '';
-  playOnce(fill);
+  legend.replaceChildren(el('strong', `${p.users} users fit.`), ` Weights ${gb(weights)} · conversations ${gb(kvTotal)} · free ${gb(Math.max(0, usable - weights - kvTotal))}`);
+  legend.classList.toggle('pending', !played && !reduceMotion.matches);
+  playOnce(() => legend.classList.remove('pending'));
 
   const slider = $('avg');
   slider.max = p.maxCtx;

@@ -286,3 +286,16 @@ test('data load failure shows an error with Retry, not a blank page', async ({ p
   await expect(page.locator('#notices button')).toHaveText('Retry');
   errors = errors.filter((e) => !e.includes('ERR_FAILED'));
 });
+
+test('KV sim: the legend keeps its space while filling, so the slider never jumps', async ({ page }) => {
+  for (const width of [1280, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await ready(page, '?model=meta-llama%2FLlama-3.3-70B-Instruct');
+    const sliderY = () => page.locator('#avg').evaluate((e) => e.getBoundingClientRect().top + scrollY);
+    const before = await sliderY();
+    await page.locator('#kv').scrollIntoViewIfNeeded();
+    await expect(page.locator('#kv-legend')).toBeVisible();
+    await expect(page.locator('#kv-legend')).toHaveCSS('visibility', 'visible', { timeout: 5000 });
+    expect(await sliderY(), `${width}px`).toBe(before);
+  }
+});
