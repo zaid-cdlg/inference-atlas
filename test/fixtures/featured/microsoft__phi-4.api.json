@@ -1,0 +1,9 @@
+{
+  "id": "microsoft/phi-4",
+  "safetensors": {
+    "parameters": {
+      "BF16": 14659507200
+    },
+    "total": 14659507200
+  }
+}

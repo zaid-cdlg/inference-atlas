@@ -1,0 +1,3807 @@
+{
+ "as_of": "2026-09-25",
+ "featured": [
+  "meta-llama/Meta-Llama-3.1-8B-Instruct",
+  "Qwen/Qwen3-8B",
+  "Qwen/Qwen3.5-9B",
+  "google/gemma-3-4b-it",
+  "mistralai/Ministral-3-8B-Instruct-2512",
+  "google/gemma-4-31B-it",
+  "Qwen/Qwen3.6-27B",
+  "Qwen/Qwen3-32B",
+  "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+  "google/gemma-3-27b-it",
+  "microsoft/phi-4",
+  "meta-llama/Llama-3.3-70B-Instruct",
+  "mistralai/Devstral-2-123B-Instruct-2512",
+  "openai/gpt-oss-20b",
+  "openai/gpt-oss-120b",
+  "Qwen/Qwen3.6-35B-A3B",
+  "google/gemma-4-26B-A4B-it",
+  "zai-org/GLM-4.5-Air",
+  "Qwen/Qwen3-235B-A22B-Instruct-2507",
+  "deepseek-ai/DeepSeek-V3.2"
+ ],
+ "models": [
+  {
+   "hf_id": "inclusionAI/Ling-3.0-flash-VL",
+   "slug": "inclusionai/ling-3.0-flash-vl",
+   "name": "inclusionAI: Ling 3.0 Flash VL",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.021,
+    "completion": 0.0616,
+    "cache_read": 0.0042
+   },
+   "arch": {
+    "params": 124848460496,
+    "active_params": 5939942096,
+    "layers": 42,
+    "heads": 32,
+    "kv_heads": 32,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 42,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "slug": "deepseek/deepseek-v4.1-flash",
+   "name": "DeepSeek: DeepSeek V4.1 Flash",
+   "context_length": 1048576,
+   "pricing": {
+    "prompt": 0.075,
+    "completion": 0.3,
+    "cache_read": 0.0015
+   },
+   "arch": {
+    "params": 763205315794,
+    "active_params": 187985358034,
+    "layers": 40,
+    "heads": 64,
+    "kv_heads": 1,
+    "head_dim": 512,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": true
+    },
+    "quant": "fp8",
+    "native_bytes": 765308679496
+   }
+  },
+  {
+   "hf_id": "ibm-granite/granite-4.2-8b",
+   "slug": "ibm-granite/granite-4.2-8b",
+   "name": "IBM: Granite 4.2 8B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.06,
+    "completion": 0.25,
+    "cache_read": 0.015
+   },
+   "arch": {
+    "params": 8791592960,
+    "active_params": 8791592960,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "tencent/Hy4-preview",
+   "slug": "tencent/hy4-preview",
+   "name": "Tencent: Hy4 preview",
+   "context_length": 1048576,
+   "pricing": {
+    "prompt": 0.834,
+    "completion": 2.501,
+    "cache_read": 0.042
+   },
+   "arch": {
+    "params": 779960992733,
+    "active_params": 40387757021,
+    "layers": 78,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 256,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 78,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": true
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.8-Flash-Next",
+   "slug": "qwen/qwen3.8-flash",
+   "name": "Qwen: Qwen3.8 Flash",
+   "context_length": 1000000,
+   "pricing": {
+    "prompt": 0.15,
+    "completion": 0.47,
+    "cache_read": 0.016
+   },
+   "arch": {
+    "params": 179999981459,
+    "active_params": 61563322259,
+    "layers": 48,
+    "heads": 24,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 12,
+     "sliding": 0,
+     "window": null,
+     "linear": 36,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-5.3-Flash",
+   "slug": "z-ai/glm-5.3-flash",
+   "name": "Z.ai: GLM 5.3 Flash",
+   "context_length": 1310720,
+   "pricing": {
+    "prompt": 0.045,
+    "completion": 0.14,
+    "cache_read": 0.01
+   },
+   "arch": {
+    "params": 321323031390,
+    "active_params": 18326510430,
+    "layers": 45,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 256,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 0
+    },
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 11,
+     "sliding": 0,
+     "window": null,
+     "linear": 34,
+     "approx": true
+    },
+    "quant": "fp8",
+    "native_bytes": 328250014584
+   }
+  },
+  {
+   "hf_id": "tencent/Hy-MT2-1.8B",
+   "slug": "tencent/hy-mt2-1.8b",
+   "name": "Tencent: Hy-MT2-1.8B",
+   "context_length": 8192,
+   "pricing": {
+    "prompt": 0.044,
+    "completion": 0.177,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 2038515712,
+    "active_params": 2038515712,
+    "layers": 32,
+    "heads": 16,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 32,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "tencent/Hy-MT2-30B-A3B",
+   "slug": "tencent/hy-mt2-30b-a3b",
+   "name": "Tencent: Hy-MT2-30B-A3B",
+   "context_length": 8192,
+   "pricing": {
+    "prompt": 0.074,
+    "completion": 0.295,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 30064725888,
+    "active_params": 3451867008,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "tencent/Hy-MT2-7B",
+   "slug": "tencent/hy-mt2-7b",
+   "name": "Tencent: Hy-MT2-7B",
+   "context_length": 8192,
+   "pricing": {
+    "prompt": 0.074,
+    "completion": 0.295,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 8029540352,
+    "active_params": 8029540352,
+    "layers": 32,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 32,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-5.3",
+   "slug": "z-ai/glm-5.3",
+   "name": "Z.ai: GLM 5.3",
+   "context_length": 1310720,
+   "pricing": {
+    "prompt": 1.4,
+    "completion": 4.4,
+    "cache_read": 0.26
+   },
+   "arch": {
+    "params": 753329940480,
+    "active_params": 41841764352,
+    "layers": 78,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 256,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 78,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 755433728000
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.8-27B",
+   "slug": "qwen/qwen3.8-27b",
+   "name": "Qwen: Qwen3.8 27B",
+   "context_length": 1000000,
+   "pricing": {
+    "prompt": 0.42,
+    "completion": 3,
+    "cache_read": 0.085
+   },
+   "arch": {
+    "params": 27781427952,
+    "active_params": 27781427952,
+    "layers": 64,
+    "heads": 24,
+    "kv_heads": 4,
+    "head_dim": 256,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 16,
+     "sliding": 0,
+     "window": null,
+     "linear": 48,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.8-2.4T-A95B",
+   "slug": "qwen/qwen3.8-2.4t-a95b",
+   "name": "Qwen: Qwen3.8 2.4T A95B",
+   "context_length": 1048576,
+   "pricing": {
+    "prompt": 2,
+    "completion": 6,
+    "cache_read": 0.25
+   },
+   "arch": {
+    "params": 2446182725504,
+    "active_params": 121665894272,
+    "layers": 92,
+    "heads": 64,
+    "kv_heads": 4,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 23,
+     "sliding": 0,
+     "window": null,
+     "linear": 69,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "meta-models/Muse-Glimmer-30B",
+   "slug": "meta/muse-glimmer-30b",
+   "name": "Meta: Muse Glimmer 30B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.3,
+    "completion": 1.2,
+    "cache_read": 0.04
+   },
+   "arch": {
+    "params": 29776626688,
+    "active_params": 29776626688,
+    "layers": 52,
+    "heads": 32,
+    "kv_heads": 2,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 13,
+     "sliding": 39,
+     "window": 2048,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "thinkingmachines/Inkling-Small",
+   "slug": "thinkingmachines/inkling-small",
+   "name": "Thinking Machines: Inkling Small",
+   "context_length": 1048576,
+   "pricing": {
+    "prompt": 0.45,
+    "completion": 1.2,
+    "cache_read": 0.1
+   },
+   "arch": {
+    "params": 265956439090,
+    "active_params": 1715287090,
+    "layers": 42,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": null,
+    "attn": {
+     "full": 42,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "inclusionAI/Ling-3.0-flash",
+   "slug": "inclusionai/ling-3.0-flash",
+   "name": "inclusionAI: Ling 3.0 Flash",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.021,
+    "completion": 0.063,
+    "cache_read": 0.0042
+   },
+   "arch": {
+    "params": 127486405600,
+    "active_params": 5605174240,
+    "layers": 42,
+    "heads": 32,
+    "kv_heads": 32,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 42,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "poolside/Laguna-S-2.1",
+   "slug": "poolside/laguna-s-2.1",
+   "name": "Poolside: Laguna S 2.1",
+   "context_length": 1048576,
+   "pricing": {
+    "prompt": 0.09,
+    "completion": 0.18,
+    "cache_read": 0.009
+   },
+   "arch": {
+    "params": 117561977600,
+    "active_params": 6127708928,
+    "layers": 48,
+    "heads": 48,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 12,
+     "sliding": 36,
+     "window": 512,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "thinkingmachines/Inkling",
+   "slug": "thinkingmachines/inkling",
+   "name": "Thinking Machines: Inkling",
+   "context_length": 1048576,
+   "pricing": {
+    "prompt": 1,
+    "completion": 4.05,
+    "cache_read": 0.17
+   },
+   "arch": {
+    "params": 952377623626,
+    "active_params": 18096407626,
+    "layers": 66,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": null,
+    "attn": {
+     "full": 66,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "tencent/Hy3",
+   "slug": "tencent/hy3",
+   "name": "Tencent: Hy3",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.0825,
+    "completion": 0.33,
+    "cache_read": 0.020625
+   },
+   "arch": {
+    "params": 298786155776,
+    "active_params": 20955458816,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "poolside/Laguna-XS-2.1",
+   "slug": "poolside/laguna-xs-2.1",
+   "name": "Poolside: Laguna XS 2.1",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.06,
+    "completion": 0.12,
+    "cache_read": 0.03
+   },
+   "arch": {
+    "params": 33442617088,
+    "active_params": 2236995328,
+    "layers": 40,
+    "heads": 48,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 10,
+     "sliding": 30,
+     "window": 512,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-5.2",
+   "slug": "z-ai/glm-5.2",
+   "name": "Z.ai: GLM 5.2",
+   "context_length": 1048576,
+   "pricing": {
+    "prompt": 0.6496,
+    "completion": 2.0416,
+    "cache_read": 0.12064
+   },
+   "arch": {
+    "params": 753329940480,
+    "active_params": 41841764352,
+    "layers": 78,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 256,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 78,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "nvidia/Nemotron-3.5-Content-Safety",
+   "slug": "nvidia/nemotron-3.5-content-safety",
+   "name": "NVIDIA: Nemotron 3.5 Content Safety",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.2,
+    "completion": 0.2,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 4300079472,
+    "active_params": 4300079472,
+    "layers": 34,
+    "heads": 8,
+    "kv_heads": 4,
+    "head_dim": 256,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 5,
+     "sliding": 29,
+     "window": 1024,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "stepfun-ai/Step-3.7-Flash",
+   "slug": "stepfun/step-3.7-flash",
+   "name": "StepFun: Step 3.7 Flash",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.2,
+    "completion": 1.15,
+    "cache_read": 0.04
+   },
+   "arch": {
+    "params": 201365316160,
+    "active_params": 201365316160,
+    "layers": 45,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 12,
+     "sliding": 36,
+     "window": 512,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.6-35B-A3B",
+   "slug": "qwen/qwen3.6-35b-a3b",
+   "name": "Qwen: Qwen3.6 35B A3B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.15,
+    "completion": 1,
+    "cache_read": 0.05
+   },
+   "arch": {
+    "params": 35951822704,
+    "active_params": 4746200944,
+    "layers": 40,
+    "heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 10,
+     "sliding": 0,
+     "window": null,
+     "linear": 30,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.6-27B",
+   "slug": "qwen/qwen3.6-27b",
+   "name": "Qwen: Qwen3.6 27B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.32,
+    "completion": 2.7,
+    "cache_read": 0.15
+   },
+   "arch": {
+    "params": 27781427952,
+    "active_params": 27781427952,
+    "layers": 64,
+    "heads": 24,
+    "kv_heads": 4,
+    "head_dim": 256,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 16,
+     "sliding": 0,
+     "window": null,
+     "linear": 48,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "tencent/Hy3-preview",
+   "slug": "tencent/hy3-preview",
+   "name": "Tencent: Hy3 preview",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.18,
+    "completion": 0.6,
+    "cache_read": 0.06
+   },
+   "arch": {
+    "params": 298786155776,
+    "active_params": 20955458816,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "XiaomiMiMo/MiMo-V2.5-Pro",
+   "slug": "xiaomi/mimo-v2.5-pro",
+   "name": "Xiaomi: MiMo-V2.5-Pro",
+   "context_length": 1050000,
+   "pricing": {
+    "prompt": 0.435,
+    "completion": 0.87,
+    "cache_read": 0.0036
+   },
+   "arch": {
+    "params": 1023182841600,
+    "active_params": 29636110080,
+    "layers": 70,
+    "heads": 128,
+    "kv_heads": 8,
+    "head_dim": 192,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 70,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": true
+    },
+    "quant": "fp8",
+    "native_bytes": 1033122028800
+   }
+  },
+  {
+   "hf_id": "XiaomiMiMo/MiMo-V2.5",
+   "slug": "xiaomi/mimo-v2.5",
+   "name": "Xiaomi: MiMo-V2.5",
+   "context_length": 1050000,
+   "pricing": {
+    "prompt": 0.14,
+    "completion": 0.28,
+    "cache_read": 0.0028
+   },
+   "arch": {
+    "params": 310775040000,
+    "active_params": 11201071104,
+    "layers": 48,
+    "heads": 64,
+    "kv_heads": 4,
+    "head_dim": 192,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": true
+    },
+    "quant": "fp8",
+    "native_bytes": 315031102208
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-5.1",
+   "slug": "z-ai/glm-5.1",
+   "name": "Z.ai: GLM 5.1",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.9646,
+    "completion": 3.0316,
+    "cache_read": 0.17914
+   },
+   "arch": {
+    "params": 753864139008,
+    "active_params": 42375962880,
+    "layers": 78,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 256,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 202752,
+    "attn": {
+     "full": 78,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "google/gemma-4-26B-A4B-it",
+   "slug": "google/gemma-4-26b-a4b-it",
+   "name": "Google: Gemma 4 26B A4B ",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.0675,
+    "completion": 0.225,
+    "cache_read": 0.0375
+   },
+   "arch": {
+    "params": 25805936206,
+    "active_params": 4395325006,
+    "layers": 30,
+    "heads": 16,
+    "kv_heads": 8,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 5,
+     "sliding": 25,
+     "window": 1024,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "google/gemma-4-31B-it",
+   "slug": "google/gemma-4-31b-it",
+   "name": "Google: Gemma 4 31B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.09,
+    "completion": 0.34,
+    "cache_read": 0.05
+   },
+   "arch": {
+    "params": 31273088876,
+    "active_params": 31273088876,
+    "layers": 60,
+    "heads": 32,
+    "kv_heads": 16,
+    "head_dim": 256,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 10,
+     "sliding": 50,
+     "window": 1024,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "RekaAI/reka-edge-2603",
+   "slug": "rekaai/reka-edge",
+   "name": "Reka Edge",
+   "context_length": 16384,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.1,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 7128509568,
+    "active_params": 7128509568,
+    "layers": 32,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 16384,
+    "attn": {
+     "full": 32,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "MiniMaxAI/MiniMax-M2.7",
+   "slug": "minimax/minimax-m2.7",
+   "name": "MiniMax: MiniMax M2.7",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.3,
+    "completion": 1.2,
+    "cache_read": 0.06
+   },
+   "arch": {
+    "params": 228689764864,
+    "active_params": 11030553088,
+    "layers": 62,
+    "heads": 48,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 204800,
+    "attn": {
+     "full": 62,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 230066110464
+   }
+  },
+  {
+   "hf_id": "mistralai/Mistral-Small-4-119B-2603",
+   "slug": "mistralai/mistral-small-2603",
+   "name": "Mistral: Mistral Small 4",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.15,
+    "completion": 0.6,
+    "cache_read": 0.015
+   },
+   "arch": {
+    "params": 119401317952,
+    "active_params": 7061079616,
+    "layers": 36,
+    "heads": 32,
+    "kv_heads": 32,
+    "head_dim": 128,
+    "mla": {
+     "kv_lora_rank": 256,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 1048576,
+    "attn": {
+     "full": 36,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 120922769408
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.5-9B",
+   "slug": "qwen/qwen3.5-9b",
+   "name": "Qwen: Qwen3.5-9B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.15,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 9653104368,
+    "active_params": 9653104368,
+    "layers": 32,
+    "heads": 16,
+    "kv_heads": 4,
+    "head_dim": 256,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 8,
+     "sliding": 0,
+     "window": null,
+     "linear": 24,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.5-35B-A3B",
+   "slug": "qwen/qwen3.5-35b-a3b",
+   "name": "Qwen: Qwen3.5-35B-A3B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.3125,
+    "completion": 1.25,
+    "cache_read": 0.15625
+   },
+   "arch": {
+    "params": 35951822704,
+    "active_params": 4746200944,
+    "layers": 40,
+    "heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 10,
+     "sliding": 0,
+     "window": null,
+     "linear": 30,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.5-27B",
+   "slug": "qwen/qwen3.5-27b",
+   "name": "Qwen: Qwen3.5-27B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.195,
+    "completion": 1.56,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 27781427952,
+    "active_params": 27781427952,
+    "layers": 64,
+    "heads": 24,
+    "kv_heads": 4,
+    "head_dim": 256,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 16,
+     "sliding": 0,
+     "window": null,
+     "linear": 48,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.5-122B-A10B",
+   "slug": "qwen/qwen3.5-122b-a10b",
+   "name": "Qwen: Qwen3.5-122B-A10B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.26,
+    "completion": 2.08,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 125086497008,
+    "active_params": 12746258672,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 12,
+     "sliding": 0,
+     "window": null,
+     "linear": 36,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3.5-397B-A17B",
+   "slug": "qwen/qwen3.5-397b-a17b",
+   "name": "Qwen: Qwen3.5 397B A17B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.55,
+    "completion": 3.5,
+    "cache_read": 0.225
+   },
+   "arch": {
+    "params": 403397928944,
+    "active_params": 24400619504,
+    "layers": 60,
+    "heads": 32,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 15,
+     "sliding": 0,
+     "window": null,
+     "linear": 45,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "MiniMaxAI/MiniMax-M2.5",
+   "slug": "minimax/minimax-m2.5",
+   "name": "MiniMax: MiniMax M2.5",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.27,
+    "completion": 1.08,
+    "cache_read": 0.027
+   },
+   "arch": {
+    "params": 228703644928,
+    "active_params": 11044433152,
+    "layers": 62,
+    "heads": 48,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 196608,
+    "attn": {
+     "full": 62,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 230121630720
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-5",
+   "slug": "z-ai/glm-5",
+   "name": "Z.ai: GLM 5",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.6,
+    "completion": 1.92,
+    "cache_read": 0.12
+   },
+   "arch": {
+    "params": 753864139008,
+    "active_params": 42375962880,
+    "layers": 78,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 256,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 202752,
+    "attn": {
+     "full": 78,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-Coder-Next",
+   "slug": "qwen/qwen3-coder-next",
+   "name": "Qwen: Qwen3 Coder Next",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.12,
+    "completion": 0.8,
+    "cache_read": 0.07
+   },
+   "arch": {
+    "params": 79674391296,
+    "active_params": 3874929408,
+    "layers": 48,
+    "heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 12,
+     "sliding": 0,
+     "window": null,
+     "linear": 36,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "stepfun-ai/Step-3.5-Flash",
+   "slug": "stepfun/step-3.5-flash",
+   "name": "StepFun: Step 3.5 Flash",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.3,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 199384301376,
+    "active_params": 199384301376,
+    "layers": 45,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 12,
+     "sliding": 36,
+     "window": 512,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-4.7-Flash",
+   "slug": "z-ai/glm-4.7-flash",
+   "name": "Z.ai: GLM 4.7 Flash",
+   "context_length": 200000,
+   "pricing": {
+    "prompt": 0.0605,
+    "completion": 0.4,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 31221488576,
+    "active_params": 4608629696,
+    "layers": 47,
+    "heads": 20,
+    "kv_heads": 20,
+    "head_dim": 256,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 202752,
+    "attn": {
+     "full": 47,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "MiniMaxAI/MiniMax-M2.1",
+   "slug": "minimax/minimax-m2.1",
+   "name": "MiniMax: MiniMax M2.1",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.3,
+    "completion": 1.2,
+    "cache_read": 0.03
+   },
+   "arch": {
+    "params": 228689764864,
+    "active_params": 11030553088,
+    "layers": 62,
+    "heads": 48,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 196608,
+    "attn": {
+     "full": 62,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 230066110464
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-4.7",
+   "slug": "z-ai/glm-4.7",
+   "name": "Z.ai: GLM 4.7",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.6,
+    "completion": 2.2,
+    "cache_read": 0.11
+   },
+   "arch": {
+    "params": 358337791296,
+    "active_params": 35586098496,
+    "layers": 92,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 202752,
+    "attn": {
+     "full": 92,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "mistralai/Devstral-2-123B-Instruct-2512",
+   "slug": "mistralai/devstral-2512",
+   "name": "Mistral: Devstral 2 2512",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.4,
+    "completion": 2,
+    "cache_read": 0.04
+   },
+   "arch": {
+    "params": 125025989840,
+    "active_params": 125025989840,
+    "layers": 88,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 88,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 128249389056
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-4.6V",
+   "slug": "z-ai/glm-4.6v",
+   "name": "Z.ai: GLM 4.6V",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.3,
+    "completion": 0.9,
+    "cache_read": 0.055
+   },
+   "arch": {
+    "params": 107710933120,
+    "active_params": 14282811520,
+    "layers": 46,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 46,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "mistralai/Ministral-3-14B-Instruct-2512",
+   "slug": "mistralai/ministral-14b-2512",
+   "name": "Mistral: Ministral 3 14B 2512",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.2,
+    "completion": 0.2,
+    "cache_read": 0.02
+   },
+   "arch": {
+    "params": 13945032240,
+    "active_params": 13945032240,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 15726581760
+   }
+  },
+  {
+   "hf_id": "mistralai/Ministral-3-8B-Instruct-2512",
+   "slug": "mistralai/ministral-8b-2512",
+   "name": "Mistral: Ministral 3 8B 2512",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.15,
+    "completion": 0.15,
+    "cache_read": 0.015
+   },
+   "arch": {
+    "params": 8918026716,
+    "active_params": 8918026716,
+    "layers": 34,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 34,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 10420523008
+   }
+  },
+  {
+   "hf_id": "mistralai/Ministral-3-3B-Instruct-2512",
+   "slug": "mistralai/ministral-3b-2512",
+   "name": "Mistral: Ministral 3 3B 2512",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.1,
+    "cache_read": 0.01
+   },
+   "arch": {
+    "params": 3849090048,
+    "active_params": 3849090048,
+    "layers": 26,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 26,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 4671989760
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-V3.2",
+   "slug": "deepseek/deepseek-v3.2",
+   "name": "DeepSeek: DeepSeek V3.2",
+   "context_length": 163840,
+   "pricing": {
+    "prompt": 0.269,
+    "completion": 0.4,
+    "cache_read": 0.1345
+   },
+   "arch": {
+    "params": 685355329792,
+    "active_params": 40959240448,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 689304740864
+   }
+  },
+  {
+   "hf_id": "mistralai/Voxtral-Small-24B-2507",
+   "slug": "mistralai/voxtral-small-24b-2507",
+   "name": "Mistral: Voxtral Small 24B 2507",
+   "context_length": 32768,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.3,
+    "cache_read": 0.01
+   },
+   "arch": {
+    "params": 24261800960,
+    "active_params": 24261800960,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "openai/gpt-oss-safeguard-20b",
+   "slug": "openai/gpt-oss-safeguard-20b",
+   "name": "OpenAI: gpt-oss-safeguard-20b",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.075,
+    "completion": 0.3,
+    "cache_read": 0.0375
+   },
+   "arch": {
+    "params": 21511953984,
+    "active_params": 4790443584,
+    "layers": 24,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 64,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 12,
+     "sliding": 12,
+     "window": 128,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "mxfp4",
+    "native_bytes": 14078525568
+   }
+  },
+  {
+   "hf_id": "MiniMaxAI/MiniMax-M2",
+   "slug": "minimax/minimax-m2",
+   "name": "MiniMax: MiniMax M2",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.3,
+    "completion": 1.2,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 228689764864,
+    "active_params": 11030553088,
+    "layers": 62,
+    "heads": 48,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 196608,
+    "attn": {
+     "full": 62,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 230066110464
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-VL-32B-Instruct",
+   "slug": "qwen/qwen3-vl-32b-instruct",
+   "name": "Qwen: Qwen3 VL 32B Instruct",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.104,
+    "completion": 0.416,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 33357390064,
+    "active_params": 33357390064,
+    "layers": 64,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 64,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "ibm-granite/granite-4.0-h-micro",
+   "slug": "ibm-granite/granite-4.0-h-micro",
+   "name": "IBM: Granite 4.0 Micro",
+   "context_length": 131000,
+   "pricing": {
+    "prompt": 0.017,
+    "completion": 0.112,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 3191396096,
+    "active_params": 3191396096,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 64,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 4,
+     "sliding": 0,
+     "window": null,
+     "linear": 36,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-VL-8B-Thinking",
+   "slug": "qwen/qwen3-vl-8b-thinking",
+   "name": "Qwen: Qwen3 VL 8B Thinking",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.18,
+    "completion": 2.1,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 8767123696,
+    "active_params": 8767123696,
+    "layers": 36,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 36,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-VL-8B-Instruct",
+   "slug": "qwen/qwen3-vl-8b-instruct",
+   "name": "Qwen: Qwen3 VL 8B Instruct",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.117,
+    "completion": 0.455,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 8767123696,
+    "active_params": 8767123696,
+    "layers": 36,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 36,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-VL-30B-A3B-Thinking",
+   "slug": "qwen/qwen3-vl-30b-a3b-thinking",
+   "name": "Qwen: Qwen3 VL 30B A3B Thinking",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.2,
+    "completion": 2.4,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 31070754032,
+    "active_params": 3891664112,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+   "slug": "qwen/qwen3-vl-30b-a3b-instruct",
+   "name": "Qwen: Qwen3 VL 30B A3B Instruct",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.15,
+    "completion": 0.6,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 31070754032,
+    "active_params": 3891664112,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-4.6",
+   "slug": "z-ai/glm-4.6",
+   "name": "Z.ai: GLM 4.6",
+   "context_length": 204800,
+   "pricing": {
+    "prompt": 0.43,
+    "completion": 1.75,
+    "cache_read": 0.08
+   },
+   "arch": {
+    "params": 356785898816,
+    "active_params": 34034206016,
+    "layers": 92,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 202752,
+    "attn": {
+     "full": 92,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-V3.2-Exp",
+   "slug": "deepseek/deepseek-v3.2-exp",
+   "name": "DeepSeek: DeepSeek V3.2 Exp",
+   "context_length": 163840,
+   "pricing": {
+    "prompt": 0.27,
+    "completion": 0.41,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 685396921376,
+    "active_params": 41000832032,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 689471107200
+   }
+  },
+  {
+   "hf_id": "thedrummer/cydonia-24b-v4.1",
+   "slug": "thedrummer/cydonia-24b-v4.1",
+   "name": "TheDrummer: Cydonia 24B V4.1",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.3,
+    "completion": 0.5,
+    "cache_read": 0.15
+   },
+   "arch": {
+    "params": 23572403200,
+    "active_params": 23572403200,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-VL-235B-A22B-Thinking",
+   "slug": "qwen/qwen3-vl-235b-a22b-thinking",
+   "name": "Qwen: Qwen3 VL 235B A22B Thinking",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.4,
+    "completion": 4,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 235670022896,
+    "active_params": 22767151856,
+    "layers": 94,
+    "heads": 64,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 94,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+   "slug": "qwen/qwen3-vl-235b-a22b-instruct",
+   "name": "Qwen: Qwen3 VL 235B A22B Instruct",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.21,
+    "completion": 1.9,
+    "cache_read": 0.1
+   },
+   "arch": {
+    "params": 235670022896,
+    "active_params": 22767151856,
+    "layers": 94,
+    "heads": 64,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 94,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+   "slug": "deepseek/deepseek-v3.1-terminus",
+   "name": "DeepSeek: DeepSeek V3.1 Terminus",
+   "context_length": 163840,
+   "pricing": {
+    "prompt": 0.27,
+    "completion": 1,
+    "cache_read": 0.135
+   },
+   "arch": {
+    "params": 684531386000,
+    "active_params": 40135296656,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 688576928320
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+   "slug": "qwen/qwen3-next-80b-a3b-thinking",
+   "name": "Qwen: Qwen3 Next 80B A3B Thinking",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.15,
+    "completion": 1.2,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 81324862720,
+    "active_params": 5525400832,
+    "layers": 48,
+    "heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 12,
+     "sliding": 0,
+     "window": null,
+     "linear": 36,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+   "slug": "qwen/qwen3-next-80b-a3b-instruct",
+   "name": "Qwen: Qwen3 Next 80B A3B Instruct",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 1.1,
+    "cache_read": 0.07
+   },
+   "arch": {
+    "params": 81324862720,
+    "active_params": 5525400832,
+    "layers": 48,
+    "heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 12,
+     "sliding": 0,
+     "window": null,
+     "linear": 36,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "moonshotai/Kimi-K2-Instruct-0905",
+   "slug": "moonshotai/kimi-k2-0905",
+   "name": "MoonshotAI: Kimi K2 0905",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.6,
+    "completion": 2.5,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 1026470735448,
+    "active_params": 32924003928,
+    "layers": 61,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 1029173265504
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-30B-A3B-Thinking-2507",
+   "slug": "qwen/qwen3-30b-a3b-thinking-2507",
+   "name": "Qwen: Qwen3 30B A3B Thinking 2507",
+   "context_length": 81920,
+   "pricing": {
+    "prompt": 0.2,
+    "completion": 2.4,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 30532122624,
+    "active_params": 3353032704,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "NousResearch/Hermes-4-405B",
+   "slug": "nousresearch/hermes-4-405b",
+   "name": "Nous: Hermes 4 405B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 1,
+    "completion": 3,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 405853388800,
+    "active_params": 405853388800,
+    "layers": 126,
+    "heads": 128,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 126,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-V3.1",
+   "slug": "deepseek/deepseek-chat-v3.1",
+   "name": "DeepSeek: DeepSeek V3.1",
+   "context_length": 163840,
+   "pricing": {
+    "prompt": 0.25,
+    "completion": 0.95,
+    "cache_read": 0.13
+   },
+   "arch": {
+    "params": 684531386000,
+    "active_params": 40135296656,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 688574839360
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-4.5V",
+   "slug": "z-ai/glm-4.5v",
+   "name": "Z.ai: GLM 4.5V",
+   "context_length": 65536,
+   "pricing": {
+    "prompt": 0.6,
+    "completion": 1.8,
+    "cache_read": 0.11
+   },
+   "arch": {
+    "params": 107710933120,
+    "active_params": 14282811520,
+    "layers": 46,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 65536,
+    "attn": {
+     "full": 46,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "openai/gpt-oss-120b",
+   "slug": "openai/gpt-oss-120b",
+   "name": "OpenAI: gpt-oss-120b",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.15,
+    "completion": 0.6,
+    "cache_read": 0.075
+   },
+   "arch": {
+    "params": 116829156672,
+    "active_params": 5750551872,
+    "layers": 36,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 64,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 18,
+     "sliding": 18,
+     "window": 128,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "mxfp4",
+    "native_bytes": 65248815744
+   }
+  },
+  {
+   "hf_id": "openai/gpt-oss-20b",
+   "slug": "openai/gpt-oss-20b",
+   "name": "OpenAI: gpt-oss-20b",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.018,
+    "completion": 0.09,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 20914757184,
+    "active_params": 4193246784,
+    "layers": 24,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 64,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 12,
+     "sliding": 12,
+     "window": 128,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "mxfp4",
+    "native_bytes": 13761264768
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+   "slug": "qwen/qwen3-coder-30b-a3b-instruct",
+   "name": "Qwen: Qwen3 Coder 30B A3B Instruct",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.07,
+    "completion": 0.28,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 30532122624,
+    "active_params": 3353032704,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+   "slug": "qwen/qwen3-30b-a3b-instruct-2507",
+   "name": "Qwen: Qwen3 30B A3B Instruct 2507",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.3,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 30532122624,
+    "active_params": 3353032704,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-4.5",
+   "slug": "z-ai/glm-4.5",
+   "name": "Z.ai: GLM 4.5",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.6,
+    "completion": 2.2,
+    "cache_read": 0.11
+   },
+   "arch": {
+    "params": 358337791296,
+    "active_params": 35586098496,
+    "layers": 92,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 92,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "zai-org/GLM-4.5-Air",
+   "slug": "z-ai/glm-4.5-air",
+   "name": "Z.ai: GLM 4.5 Air",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.13,
+    "completion": 0.85,
+    "cache_read": 0.025
+   },
+   "arch": {
+    "params": 110468824832,
+    "active_params": 14964522752,
+    "layers": 46,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 46,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+   "slug": "qwen/qwen3-235b-a22b-thinking-2507",
+   "name": "Qwen: Qwen3 235B A22B Thinking 2507",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.23,
+    "completion": 2.3,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 235093634560,
+    "active_params": 22190763520,
+    "layers": 94,
+    "heads": 64,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 94,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+   "slug": "qwen/qwen3-coder",
+   "name": "Qwen: Qwen3 Coder 480B A35B",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.3,
+    "completion": 1,
+    "cache_read": 0.1
+   },
+   "arch": {
+    "params": 480154875392,
+    "active_params": 35474765312,
+    "layers": 62,
+    "heads": 96,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 62,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "ByteDance-Seed/UI-TARS-1.5-7B",
+   "slug": "bytedance/ui-tars-1.5-7b",
+   "name": "ByteDance: UI-TARS 7B ",
+   "context_length": 128000,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.2,
+    "cache_read": 0.1
+   },
+   "arch": {
+    "params": 8292166656,
+    "active_params": 8292166656,
+    "layers": 28,
+    "heads": 28,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 128000,
+    "attn": {
+     "full": 28,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+   "slug": "qwen/qwen3-235b-a22b-2507",
+   "name": "Qwen: Qwen3 235B A22B Instruct 2507",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.0875,
+    "completion": 0.35,
+    "cache_read": 0.0175
+   },
+   "arch": {
+    "params": 235093634560,
+    "active_params": 22190763520,
+    "layers": 94,
+    "heads": 64,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 94,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "moonshotai/Kimi-K2-Instruct",
+   "slug": "moonshotai/kimi-k2",
+   "name": "MoonshotAI: Kimi K2 0711",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.57,
+    "completion": 2.3,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 1026408235864,
+    "active_params": 32861504344,
+    "layers": 61,
+    "heads": 64,
+    "kv_heads": 64,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 1028923275952
+   }
+  },
+  {
+   "hf_id": "cognitivecomputations/Dolphin-Mistral-24B-Venice-Edition",
+   "slug": "cognitivecomputations/dolphin-mistral-24b-venice-edition",
+   "name": "Venice: Uncensored",
+   "context_length": 128000,
+   "pricing": {
+    "prompt": 0.2,
+    "completion": 0.9,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 24011361280,
+    "active_params": 24011361280,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "tencent/Hunyuan-A13B-Instruct",
+   "slug": "tencent/hunyuan-a13b-instruct",
+   "name": "Tencent: Hunyuan A13B Instruct",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.14,
+    "completion": 0.57,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 80393183232,
+    "active_params": 80393183232,
+    "layers": 32,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 32,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "baidu/ERNIE-4.5-VL-424B-A47B-PT",
+   "slug": "baidu/ernie-4.5-vl-424b-a47b",
+   "name": "Baidu: ERNIE 4.5 VL 424B A47B ",
+   "context_length": 123000,
+   "pricing": {
+    "prompt": 0.42,
+    "completion": 1.25,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 423526285184,
+    "active_params": 423526285184,
+    "layers": 54,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 54,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+   "slug": "mistralai/mistral-small-3.2-24b-instruct",
+   "name": "Mistral: Mistral Small 3.2 24B",
+   "context_length": 256000,
+   "pricing": {
+    "prompt": 0.09375,
+    "completion": 0.25,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 24011361280,
+    "active_params": 24011361280,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-R1-0528",
+   "slug": "deepseek/deepseek-r1-0528",
+   "name": "DeepSeek: R1 0528",
+   "context_length": 163840,
+   "pricing": {
+    "prompt": 0.5,
+    "completion": 2.15,
+    "cache_read": 0.35
+   },
+   "arch": {
+    "params": 684531386000,
+    "active_params": 40135296656,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 688574839360
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-30B-A3B",
+   "slug": "qwen/qwen3-30b-a3b",
+   "name": "Qwen: Qwen3 30B A3B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.12,
+    "completion": 0.5,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 30532122624,
+    "active_params": 3353032704,
+    "layers": 48,
+    "heads": 32,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 40960,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-8B",
+   "slug": "qwen/qwen3-8b",
+   "name": "Qwen: Qwen3 8B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.117,
+    "completion": 0.455,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 8190735360,
+    "active_params": 8190735360,
+    "layers": 36,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 40960,
+    "attn": {
+     "full": 36,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-14B",
+   "slug": "qwen/qwen3-14b",
+   "name": "Qwen: Qwen3 14B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.12,
+    "completion": 0.24,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 14768307200,
+    "active_params": 14768307200,
+    "layers": 40,
+    "heads": 40,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 40960,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-32B",
+   "slug": "qwen/qwen3-32b",
+   "name": "Qwen: Qwen3 32B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.08,
+    "completion": 0.28,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 32762123264,
+    "active_params": 32762123264,
+    "layers": 64,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 40960,
+    "attn": {
+     "full": 64,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen3-235B-A22B",
+   "slug": "qwen/qwen3-235b-a22b",
+   "name": "Qwen: Qwen3 235B A22B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.455,
+    "completion": 1.82,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 235093634560,
+    "active_params": 22190763520,
+    "layers": 94,
+    "heads": 64,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 40960,
+    "attn": {
+     "full": 94,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-V3-0324",
+   "slug": "deepseek/deepseek-chat-v3-0324",
+   "name": "DeepSeek: DeepSeek V3 0324",
+   "context_length": 163840,
+   "pricing": {
+    "prompt": 0.25,
+    "completion": 1,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 684531386000,
+    "active_params": 40135296656,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 688574839360
+   }
+  },
+  {
+   "hf_id": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+   "slug": "mistralai/mistral-small-3.1-24b-instruct",
+   "name": "Mistral: Mistral Small 3.1 24B",
+   "context_length": 128000,
+   "pricing": {
+    "prompt": 0.351,
+    "completion": 0.555,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 24011361280,
+    "active_params": 24011361280,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "google/gemma-3-4b-it",
+   "slug": "google/gemma-3-4b-it",
+   "name": "Google: Gemma 3 4B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.05,
+    "completion": 0.1,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 4300079472,
+    "active_params": 4300079472,
+    "layers": 34,
+    "heads": 8,
+    "kv_heads": 4,
+    "head_dim": 256,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 5,
+     "sliding": 29,
+     "window": 1024,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "RekaAI/reka-flash-3",
+   "slug": "rekaai/reka-flash-3",
+   "name": "Reka Flash 3",
+   "context_length": 65536,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.2,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 20905482240,
+    "active_params": 20905482240,
+    "layers": 44,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 96,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 44,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "google/gemma-3-27b-it",
+   "slug": "google/gemma-3-27b-it",
+   "name": "Google: Gemma 3 27B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.08,
+    "completion": 0.45,
+    "cache_read": 0.04
+   },
+   "arch": {
+    "params": 27432406640,
+    "active_params": 27432406640,
+    "layers": 62,
+    "heads": 32,
+    "kv_heads": 16,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 10,
+     "sliding": 52,
+     "window": 1024,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "TheDrummer/Skyfall-36B-v2",
+   "slug": "thedrummer/skyfall-36b-v2",
+   "name": "TheDrummer: Skyfall 36B V2",
+   "context_length": 32768,
+   "pricing": {
+    "prompt": 0.55,
+    "completion": 0.8,
+    "cache_read": 0.25
+   },
+   "arch": {
+    "params": 36910535680,
+    "active_params": 36910535680,
+    "layers": 64,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 64,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen2.5-VL-72B-Instruct",
+   "slug": "qwen/qwen2.5-vl-72b-instruct",
+   "name": "Qwen: Qwen2.5 VL 72B Instruct",
+   "context_length": 128000,
+   "pricing": {
+    "prompt": 0.8,
+    "completion": 1,
+    "cache_read": 0.4
+   },
+   "arch": {
+    "params": 73410777344,
+    "active_params": 73410777344,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 128000,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "mistralai/Mistral-Small-24B-Instruct-2501",
+   "slug": "mistralai/mistral-small-24b-instruct-2501",
+   "name": "Mistral: Mistral Small 3",
+   "context_length": 32768,
+   "pricing": {
+    "prompt": 0.05,
+    "completion": 0.08,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 23572403200,
+    "active_params": 23572403200,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+   "slug": "deepseek/deepseek-r1-distill-llama-70b",
+   "name": "DeepSeek: R1 Distill Llama 70B",
+   "context_length": 8192,
+   "pricing": {
+    "prompt": 0.8,
+    "completion": 0.8,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 70553706496,
+    "active_params": 70553706496,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-R1",
+   "slug": "deepseek/deepseek-r1",
+   "name": "DeepSeek: R1",
+   "context_length": 64000,
+   "pricing": {
+    "prompt": 0.7,
+    "completion": 2.5,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 684489845504,
+    "active_params": 40093756160,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 688408677376
+   }
+  },
+  {
+   "hf_id": "MiniMaxAI/MiniMax-Text-01",
+   "slug": "minimax/minimax-01",
+   "name": "MiniMax: MiniMax-01",
+   "context_length": 1000192,
+   "pricing": {
+    "prompt": 0.2,
+    "completion": 1.1,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 456089655296,
+    "active_params": 48403306496,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 10240000,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "microsoft/phi-4",
+   "slug": "microsoft/phi-4",
+   "name": "Microsoft: Phi 4",
+   "context_length": 16384,
+   "pricing": {
+    "prompt": 0.07,
+    "completion": 0.14,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 14659507200,
+    "active_params": 14659507200,
+    "layers": 40,
+    "heads": 40,
+    "kv_heads": 10,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 16384,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "deepseek-ai/DeepSeek-V3",
+   "slug": "deepseek/deepseek-chat",
+   "name": "DeepSeek: DeepSeek V3",
+   "context_length": 163840,
+   "pricing": {
+    "prompt": 0.32,
+    "completion": 0.89,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 684531386000,
+    "active_params": 40135296656,
+    "layers": 61,
+    "heads": 128,
+    "kv_heads": 128,
+    "head_dim": 192,
+    "mla": {
+     "kv_lora_rank": 512,
+     "qk_rope_head_dim": 64
+    },
+    "moe": true,
+    "max_ctx": 163840,
+    "attn": {
+     "full": 61,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": "fp8",
+    "native_bytes": 688574839360
+   }
+  },
+  {
+   "hf_id": "Sao10K/L3.3-70B-Euryale-v2.3",
+   "slug": "sao10k/l3.3-euryale-70b",
+   "name": "Sao10K: Llama 3.3 Euryale 70B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.65,
+    "completion": 0.75,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 70553706496,
+    "active_params": 70553706496,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "meta-llama/Llama-3.3-70B-Instruct",
+   "slug": "meta-llama/llama-3.3-70b-instruct",
+   "name": "Meta: Llama 3.3 70B Instruct",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.32,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 70553706496,
+    "active_params": 70553706496,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+   "slug": "qwen/qwen-2.5-coder-32b-instruct",
+   "name": "Qwen2.5 Coder 32B Instruct",
+   "context_length": 32768,
+   "pricing": {
+    "prompt": 0.66,
+    "completion": 1,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 32763876352,
+    "active_params": 32763876352,
+    "layers": 64,
+    "heads": 40,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 64,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "TheDrummer/UnslopNemo-12B-v4.1",
+   "slug": "thedrummer/unslopnemo-12b",
+   "name": "TheDrummer: UnslopNemo 12B",
+   "context_length": 1024000,
+   "pricing": {
+    "prompt": 0.4,
+    "completion": 0.4,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 12247782400,
+    "active_params": 12247782400,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 1024000,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "anthracite-org/magnum-v4-72b",
+   "slug": "anthracite-org/magnum-v4-72b",
+   "name": "Magnum v4 72B",
+   "context_length": 32768,
+   "pricing": {
+    "prompt": 2.5,
+    "completion": 5,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 72706203648,
+    "active_params": 72706203648,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen2.5-7B-Instruct",
+   "slug": "qwen/qwen-2.5-7b-instruct",
+   "name": "Qwen: Qwen2.5 7B Instruct",
+   "context_length": 32768,
+   "pricing": {
+    "prompt": 0.1,
+    "completion": 0.2,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 7615616512,
+    "active_params": 7615616512,
+    "layers": 28,
+    "heads": 28,
+    "kv_heads": 4,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 28,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Qwen/Qwen2.5-72B-Instruct",
+   "slug": "qwen/qwen-2.5-72b-instruct",
+   "name": "Qwen2.5 72B Instruct",
+   "context_length": 32768,
+   "pricing": {
+    "prompt": 0.36,
+    "completion": 0.4,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 72706203648,
+    "active_params": 72706203648,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 32768,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "NousResearch/Hermes-3-Llama-3.1-70B",
+   "slug": "nousresearch/hermes-3-llama-3.1-70b",
+   "name": "Nous: Hermes 3 70B Instruct",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.7,
+    "completion": 0.7,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 70553706496,
+    "active_params": 70553706496,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "NousResearch/Hermes-3-Llama-3.1-405B",
+   "slug": "nousresearch/hermes-3-llama-3.1-405b",
+   "name": "Nous: Hermes 3 405B Instruct",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 1,
+    "completion": 1,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 405853388800,
+    "active_params": 405853388800,
+    "layers": 126,
+    "heads": 128,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 126,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "Sao10K/L3-8B-Lunaris-v1",
+   "slug": "sao10k/l3-lunaris-8b",
+   "name": "Sao10K: Llama 3 8B Lunaris",
+   "context_length": 8192,
+   "pricing": {
+    "prompt": 0.04,
+    "completion": 0.05,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 8030261248,
+    "active_params": 8030261248,
+    "layers": 32,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 8192,
+    "attn": {
+     "full": 32,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+   "slug": "meta-llama/llama-3.1-8b-instruct",
+   "name": "Meta: Llama 3.1 8B Instruct",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.05,
+    "completion": 0.08,
+    "cache_read": 0.025
+   },
+   "arch": {
+    "params": 8030261248,
+    "active_params": 8030261248,
+    "layers": 32,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 32,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "mistralai/Mistral-Nemo-Instruct-2407",
+   "slug": "mistralai/mistral-nemo",
+   "name": "Mistral: Mistral Nemo",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.019,
+    "completion": 0.03,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 12247782400,
+    "active_params": 12247782400,
+    "layers": 40,
+    "heads": 32,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 40,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "mistralai/Mixtral-8x22B-Instruct-v0.1",
+   "slug": "mistralai/mixtral-8x22b-instruct",
+   "name": "Mistral: Mixtral 8x22B Instruct",
+   "context_length": 65536,
+   "pricing": {
+    "prompt": 2,
+    "completion": 6,
+    "cache_read": 0.2
+   },
+   "arch": {
+    "params": 140630071296,
+    "active_params": 39161468928,
+    "layers": 56,
+    "heads": 48,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 65536,
+    "attn": {
+     "full": 56,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  }
+ ]
+}

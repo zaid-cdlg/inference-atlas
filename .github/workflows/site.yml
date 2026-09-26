@@ -1,0 +1,118 @@
+# Tests on every push and pull request. Every Monday (or on demand) the model catalogue is
+# refreshed; a refresh that fails its gate or the tests commits and publishes nothing. Pushes
+# to main and successful refreshes deploy to GitHub Pages and the Hugging Face Space.
+name: Test, refresh and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: node --test
+      - run: npm ci
+      - run: npx playwright install --with-deps --only-shell chromium
+      - run: npx playwright test
+
+  refresh:
+    # Only main publishes: a manual run on another branch never refreshes or deploys.
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Refresh the catalogue (fails closed on the validation gate)
+        run: node scripts/refresh.mjs
+        env:
+          # Read-only token (gated repos). The Space write token never reaches this job,
+          # which parses untrusted upstream JSON.
+          HF_TOKEN: ${{ secrets.HF_READ_TOKEN }}
+      - name: Tests on the new data
+        run: node --test
+      - name: Commit models.json
+        id: commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/models.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(data): weekly model refresh'
+            # main may have moved during the run; replay the data commit on top of it
+            git pull --rebase origin main
+            node --test
+            git push origin HEAD:main
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: [test, refresh]
+    if: >-
+      always() && github.ref == 'refs/heads/main' && needs.test.result == 'success' &&
+      (needs.refresh.result == 'success' ||
+       (needs.refresh.result == 'skipped' && github.event_name == 'push'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The refresh commit, or on a push the tip of main (never an older queued sha).
+          ref: ${{ needs.refresh.outputs.sha || github.ref }}
+          persist-credentials: false
+      - name: Collect the public page files
+        run: |
+          mkdir -p _site/assets
+          cp index.html app.js planner.js state.js math.js styles.css _site/
+          cp -r data _site/
+          cp -r assets/fonts assets/hero.webp assets/favicon.svg _site/assets/
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+      - id: pages
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+      - name: Mirror to the Hugging Face Space
+        run: |
+          pip install huggingface_hub==2.0.0
+          cp -r _site _space
+          cp space/README.md _space/README.md
+          hf upload ZaidCdlg/inference-atlas _space . --repo-type space --delete '*' \
+            --commit-message "Deploy ${GITHUB_SHA::7}"
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}

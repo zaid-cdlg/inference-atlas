@@ -1,0 +1,10 @@
+{
+  "id": "openai/gpt-oss-20b",
+  "safetensors": {
+    "parameters": {
+      "BF16": 1804459584,
+      "U8": 19110297600
+    },
+    "total": 20914757184
+  }
+}

@@ -1,0 +1,508 @@
+{
+  "_meta": {
+    "checked_date": "2026-09-25",
+    "note": "Penalties are quoted from sources, never invented. Evidence is mostly Llama-3.1 (8B/70B/405B); other families may differ.",
+    "quantized_repos_rule": "Tiers: official = the model's own org; trusted = RedHatAI (vLLM maintainers, evaluated), hugging-quants, casperhansen (AutoAWQ author); community = anyone else, included only with 50k+ downloads in the last 30 days. 'stored_as' is the repo's quantization_config: RedHatAI w4a16 repos are GPTQ-quantized and stored as compressed-tensors; cyankiwi AWQ repos are AWQ-quantized and stored as compressed-tensors. vLLM auto-detects all of these, so the command only swaps the model id (no --quantization flag). fp8 entries are optional: online --quantization fp8 works from BF16 on fp8 GPUs. Checked 2026-09-25.",
+    "int4_rule": "int4 is the repo the page uses for INT4: Google's official QAT checkpoint for Gemma 4 31B; otherwise official before trusted before community, then most downloads. Natively quantized models (FP8, MXFP4) have none, because they only run in their published format. publisher 'community' is shown on the page as (community quant)."
+  },
+  "quant_penalty": [
+    {
+      "id": "fp16",
+      "name": "FP16 / BF16",
+      "label": "baseline (full quality)",
+      "quote": "Reference precision. All recovery figures below are measured against BF16.",
+      "selectable": true,
+      "sources": [
+        {
+          "title": "Kurtic et al., \"Give Me BF16 or Give Me Death\"? Accuracy-Performance Trade-Offs in LLM Quantization (arXiv 2411.02355)",
+          "url": "https://arxiv.org/abs/2411.02355",
+          "checked_date": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "id": "fp8",
+      "name": "FP8 (W8A8-FP)",
+      "label": "about lossless",
+      "quote": "FP8 (W8A8-FP) is effectively lossless across all model scales. Open LLM Leaderboard v1 recovery: 99.31% (8B), 99.72% (70B), 100.12% (405B).",
+      "selectable": true,
+      "sources": [
+        {
+          "title": "Kurtic et al., arXiv 2411.02355 (abstract + Table 2)",
+          "url": "https://arxiv.org/abs/2411.02355",
+          "checked_date": "2026-09-25"
+        },
+        {
+          "title": "Red Hat Developer: We ran over half a million evaluations on quantized LLMs",
+          "url": "https://developers.redhat.com/articles/2024/10/17/we-ran-over-half-million-evaluations-quantized-llms",
+          "checked_date": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "id": "int8",
+      "name": "INT8 (W8A8-INT)",
+      "label": "small loss (1-3%)",
+      "quote": "Well-tuned INT8 (W8A8-INT) achieves surprisingly low (1-3%) accuracy degradation per task on average.",
+      "selectable": false,
+      "sources": [
+        {
+          "title": "Kurtic et al., arXiv 2411.02355",
+          "url": "https://arxiv.org/abs/2411.02355",
+          "checked_date": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "id": "int4-gptq",
+      "name": "INT4 GPTQ (W4A16)",
+      "label": "small loss, most noticeable on small models",
+      "quote": "INT4 weight-only (W4A16-INT) is more competitive than expected, rivaling 8-bit quantization. Open LLM Leaderboard v1 recovery: 98.72% (8B), 99.53% (70B), 99.98% (405B). Coding (HumanEval): 4-bit models recover 98.9%.",
+      "selectable": true,
+      "sources": [
+        {
+          "title": "Kurtic et al., arXiv 2411.02355 (abstract + Table 2, W4A16 via GPTQ)",
+          "url": "https://arxiv.org/abs/2411.02355",
+          "checked_date": "2026-09-25"
+        },
+        {
+          "title": "Frantar et al., GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers (arXiv 2210.17323)",
+          "url": "https://arxiv.org/abs/2210.17323",
+          "checked_date": "2026-09-25"
+        }
+      ]
+    },
+    {
+      "id": "int4-awq",
+      "name": "INT4 AWQ (W4A16)",
+      "label": "small loss, a bit more than GPTQ on real tasks",
+      "quote": "Near-identical to GPTQ on academic benchmarks (AWQ leads by 0.23 and 0.35 points), but GPTQ outperforms AWQ on real-world tasks by 2.9 points (8B) and 0.8 points (70B) on a 0-100 scale. The AWQ authors report it beats prior 4-bit methods on their benchmarks.",
+      "selectable": true,
+      "sources": [
+        {
+          "title": "Kurtic et al., arXiv 2411.02355 (Section 3, Table 1)",
+          "url": "https://arxiv.org/abs/2411.02355",
+          "checked_date": "2026-09-25"
+        },
+        {
+          "title": "Lin et al., AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration (MLSys 2024, arXiv 2306.00978)",
+          "url": "https://arxiv.org/abs/2306.00978",
+          "checked_date": "2026-09-25"
+        }
+      ]
+    }
+  ],
+  "quantized_repos": {
+    "meta-llama/Meta-Llama-3.1-8B-Instruct": {
+      "awq": {
+        "repo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "url": "https://huggingface.co/hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "tier": "trusted",
+        "stored_as": "awq",
+        "downloads_30d": 153004
+      },
+      "gptq": {
+        "repo": "RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/Meta-Llama-3.1-8B-Instruct-quantized.w4a16",
+        "tier": "trusted",
+        "stored_as": "gptq",
+        "downloads_30d": 50247
+      },
+      "fp8": {
+        "repo": "RedHatAI/Meta-Llama-3.1-8B-Instruct-FP8",
+        "url": "https://huggingface.co/RedHatAI/Meta-Llama-3.1-8B-Instruct-FP8",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 135738
+      },
+      "int4": {
+        "repo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "url": "https://huggingface.co/hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "method": "awq",
+        "publisher": "trusted"
+      }
+    },
+    "Qwen/Qwen3-8B": {
+      "awq": {
+        "repo": "Qwen/Qwen3-8B-AWQ",
+        "url": "https://huggingface.co/Qwen/Qwen3-8B-AWQ",
+        "tier": "official",
+        "stored_as": "awq",
+        "downloads_30d": 1963316
+      },
+      "gptq": null,
+      "fp8": {
+        "repo": "Qwen/Qwen3-8B-FP8",
+        "url": "https://huggingface.co/Qwen/Qwen3-8B-FP8",
+        "tier": "official",
+        "stored_as": "fp8",
+        "downloads_30d": 679490
+      },
+      "int4": {
+        "repo": "Qwen/Qwen3-8B-AWQ",
+        "url": "https://huggingface.co/Qwen/Qwen3-8B-AWQ",
+        "method": "awq",
+        "publisher": "official"
+      }
+    },
+    "Qwen/Qwen3.5-9B": {
+      "awq": {
+        "repo": "QuantTrio/Qwen3.5-9B-AWQ",
+        "url": "https://huggingface.co/QuantTrio/Qwen3.5-9B-AWQ",
+        "tier": "community",
+        "stored_as": "awq",
+        "downloads_30d": 857475
+      },
+      "gptq": {
+        "repo": "RedHatAI/Qwen3.5-9B-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/Qwen3.5-9B-quantized.w4a16",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 162970
+      },
+      "fp8": {
+        "repo": "RedHatAI/Qwen3.5-9B-FP8-dynamic",
+        "url": "https://huggingface.co/RedHatAI/Qwen3.5-9B-FP8-dynamic",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 61673
+      },
+      "int4": {
+        "repo": "RedHatAI/Qwen3.5-9B-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/Qwen3.5-9B-quantized.w4a16",
+        "method": "gptq",
+        "publisher": "trusted"
+      }
+    },
+    "google/gemma-3-4b-it": {
+      "awq": null,
+      "gptq": {
+        "repo": "RedHatAI/gemma-3-4b-it-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/gemma-3-4b-it-quantized.w4a16",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 2530
+      },
+      "fp8": {
+        "repo": "RedHatAI/gemma-3-4b-it-FP8-dynamic",
+        "url": "https://huggingface.co/RedHatAI/gemma-3-4b-it-FP8-dynamic",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 999
+      },
+      "int4": {
+        "repo": "RedHatAI/gemma-3-4b-it-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/gemma-3-4b-it-quantized.w4a16",
+        "method": "gptq",
+        "publisher": "trusted"
+      }
+    },
+    "mistralai/Ministral-3-8B-Instruct-2512": {
+      "awq": null,
+      "gptq": null,
+      "fp8": {
+        "repo": "mistralai/Ministral-3-8B-Instruct-2512",
+        "url": "https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512",
+        "tier": "official",
+        "stored_as": "fp8 (native)",
+        "downloads_30d": null
+      },
+      "note": "Base repo is already FP8. Official BF16 copy: mistralai/Ministral-3-8B-Instruct-2512-BF16.",
+      "int4": null
+    },
+    "google/gemma-4-31B-it": {
+      "awq": {
+        "repo": "cyankiwi/gemma-4-31B-it-qat-AWQ-INT4",
+        "url": "https://huggingface.co/cyankiwi/gemma-4-31B-it-qat-AWQ-INT4",
+        "tier": "community",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 209303
+      },
+      "gptq": null,
+      "fp8": {
+        "repo": "RedHatAI/gemma-4-31B-it-FP8-dynamic",
+        "url": "https://huggingface.co/RedHatAI/gemma-4-31B-it-FP8-dynamic",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 228009
+      },
+      "note": "INT4 uses Google's official QAT checkpoint (compressed-tensors W4A16, 382k downloads in 30 days). QAT is neither AWQ nor GPTQ, so no quant_penalty row applies.",
+      "int4": {
+        "repo": "google/gemma-4-31B-it-qat-w4a16-ct",
+        "url": "https://huggingface.co/google/gemma-4-31B-it-qat-w4a16-ct",
+        "method": "qat",
+        "publisher": "official"
+      }
+    },
+    "Qwen/Qwen3.6-27B": {
+      "awq": {
+        "repo": "cyankiwi/Qwen3.6-27B-AWQ-INT4",
+        "url": "https://huggingface.co/cyankiwi/Qwen3.6-27B-AWQ-INT4",
+        "tier": "community",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 955779
+      },
+      "gptq": {
+        "repo": "groxaxo/Qwen3.6-27B-GPTQ-Pro-4bit",
+        "url": "https://huggingface.co/groxaxo/Qwen3.6-27B-GPTQ-Pro-4bit",
+        "tier": "community",
+        "stored_as": "gptq",
+        "downloads_30d": 101615
+      },
+      "fp8": {
+        "repo": "Qwen/Qwen3.6-27B-FP8",
+        "url": "https://huggingface.co/Qwen/Qwen3.6-27B-FP8",
+        "tier": "official",
+        "stored_as": "fp8",
+        "downloads_30d": 4786005
+      },
+      "int4": {
+        "repo": "groxaxo/Qwen3.6-27B-GPTQ-Pro-4bit",
+        "url": "https://huggingface.co/groxaxo/Qwen3.6-27B-GPTQ-Pro-4bit",
+        "method": "gptq",
+        "publisher": "community"
+      }
+    },
+    "Qwen/Qwen3-32B": {
+      "awq": {
+        "repo": "Qwen/Qwen3-32B-AWQ",
+        "url": "https://huggingface.co/Qwen/Qwen3-32B-AWQ",
+        "tier": "official",
+        "stored_as": "awq",
+        "downloads_30d": 827352
+      },
+      "gptq": {
+        "repo": "RedHatAI/Qwen3-32B-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/Qwen3-32B-quantized.w4a16",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 9403
+      },
+      "fp8": {
+        "repo": "Qwen/Qwen3-32B-FP8",
+        "url": "https://huggingface.co/Qwen/Qwen3-32B-FP8",
+        "tier": "official",
+        "stored_as": "fp8",
+        "downloads_30d": 198163
+      },
+      "int4": {
+        "repo": "Qwen/Qwen3-32B-AWQ",
+        "url": "https://huggingface.co/Qwen/Qwen3-32B-AWQ",
+        "method": "awq",
+        "publisher": "official"
+      }
+    },
+    "mistralai/Mistral-Small-3.2-24B-Instruct-2506": {
+      "awq": null,
+      "gptq": null,
+      "fp8": null,
+      "note": "No trusted or widely used INT4 repo. FP8 via online --quantization fp8 (community stelterlab/...-FP8 has 6k downloads; RedHatAI FP8 repo has no HF-format config.json).",
+      "int4": null
+    },
+    "google/gemma-3-27b-it": {
+      "awq": {
+        "repo": "gaunernst/gemma-3-27b-it-int4-awq",
+        "url": "https://huggingface.co/gaunernst/gemma-3-27b-it-int4-awq",
+        "tier": "community",
+        "stored_as": "awq",
+        "downloads_30d": 1218448
+      },
+      "gptq": {
+        "repo": "RedHatAI/gemma-3-27b-it-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/gemma-3-27b-it-quantized.w4a16",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 368089
+      },
+      "fp8": {
+        "repo": "RedHatAI/gemma-3-27b-it-FP8-dynamic",
+        "url": "https://huggingface.co/RedHatAI/gemma-3-27b-it-FP8-dynamic",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 56929
+      },
+      "int4": {
+        "repo": "RedHatAI/gemma-3-27b-it-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/gemma-3-27b-it-quantized.w4a16",
+        "method": "gptq",
+        "publisher": "trusted"
+      }
+    },
+    "microsoft/phi-4": {
+      "awq": null,
+      "gptq": {
+        "repo": "RedHatAI/phi-4-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/phi-4-quantized.w4a16",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 1297
+      },
+      "fp8": {
+        "repo": "RedHatAI/phi-4-FP8-dynamic",
+        "url": "https://huggingface.co/RedHatAI/phi-4-FP8-dynamic",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 100214
+      },
+      "int4": {
+        "repo": "RedHatAI/phi-4-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/phi-4-quantized.w4a16",
+        "method": "gptq",
+        "publisher": "trusted"
+      }
+    },
+    "meta-llama/Llama-3.3-70B-Instruct": {
+      "awq": {
+        "repo": "casperhansen/llama-3.3-70b-instruct-awq",
+        "url": "https://huggingface.co/casperhansen/llama-3.3-70b-instruct-awq",
+        "tier": "trusted",
+        "stored_as": "awq",
+        "downloads_30d": 542141
+      },
+      "gptq": {
+        "repo": "RedHatAI/Llama-3.3-70B-Instruct-quantized.w4a16",
+        "url": "https://huggingface.co/RedHatAI/Llama-3.3-70B-Instruct-quantized.w4a16",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 4787
+      },
+      "fp8": {
+        "repo": "RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic",
+        "url": "https://huggingface.co/RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 119407
+      },
+      "int4": {
+        "repo": "casperhansen/llama-3.3-70b-instruct-awq",
+        "url": "https://huggingface.co/casperhansen/llama-3.3-70b-instruct-awq",
+        "method": "awq",
+        "publisher": "trusted"
+      }
+    },
+    "mistralai/Devstral-2-123B-Instruct-2512": {
+      "awq": {
+        "repo": "cyankiwi/Devstral-2-123B-Instruct-2512-AWQ-4bit",
+        "url": "https://huggingface.co/cyankiwi/Devstral-2-123B-Instruct-2512-AWQ-4bit",
+        "tier": "community",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 118950
+      },
+      "gptq": null,
+      "fp8": {
+        "repo": "mistralai/Devstral-2-123B-Instruct-2512",
+        "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512",
+        "tier": "official",
+        "stored_as": "fp8 (native)",
+        "downloads_30d": null
+      },
+      "note": "Base repo is already FP8; no public BF16 copy found.",
+      "int4": null
+    },
+    "openai/gpt-oss-20b": {
+      "awq": null,
+      "gptq": null,
+      "fp8": null,
+      "note": "Ships MXFP4 (about 4-bit) natively; INT4 does not apply.",
+      "int4": null
+    },
+    "openai/gpt-oss-120b": {
+      "awq": null,
+      "gptq": null,
+      "fp8": null,
+      "note": "Ships MXFP4 (about 4-bit) natively; INT4 does not apply.",
+      "int4": null
+    },
+    "Qwen/Qwen3.6-35B-A3B": {
+      "awq": {
+        "repo": "QuantTrio/Qwen3.6-35B-A3B-AWQ",
+        "url": "https://huggingface.co/QuantTrio/Qwen3.6-35B-A3B-AWQ",
+        "tier": "community",
+        "stored_as": "awq",
+        "downloads_30d": 748257
+      },
+      "gptq": {
+        "repo": "palmfuture/Qwen3.6-35B-A3B-GPTQ-Int4",
+        "url": "https://huggingface.co/palmfuture/Qwen3.6-35B-A3B-GPTQ-Int4",
+        "tier": "community",
+        "stored_as": "gptq",
+        "downloads_30d": 86538
+      },
+      "fp8": {
+        "repo": "Qwen/Qwen3.6-35B-A3B-FP8",
+        "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B-FP8",
+        "tier": "official",
+        "stored_as": "fp8",
+        "downloads_30d": 8076507
+      },
+      "int4": {
+        "repo": "palmfuture/Qwen3.6-35B-A3B-GPTQ-Int4",
+        "url": "https://huggingface.co/palmfuture/Qwen3.6-35B-A3B-GPTQ-Int4",
+        "method": "gptq",
+        "publisher": "community"
+      }
+    },
+    "google/gemma-4-26B-A4B-it": {
+      "awq": {
+        "repo": "cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+        "url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+        "tier": "community",
+        "stored_as": "compressed-tensors W4A16",
+        "downloads_30d": 1236488
+      },
+      "gptq": null,
+      "fp8": {
+        "repo": "RedHatAI/gemma-4-26B-A4B-it-FP8-dynamic",
+        "url": "https://huggingface.co/RedHatAI/gemma-4-26B-A4B-it-FP8-dynamic",
+        "tier": "trusted",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 903324
+      },
+      "int4": {
+        "repo": "cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+        "url": "https://huggingface.co/cyankiwi/gemma-4-26B-A4B-it-AWQ-4bit",
+        "method": "awq",
+        "publisher": "community"
+      }
+    },
+    "zai-org/GLM-4.5-Air": {
+      "awq": null,
+      "gptq": null,
+      "fp8": {
+        "repo": "zai-org/GLM-4.5-Air-FP8",
+        "url": "https://huggingface.co/zai-org/GLM-4.5-Air-FP8",
+        "tier": "official",
+        "stored_as": "compressed-tensors FP8 W8A8",
+        "downloads_30d": 53164
+      },
+      "note": "Community AWQ repos exist but are under 50k downloads (cyankiwi/GLM-4.5-Air-AWQ-4bit, 2k).",
+      "int4": null
+    },
+    "Qwen/Qwen3-235B-A22B-Instruct-2507": {
+      "awq": null,
+      "gptq": null,
+      "fp8": {
+        "repo": "Qwen/Qwen3-235B-A22B-Instruct-2507-FP8",
+        "url": "https://huggingface.co/Qwen/Qwen3-235B-A22B-Instruct-2507-FP8",
+        "tier": "official",
+        "stored_as": "fp8",
+        "downloads_30d": 420104
+      },
+      "note": "QuantTrio/Qwen3-235B-A22B-Instruct-2507-AWQ exists (6k downloads), below the 50k community bar.",
+      "int4": null
+    },
+    "deepseek-ai/DeepSeek-V3.2": {
+      "awq": null,
+      "gptq": null,
+      "fp8": {
+        "repo": "deepseek-ai/DeepSeek-V3.2",
+        "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2",
+        "tier": "official",
+        "stored_as": "fp8 (native, block 128x128)",
+        "downloads_30d": null
+      },
+      "note": "Base repo is already FP8. INT4 repos found are under 200 downloads.",
+      "int4": null
+    }
+  }
+}

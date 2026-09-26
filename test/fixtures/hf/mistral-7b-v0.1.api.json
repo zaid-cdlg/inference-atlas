@@ -1,0 +1,9 @@
+{
+  "id": "mistralai/Mistral-7B-Instruct-v0.1",
+  "safetensors": {
+    "parameters": {
+      "BF16": 7241732096
+    },
+    "total": 7241732096
+  }
+}

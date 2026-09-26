@@ -1,0 +1,9 @@
+{
+  "id": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+  "safetensors": {
+    "parameters": {
+      "BF16": 46702792704
+    },
+    "total": 46702792704
+  }
+}
