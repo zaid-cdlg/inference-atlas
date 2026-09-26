@@ -1,5 +1,5 @@
 {
- "as_of": "2026-09-25",
+ "as_of": "2026-09-26",
  "featured": [
   "meta-llama/Meta-Llama-3.1-8B-Instruct",
   "Qwen/Qwen3-8B",
@@ -63,9 +63,9 @@
    "name": "DeepSeek: DeepSeek V4.1 Flash",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.075,
-    "completion": 0.3,
-    "cache_read": 0.0015
+    "prompt": 0.14,
+    "completion": 0.42,
+    "cache_read": 0.0042
    },
    "arch": {
     "params": 763205315794,
@@ -190,9 +190,9 @@
    "name": "Z.ai: GLM 5.3 Flash",
    "context_length": 1310720,
    "pricing": {
-    "prompt": 0.045,
-    "completion": 0.14,
-    "cache_read": 0.01
+    "prompt": 0.04,
+    "completion": 0.5,
+    "cache_read": 0.015
    },
    "arch": {
     "params": 321323031390,
@@ -442,7 +442,7 @@
    "hf_id": "thinkingmachines/Inkling-Small",
    "slug": "thinkingmachines/inkling-small",
    "name": "Thinking Machines: Inkling Small",
-   "context_length": 1048576,
+   "context_length": 524288,
    "pricing": {
     "prompt": 0.45,
     "completion": 1.2,
@@ -538,7 +538,7 @@
    "hf_id": "thinkingmachines/Inkling",
    "slug": "thinkingmachines/inkling",
    "name": "Thinking Machines: Inkling",
-   "context_length": 1048576,
+   "context_length": 524288,
    "pricing": {
     "prompt": 1,
     "completion": 4.05,
@@ -571,9 +571,9 @@
    "name": "Tencent: Hy3",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.0825,
-    "completion": 0.33,
-    "cache_read": 0.020625
+    "prompt": 0.132,
+    "completion": 0.528,
+    "cache_read": 0.033
    },
    "arch": {
     "params": 298786155776,
@@ -761,8 +761,8 @@
    "context_length": 262144,
    "pricing": {
     "prompt": 0.32,
-    "completion": 2.7,
-    "cache_read": 0.15
+    "completion": 3.2,
+    "cache_read": null
    },
    "arch": {
     "params": 27781427952,
@@ -3085,6 +3085,37 @@
    }
   },
   {
+   "hf_id": "google/gemma-3-12b-it",
+   "slug": "google/gemma-3-12b-it",
+   "name": "Google: Gemma 3 12B",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.05,
+    "completion": 0.15,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 12187325040,
+    "active_params": 12187325040,
+    "layers": 48,
+    "heads": 16,
+    "kv_heads": 8,
+    "head_dim": 240,
+    "mla": null,
+    "moe": false,
+    "max_ctx": null,
+    "attn": {
+     "full": 48,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": true
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
    "hf_id": "RekaAI/reka-flash-3",
    "slug": "rekaai/reka-flash-3",
    "name": "Reka Flash 3",
@@ -3134,13 +3165,13 @@
     "head_dim": 128,
     "mla": null,
     "moe": false,
-    "max_ctx": 131072,
+    "max_ctx": null,
     "attn": {
-     "full": 10,
-     "sliding": 52,
-     "window": 1024,
+     "full": 62,
+     "sliding": 0,
+     "window": null,
      "linear": 0,
-     "approx": false
+     "approx": true
     },
     "quant": null,
     "native_bytes": null
@@ -3711,6 +3742,37 @@
    }
   },
   {
+   "hf_id": "meta-llama/Meta-Llama-3.1-70B-Instruct",
+   "slug": "meta-llama/llama-3.1-70b-instruct",
+   "name": "Meta: Llama 3.1 70B Instruct",
+   "context_length": 131072,
+   "pricing": {
+    "prompt": 0.4,
+    "completion": 0.4,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 70553706496,
+    "active_params": 70553706496,
+    "layers": 80,
+    "heads": 64,
+    "kv_heads": 8,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 131072,
+    "attn": {
+     "full": 80,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
    "hf_id": "meta-llama/Meta-Llama-3.1-8B-Instruct",
    "slug": "meta-llama/llama-3.1-8b-instruct",
    "name": "Meta: Llama 3.1 8B Instruct",
@@ -3767,6 +3829,37 @@
      "window": null,
      "linear": 0,
      "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
+   }
+  },
+  {
+   "hf_id": "google/gemma-2-27b-it",
+   "slug": "google/gemma-2-27b-it",
+   "name": "Google: Gemma 2 27B",
+   "context_length": 8192,
+   "pricing": {
+    "prompt": 0.65,
+    "completion": 0.65,
+    "cache_read": null
+   },
+   "arch": {
+    "params": 27227128320,
+    "active_params": 27227128320,
+    "layers": 46,
+    "heads": 32,
+    "kv_heads": 16,
+    "head_dim": 128,
+    "mla": null,
+    "moe": false,
+    "max_ctx": 8192,
+    "attn": {
+     "full": 46,
+     "sliding": 0,
+     "window": null,
+     "linear": 0,
+     "approx": true
     },
     "quant": null,
     "native_bytes": null
