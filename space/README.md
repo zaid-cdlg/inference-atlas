@@ -6,7 +6,7 @@ colorTo: gray
 sdk: static
 pinned: false
 license: mit
-short_description: Self-host an open LLM or pay the API? Break-even + vllm serve
+short_description: Self-host an open LLM or pay the API? Find the break-even
 ---
 
 # inference-atlas
