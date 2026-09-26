@@ -26,7 +26,8 @@ The model list refreshes every week, so new open-weight models show up on their 
 
 *Llama 3.3 70B on one NVIDIA B200 (auto-picked, FP8), chat use case with the longest conversation raised to 16k tokens: 68 users fit at 4k tokens each, 17 at 16k. [Open this setup](https://zaid-cdlg.github.io/inference-atlas/?model=meta-llama%2FLlama-3.3-70B-Instruct&use=chat&max_ctx=16384).*
 
-<!-- BUTTON: "Open the calculator" link goes here -->
+**[Open the calculator](https://zaid-cdlg.github.io/inference-atlas/)** (also on
+[Hugging Face](https://huggingface.co/spaces/ZaidCdlg/inference-atlas))
 
 > Estimates are first-order and usually optimistic. Verify on your own hardware with
 > `vllm bench serve` before you buy anything.
@@ -36,6 +37,28 @@ The model list refreshes every week, so new open-weight models show up on their 
 LLMScale and SelfHostLLM check whether a model fits in VRAM. NVIDIA AIConfigurator and BentoML
 llm-optimizer tune serving configs for experts. inference-atlas adds the self-host vs API
 break-even and a runnable `vllm serve` command, for beginners.
+
+## Run it locally
+
+The page is plain HTML and JavaScript with no build step. Serve the repo root and open
+http://localhost:8000:
+
+```sh
+python3 -m http.server
+```
+
+Tests need Node. `npm test` runs the math, planner, state, data and refresh checks. The browser
+checks use Playwright with Chromium:
+
+```sh
+npm ci
+npm test
+npx playwright install chromium
+npx playwright test
+```
+
+GPU specs and prices are cited in [data/gpus.sources.md](data/gpus.sources.md). The visual
+system is in [DESIGN.md](DESIGN.md).
 
 ## License
 
