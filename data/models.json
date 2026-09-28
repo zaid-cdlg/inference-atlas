@@ -1,5 +1,5 @@
 {
- "as_of": "2026-09-26",
+ "as_of": "2026-09-28",
  "featured": [
   "meta-llama/Meta-Llama-3.1-8B-Instruct",
   "Qwen/Qwen3-8B",
@@ -63,9 +63,9 @@
    "name": "DeepSeek: DeepSeek V4.1 Flash",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.14,
-    "completion": 0.42,
-    "cache_read": 0.0042
+    "prompt": 0.035,
+    "completion": 0.29,
+    "cache_read": 0.001
    },
    "arch": {
     "params": 763205315794,
@@ -190,9 +190,9 @@
    "name": "Z.ai: GLM 5.3 Flash",
    "context_length": 1310720,
    "pricing": {
-    "prompt": 0.04,
+    "prompt": 0.15,
     "completion": 0.5,
-    "cache_read": 0.015
+    "cache_read": 0.03
    },
    "arch": {
     "params": 321323031390,
@@ -918,9 +918,9 @@
    "name": "Google: Gemma 4 26B A4B ",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.0675,
-    "completion": 0.225,
-    "cache_read": 0.0375
+    "prompt": 0.09,
+    "completion": 0.3,
+    "cache_read": 0.05
    },
    "arch": {
     "params": 25805936206,
@@ -1107,9 +1107,9 @@
    "name": "Qwen: Qwen3.5-35B-A3B",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.3125,
-    "completion": 1.25,
-    "cache_read": 0.15625
+    "prompt": 0.1625,
+    "completion": 1.3,
+    "cache_read": null
    },
    "arch": {
     "params": 35951822704,
@@ -1609,9 +1609,9 @@
    "name": "DeepSeek: DeepSeek V3.2",
    "context_length": 163840,
    "pricing": {
-    "prompt": 0.269,
-    "completion": 0.4,
-    "cache_read": 0.1345
+    "prompt": 0.28,
+    "completion": 0.42,
+    "cache_read": 0.028
    },
    "arch": {
     "params": 685355329792,
@@ -2994,9 +2994,9 @@
    "name": "DeepSeek: DeepSeek V3 0324",
    "context_length": 163840,
    "pricing": {
-    "prompt": 0.25,
-    "completion": 1,
-    "cache_read": null
+    "prompt": 0.29,
+    "completion": 1.14,
+    "cache_read": 0.11
    },
    "arch": {
     "params": 684531386000,
@@ -3403,8 +3403,8 @@
    "name": "DeepSeek: DeepSeek V3",
    "context_length": 163840,
    "pricing": {
-    "prompt": 0.32,
-    "completion": 0.89,
+    "prompt": 0.2574,
+    "completion": 1.0287,
     "cache_read": null
    },
    "arch": {
