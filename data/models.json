@@ -1,5 +1,5 @@
 {
- "as_of": "2026-09-28",
+ "as_of": "2026-10-05",
  "featured": [
   "meta-llama/Meta-Llama-3.1-8B-Instruct",
   "Qwen/Qwen3-8B",
@@ -63,9 +63,9 @@
    "name": "DeepSeek: DeepSeek V4.1 Flash",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.035,
-    "completion": 0.29,
-    "cache_read": 0.001
+    "prompt": 0.3,
+    "completion": 1.2,
+    "cache_read": 0.006
    },
    "arch": {
     "params": 763205315794,
@@ -86,6 +86,37 @@
     },
     "quant": "fp8",
     "native_bytes": 765308679496
+   }
+  },
+  {
+   "hf_id": "nex-agi/Nex-N2.5-mini",
+   "slug": "nex-agi/nex-n2.5-mini",
+   "name": "Nex AGI: Nex-N2.5-Mini",
+   "context_length": 262144,
+   "pricing": {
+    "prompt": 0.025,
+    "completion": 0.1,
+    "cache_read": 0.0025
+   },
+   "arch": {
+    "params": 35107181936,
+    "active_params": 3901560176,
+    "layers": 40,
+    "heads": 16,
+    "kv_heads": 2,
+    "head_dim": 256,
+    "mla": null,
+    "moe": true,
+    "max_ctx": 262144,
+    "attn": {
+     "full": 10,
+     "sliding": 0,
+     "window": null,
+     "linear": 30,
+     "approx": false
+    },
+    "quant": null,
+    "native_bytes": null
    }
   },
   {
@@ -188,7 +219,7 @@
    "hf_id": "zai-org/GLM-5.3-Flash",
    "slug": "z-ai/glm-5.3-flash",
    "name": "Z.ai: GLM 5.3 Flash",
-   "context_length": 1310720,
+   "context_length": 1048576,
    "pricing": {
     "prompt": 0.15,
     "completion": 0.5,
@@ -315,11 +346,11 @@
    "hf_id": "zai-org/GLM-5.3",
    "slug": "z-ai/glm-5.3",
    "name": "Z.ai: GLM 5.3",
-   "context_length": 1310720,
+   "context_length": 1048576,
    "pricing": {
-    "prompt": 1.4,
-    "completion": 4.4,
-    "cache_read": 0.26
+    "prompt": 0.05,
+    "completion": 7,
+    "cache_read": 0.045
    },
    "arch": {
     "params": 753329940480,
@@ -351,8 +382,8 @@
    "name": "Qwen: Qwen3.8 27B",
    "context_length": 1000000,
    "pricing": {
-    "prompt": 0.42,
-    "completion": 3,
+    "prompt": 0.425,
+    "completion": 2.55,
     "cache_read": 0.085
    },
    "arch": {
@@ -413,8 +444,8 @@
    "name": "Meta: Muse Glimmer 30B",
    "context_length": 131072,
    "pricing": {
-    "prompt": 0.3,
-    "completion": 1.2,
+    "prompt": 0.35,
+    "completion": 1.5,
     "cache_read": 0.04
    },
    "arch": {
@@ -540,9 +571,9 @@
    "name": "Thinking Machines: Inkling",
    "context_length": 524288,
    "pricing": {
-    "prompt": 1,
+    "prompt": 0.95,
     "completion": 4.05,
-    "cache_read": 0.17
+    "cache_read": 0.16
    },
    "arch": {
     "params": 952377623626,
@@ -633,9 +664,9 @@
    "name": "Z.ai: GLM 5.2",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.6496,
-    "completion": 2.0416,
-    "cache_read": 0.12064
+    "prompt": 0.0192,
+    "completion": 16,
+    "cache_read": 0.0192
    },
    "arch": {
     "params": 753329940480,
@@ -761,8 +792,8 @@
    "context_length": 262144,
    "pricing": {
     "prompt": 0.32,
-    "completion": 3.2,
-    "cache_read": null
+    "completion": 3.25,
+    "cache_read": 0.03
    },
    "arch": {
     "params": 27781427952,
@@ -884,9 +915,9 @@
    "name": "Z.ai: GLM 5.1",
    "context_length": 204800,
    "pricing": {
-    "prompt": 0.9646,
-    "completion": 3.0316,
-    "cache_read": 0.17914
+    "prompt": 1.4,
+    "completion": 4.4,
+    "cache_read": 0.26
    },
    "arch": {
     "params": 753864139008,
@@ -1011,9 +1042,9 @@
    "name": "MiniMax: MiniMax M2.7",
    "context_length": 204800,
    "pricing": {
-    "prompt": 0.3,
-    "completion": 1.2,
-    "cache_read": 0.06
+    "prompt": 0.21,
+    "completion": 0.84,
+    "cache_read": 0.042
    },
    "arch": {
     "params": 228689764864,
@@ -1107,9 +1138,9 @@
    "name": "Qwen: Qwen3.5-35B-A3B",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.1625,
-    "completion": 1.3,
-    "cache_read": null
+    "prompt": 0.15,
+    "completion": 1,
+    "cache_read": 0.05
    },
    "arch": {
     "params": 35951822704,
@@ -1487,7 +1518,7 @@
    "pricing": {
     "prompt": 0.3,
     "completion": 0.9,
-    "cache_read": 0.055
+    "cache_read": 0.05
    },
    "arch": {
     "params": 107710933120,
@@ -2082,7 +2113,7 @@
    "pricing": {
     "prompt": 0.27,
     "completion": 1,
-    "cache_read": 0.135
+    "cache_read": null
    },
    "arch": {
     "params": 684531386000,
@@ -2337,9 +2368,9 @@
    "name": "OpenAI: gpt-oss-120b",
    "context_length": 131072,
    "pricing": {
-    "prompt": 0.15,
-    "completion": 0.6,
-    "cache_read": 0.075
+    "prompt": 0.037,
+    "completion": 0.17,
+    "cache_read": null
    },
    "arch": {
     "params": 116829156672,
@@ -2370,7 +2401,7 @@
    "pricing": {
     "prompt": 0.018,
     "completion": 0.09,
-    "cache_read": null
+    "cache_read": 0.009
    },
    "arch": {
     "params": 20914757184,
@@ -2430,8 +2461,8 @@
    "name": "Qwen: Qwen3 30B A3B Instruct 2507",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.1,
-    "completion": 0.3,
+    "prompt": 0.04815,
+    "completion": 0.19305,
     "cache_read": null
    },
    "arch": {
@@ -3271,37 +3302,6 @@
    }
   },
   {
-   "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-   "slug": "deepseek/deepseek-r1-distill-llama-70b",
-   "name": "DeepSeek: R1 Distill Llama 70B",
-   "context_length": 8192,
-   "pricing": {
-    "prompt": 0.8,
-    "completion": 0.8,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 70553706496,
-    "active_params": 70553706496,
-    "layers": 80,
-    "heads": 64,
-    "kv_heads": 8,
-    "head_dim": 128,
-    "mla": null,
-    "moe": false,
-    "max_ctx": 131072,
-    "attn": {
-     "full": 80,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "deepseek-ai/DeepSeek-R1",
    "slug": "deepseek/deepseek-r1",
    "name": "DeepSeek: R1",
@@ -3468,9 +3468,9 @@
    "name": "Meta: Llama 3.3 70B Instruct",
    "context_length": 131072,
    "pricing": {
-    "prompt": 0.1,
-    "completion": 0.32,
-    "cache_read": null
+    "prompt": 0.22,
+    "completion": 0.5,
+    "cache_read": 0.11
    },
    "arch": {
     "params": 70553706496,
