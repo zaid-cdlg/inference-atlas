@@ -1,8 +1,7 @@
 {
- "as_of": "2026-10-05",
+ "as_of": "2026-10-12",
  "featured": [
   "meta-llama/Meta-Llama-3.1-8B-Instruct",
-  "Qwen/Qwen3-8B",
   "Qwen/Qwen3.5-9B",
   "google/gemma-3-4b-it",
   "mistralai/Ministral-3-8B-Instruct-2512",
@@ -63,9 +62,9 @@
    "name": "DeepSeek: DeepSeek V4.1 Flash",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.3,
-    "completion": 1.2,
-    "cache_read": 0.006
+    "prompt": 0.15,
+    "completion": 0.6,
+    "cache_read": 0.003
    },
    "arch": {
     "params": 763205315794,
@@ -221,9 +220,9 @@
    "name": "Z.ai: GLM 5.3 Flash",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.15,
-    "completion": 0.5,
-    "cache_read": 0.03
+    "prompt": 0.0232,
+    "completion": 1.2,
+    "cache_read": 0.0232
    },
    "arch": {
     "params": 321323031390,
@@ -348,9 +347,9 @@
    "name": "Z.ai: GLM 5.3",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.05,
-    "completion": 7,
-    "cache_read": 0.045
+    "prompt": 0.079,
+    "completion": 4.8,
+    "cache_read": 0.059
    },
    "arch": {
     "params": 753329940480,
@@ -382,9 +381,9 @@
    "name": "Qwen: Qwen3.8 27B",
    "context_length": 1000000,
    "pricing": {
-    "prompt": 0.425,
-    "completion": 2.55,
-    "cache_read": 0.085
+    "prompt": 0.04,
+    "completion": 2.3,
+    "cache_read": 0.0198
    },
    "arch": {
     "params": 27781427952,
@@ -444,8 +443,8 @@
    "name": "Meta: Muse Glimmer 30B",
    "context_length": 131072,
    "pricing": {
-    "prompt": 0.35,
-    "completion": 1.5,
+    "prompt": 0.3,
+    "completion": 1.2,
     "cache_read": 0.04
    },
    "arch": {
@@ -571,9 +570,9 @@
    "name": "Thinking Machines: Inkling",
    "context_length": 524288,
    "pricing": {
-    "prompt": 0.95,
+    "prompt": 1,
     "completion": 4.05,
-    "cache_read": 0.16
+    "cache_read": 0.17
    },
    "arch": {
     "params": 952377623626,
@@ -664,9 +663,9 @@
    "name": "Z.ai: GLM 5.2",
    "context_length": 1048576,
    "pricing": {
-    "prompt": 0.0192,
-    "completion": 16,
-    "cache_read": 0.0192
+    "prompt": 0.06,
+    "completion": 7,
+    "cache_read": 0.059
    },
    "arch": {
     "params": 753329940480,
@@ -760,9 +759,9 @@
    "name": "Qwen: Qwen3.6 35B A3B",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.15,
-    "completion": 1,
-    "cache_read": 0.05
+    "prompt": 0.1,
+    "completion": 0.95,
+    "cache_read": 0.1
    },
    "arch": {
     "params": 35951822704,
@@ -792,8 +791,8 @@
    "context_length": 262144,
    "pricing": {
     "prompt": 0.32,
-    "completion": 3.25,
-    "cache_read": 0.03
+    "completion": 3.2,
+    "cache_read": null
    },
    "arch": {
     "params": 27781427952,
@@ -915,9 +914,9 @@
    "name": "Z.ai: GLM 5.1",
    "context_length": 204800,
    "pricing": {
-    "prompt": 1.4,
-    "completion": 4.4,
-    "cache_read": 0.26
+    "prompt": 0.966,
+    "completion": 3.036,
+    "cache_read": 0.1794
    },
    "arch": {
     "params": 753864139008,
@@ -1138,9 +1137,9 @@
    "name": "Qwen: Qwen3.5-35B-A3B",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.15,
-    "completion": 1,
-    "cache_read": 0.05
+    "prompt": 0.08,
+    "completion": 0.75,
+    "cache_read": 0.04
    },
    "arch": {
     "params": 35951822704,
@@ -1169,8 +1168,8 @@
    "name": "Qwen: Qwen3.5-27B",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.195,
-    "completion": 1.56,
+    "prompt": 0.26,
+    "completion": 2.6,
     "cache_read": null
    },
    "arch": {
@@ -1640,9 +1639,9 @@
    "name": "DeepSeek: DeepSeek V3.2",
    "context_length": 163840,
    "pricing": {
-    "prompt": 0.28,
-    "completion": 0.42,
-    "cache_read": 0.028
+    "prompt": 0.259,
+    "completion": 0.8,
+    "cache_read": 0.14
    },
    "arch": {
     "params": 685355329792,
@@ -1762,37 +1761,6 @@
    }
   },
   {
-   "hf_id": "Qwen/Qwen3-VL-32B-Instruct",
-   "slug": "qwen/qwen3-vl-32b-instruct",
-   "name": "Qwen: Qwen3 VL 32B Instruct",
-   "context_length": 131072,
-   "pricing": {
-    "prompt": 0.104,
-    "completion": 0.416,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 33357390064,
-    "active_params": 33357390064,
-    "layers": 64,
-    "heads": 64,
-    "kv_heads": 8,
-    "head_dim": 128,
-    "mla": null,
-    "moe": false,
-    "max_ctx": 262144,
-    "attn": {
-     "full": 64,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "ibm-granite/granite-4.0-h-micro",
    "slug": "ibm-granite/granite-4.0-h-micro",
    "name": "IBM: Granite 4.0 Micro",
@@ -1824,45 +1792,14 @@
    }
   },
   {
-   "hf_id": "Qwen/Qwen3-VL-8B-Thinking",
-   "slug": "qwen/qwen3-vl-8b-thinking",
-   "name": "Qwen: Qwen3 VL 8B Thinking",
-   "context_length": 131072,
-   "pricing": {
-    "prompt": 0.18,
-    "completion": 2.1,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 8767123696,
-    "active_params": 8767123696,
-    "layers": 36,
-    "heads": 32,
-    "kv_heads": 8,
-    "head_dim": 128,
-    "mla": null,
-    "moe": false,
-    "max_ctx": 262144,
-    "attn": {
-     "full": 36,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "Qwen/Qwen3-VL-8B-Instruct",
    "slug": "qwen/qwen3-vl-8b-instruct",
    "name": "Qwen: Qwen3 VL 8B Instruct",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.117,
-    "completion": 0.455,
-    "cache_read": null
+    "prompt": 0.25,
+    "completion": 0.75,
+    "cache_read": 0.12
    },
    "arch": {
     "params": 8767123696,
@@ -1891,8 +1828,8 @@
    "name": "Qwen: Qwen3 VL 30B A3B Thinking",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.2,
-    "completion": 2.4,
+    "prompt": 0.29,
+    "completion": 1,
     "cache_read": null
    },
    "arch": {
@@ -1953,9 +1890,9 @@
    "name": "Z.ai: GLM 4.6",
    "context_length": 204800,
    "pricing": {
-    "prompt": 0.43,
-    "completion": 1.75,
-    "cache_read": 0.08
+    "prompt": 0.5,
+    "completion": 2,
+    "cache_read": 0.1
    },
    "arch": {
     "params": 356785898816,
@@ -2034,37 +1971,6 @@
     "max_ctx": 131072,
     "attn": {
      "full": 40,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
-   "hf_id": "Qwen/Qwen3-VL-235B-A22B-Thinking",
-   "slug": "qwen/qwen3-vl-235b-a22b-thinking",
-   "name": "Qwen: Qwen3 VL 235B A22B Thinking",
-   "context_length": 131072,
-   "pricing": {
-    "prompt": 0.4,
-    "completion": 4,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 235670022896,
-    "active_params": 22767151856,
-    "layers": 94,
-    "heads": 64,
-    "kv_heads": 4,
-    "head_dim": 128,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 262144,
-    "attn": {
-     "full": 94,
      "sliding": 0,
      "window": null,
      "linear": 0,
@@ -2233,37 +2139,6 @@
     },
     "quant": "fp8",
     "native_bytes": 1029173265504
-   }
-  },
-  {
-   "hf_id": "Qwen/Qwen3-30B-A3B-Thinking-2507",
-   "slug": "qwen/qwen3-30b-a3b-thinking-2507",
-   "name": "Qwen: Qwen3 30B A3B Thinking 2507",
-   "context_length": 81920,
-   "pricing": {
-    "prompt": 0.2,
-    "completion": 2.4,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 30532122624,
-    "active_params": 3353032704,
-    "layers": 48,
-    "heads": 32,
-    "kv_heads": 4,
-    "head_dim": 128,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 262144,
-    "attn": {
-     "full": 48,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
    }
   },
   {
@@ -2461,8 +2336,8 @@
    "name": "Qwen: Qwen3 30B A3B Instruct 2507",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.04815,
-    "completion": 0.19305,
+    "prompt": 0.1,
+    "completion": 0.3,
     "cache_read": null
    },
    "arch": {
@@ -2552,10 +2427,10 @@
    "hf_id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
    "slug": "qwen/qwen3-235b-a22b-thinking-2507",
    "name": "Qwen: Qwen3 235B A22B Thinking 2507",
-   "context_length": 131072,
+   "context_length": 128000,
    "pricing": {
-    "prompt": 0.23,
-    "completion": 2.3,
+    "prompt": 0.45,
+    "completion": 3.5,
     "cache_read": null
    },
    "arch": {
@@ -2647,9 +2522,9 @@
    "name": "Qwen: Qwen3 235B A22B Instruct 2507",
    "context_length": 262144,
    "pricing": {
-    "prompt": 0.0875,
-    "completion": 0.35,
-    "cache_read": 0.0175
+    "prompt": 0.09,
+    "completion": 0.55,
+    "cache_read": null
    },
    "arch": {
     "params": 235093634560,
@@ -2769,37 +2644,6 @@
    }
   },
   {
-   "hf_id": "baidu/ERNIE-4.5-VL-424B-A47B-PT",
-   "slug": "baidu/ernie-4.5-vl-424b-a47b",
-   "name": "Baidu: ERNIE 4.5 VL 424B A47B ",
-   "context_length": 123000,
-   "pricing": {
-    "prompt": 0.42,
-    "completion": 1.25,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 423526285184,
-    "active_params": 423526285184,
-    "layers": 54,
-    "heads": 64,
-    "kv_heads": 8,
-    "head_dim": 128,
-    "mla": null,
-    "moe": false,
-    "max_ctx": 131072,
-    "attn": {
-     "full": 54,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
    "slug": "mistralai/mistral-small-3.2-24b-instruct",
    "name": "Mistral: Mistral Small 3.2 24B",
@@ -2868,7 +2712,7 @@
    "hf_id": "Qwen/Qwen3-30B-A3B",
    "slug": "qwen/qwen3-30b-a3b",
    "name": "Qwen: Qwen3 30B A3B",
-   "context_length": 131072,
+   "context_length": 40960,
    "pricing": {
     "prompt": 0.12,
     "completion": 0.5,
@@ -2896,41 +2740,10 @@
    }
   },
   {
-   "hf_id": "Qwen/Qwen3-8B",
-   "slug": "qwen/qwen3-8b",
-   "name": "Qwen: Qwen3 8B",
-   "context_length": 131072,
-   "pricing": {
-    "prompt": 0.117,
-    "completion": 0.455,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 8190735360,
-    "active_params": 8190735360,
-    "layers": 36,
-    "heads": 32,
-    "kv_heads": 8,
-    "head_dim": 128,
-    "mla": null,
-    "moe": false,
-    "max_ctx": 40960,
-    "attn": {
-     "full": 36,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
    "hf_id": "Qwen/Qwen3-14B",
    "slug": "qwen/qwen3-14b",
    "name": "Qwen: Qwen3 14B",
-   "context_length": 131072,
+   "context_length": 40960,
    "pricing": {
     "prompt": 0.12,
     "completion": 0.24,
@@ -2979,37 +2792,6 @@
     "max_ctx": 40960,
     "attn": {
      "full": 64,
-     "sliding": 0,
-     "window": null,
-     "linear": 0,
-     "approx": false
-    },
-    "quant": null,
-    "native_bytes": null
-   }
-  },
-  {
-   "hf_id": "Qwen/Qwen3-235B-A22B",
-   "slug": "qwen/qwen3-235b-a22b",
-   "name": "Qwen: Qwen3 235B A22B",
-   "context_length": 131072,
-   "pricing": {
-    "prompt": 0.455,
-    "completion": 1.82,
-    "cache_read": null
-   },
-   "arch": {
-    "params": 235093634560,
-    "active_params": 22190763520,
-    "layers": 94,
-    "heads": 64,
-    "kv_heads": 4,
-    "head_dim": 128,
-    "mla": null,
-    "moe": true,
-    "max_ctx": 40960,
-    "attn": {
-     "full": 94,
      "sliding": 0,
      "window": null,
      "linear": 0,
@@ -3403,8 +3185,8 @@
    "name": "DeepSeek: DeepSeek V3",
    "context_length": 163840,
    "pricing": {
-    "prompt": 0.2574,
-    "completion": 1.0287,
+    "prompt": 0.32,
+    "completion": 0.89,
     "cache_read": null
    },
    "arch": {
@@ -3809,7 +3591,7 @@
    "name": "Mistral: Mistral Nemo",
    "context_length": 131072,
    "pricing": {
-    "prompt": 0.019,
+    "prompt": 0.029,
     "completion": 0.03,
     "cache_read": null
    },
